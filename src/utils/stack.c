@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   stack.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/20 14:58:49 by messengu         ###   ########.fr       */
+/*   Created: 2025/05/20 14:51:54 by messengu          #+#    #+#             */
+/*   Updated: 2025/05/20 14:56:26 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int main(int argc, char **argv, char **envp)
-// {
-// 	t_stack *stack;
+t_stack *init_stack() {}
 
-// 	stack = parse(arg);
-// 	while (!is_empty(stack))
-// 	{
-// 		cmd = pop(&stack);
-// 		execute(cmd);
-// 		free_cmd(cmd);
-// 	}
-// 	clean(&stack);
+void push(t_stack **stack, t_cmd *cmd) {}
 
-//     return (0);
-// }
+t_cmd *pop(t_stack **stack) {}
+
+void clean(t_stack **stack) {}
+
+int is_empty(t_stack *stack) {}
