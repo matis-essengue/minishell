@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/20 14:56:35 by messengu         ###   ########.fr       */
+/*   Updated: 2025/05/26 17:37:24 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "../includes/parsing.h"
 
 // ---- STRUCTS ----
 
 typedef enum input_type
 {
     STDIN,
-    PIPE,
+    PIPEIN,
     HERE_DOC,
     INFILE,
 } t_input_type;
@@ -29,7 +30,7 @@ typedef enum input_type
 typedef enum output_type
 {
     STDOUT,
-    PIPE,
+    PIPEOUT,
     OUTFILE,
 } t_output_type;
 
