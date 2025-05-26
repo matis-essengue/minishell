@@ -1,20 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.h                                          :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/26 17:32:41 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/26 18:19:27 by messengu         ###   ########.fr       */
+/*   Created: 2024/11/24 15:30:29 by matis             #+#    #+#             */
+/*   Updated: 2024/11/24 15:32:19 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSING_H
-# define PARSING_H
+#include "libft.h"
 
-# include <stdio.h>
+void	ft_putstr_fd(char *s, int fd)
+{
+	char	*scpy;
 
-int	parse(char *line);
-
-#endif
+	scpy = s;
+	while (*scpy)
+	{
+		ft_putchar_fd(*scpy, fd);
+		scpy++;
+	}
+}

@@ -1,11 +1,14 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror -MMD
 RM = rm -f
 
 SRCS = src/main.c src/parsing/parser.c
-OBJS = $(SRCS:.c=.o)
+OBJ_DIR = obj
+DEP_DIR = $(OBJ_DIR)
+OBJS = $(SRCS:src/%.c=$(OBJ_DIR)/%.o)
+DEPS = $(OBJS:.o=.d)
 
 LIBFT = libft/libft.a
 
@@ -17,15 +20,18 @@ $(NAME): $(OBJS) $(LIBFT)
 $(LIBFT):
 	make -C libft
 
-%.o: %.c
+$(OBJ_DIR)/%.o: src/%.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+-include $(DEPS)
+
 clean:
-	$(RM) $(OBJS)
+	$(RM) -r $(OBJ_DIR)
 	make clean -C libft
 
 fclean: clean
-	$(RM) $(NAME) 
+	$(RM) $(NAME)
 	make fclean -C libft
 
 re: fclean all

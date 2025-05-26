@@ -1,20 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.h                                          :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/26 17:32:41 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/26 18:19:27 by messengu         ###   ########.fr       */
+/*   Created: 2024/11/05 14:01:21 by messengu          #+#    #+#             */
+/*   Updated: 2025/04/24 20:10:39 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSING_H
-# define PARSING_H
+#include "libft.h"
 
-# include <stdio.h>
+size_t	ft_strlen(const char *str)
+{
+	char	*strcpy;
 
-int	parse(char *line);
-
-#endif
+	strcpy = (char *)str;
+	while (*strcpy)
+		strcpy++;
+	return (strcpy - str);
+}
