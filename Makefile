@@ -4,7 +4,16 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -MMD
 RM = rm -f
 
-SRCS = src/main.c src/parsing/parser.c
+SRCS = \
+	src/main.c \
+	src/parsing/parser.c \
+	src/parsing/tokenizer.c \
+	src/parsing/token.c \
+	src/parsing/token_checker.c \
+	src/utils/stack.c \
+	src/parsing/utils.c \
+	src/parsing/expander.c \
+	src/parsing/quote_remover.c
 OBJ_DIR = obj
 DEP_DIR = $(OBJ_DIR)
 OBJS = $(SRCS:src/%.c=$(OBJ_DIR)/%.o)

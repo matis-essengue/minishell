@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/26 17:37:24 by messengu         ###   ########.fr       */
+/*   Updated: 2025/05/28 11:44:01 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,16 @@ typedef struct s_cmd
 {
     char    *name;
     char    **args;
+	char	*infile;
+	char	*outfile;
     t_input_type input_type;
     t_output_type output_type;
+	struct s_cmd	*next;
 } t_cmd;
 
 typedef struct s_stack
 {
-    t_cmd *cmd;
+    void *value;
     struct s_stack *next;
 } t_stack;
 
@@ -52,8 +55,9 @@ typedef struct s_stack
 
 // -- stacks
 t_stack *init_stack();
-void push(t_stack **stack, t_cmd *cmd);
-t_cmd *pop(t_stack **stack);
+void push(t_stack **stack, void *value);
+void *pop(t_stack **stack);
+void *top(t_stack *stack);
 void clean(t_stack **stack);
 int is_empty(t_stack *stack);
 
