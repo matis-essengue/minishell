@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/28 12:33:48 by messengu         ###   ########.fr       */
+/*   Updated: 2025/05/28 15:24:11 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,15 @@ char	*expand_word(char *word)
 			squoted = !squoted;
 		if (*temp == '$' && !squoted)
 		{
-			if (*(temp + 1) && *(temp + 1) == '\"')
+			if  (*(temp + 1) && *(temp + 1) == '$')
 			{
+				temp++;
+				continue;
+			}
+			if  (*(temp + 1) && *(temp + 1) == '?')
+			{
+				// TODO: expand $?
+				temp++;
 				temp++;
 				continue;
 			}

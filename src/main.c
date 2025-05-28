@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/26 17:36:42 by messengu         ###   ########.fr       */
+/*   Updated: 2025/05/28 15:14:58 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,18 @@ int main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	(void)envp;
-// 	stack = parse(arg);
-// 	while (!is_empty(stack))
-// 	{
-// 		cmd = pop(&stack);
-// 		execute(cmd);
-// 		free_cmd(cmd);
-// 	}
-// 	clean(&stack);
-	parse(argv[1]);
+	printf("\033[2J\033[H");
+	char *line;
+	while (1)
+	{
+		line = readline("\033[36mminishell> \033[0m");
+		if (line == NULL)
+			break;
+		add_history(line);
+		parse(line);
+		free(line);
+	}
+	// parse(argv[1]);
 
     return (0);
 }

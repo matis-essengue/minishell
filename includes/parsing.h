@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:32:41 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/28 11:29:56 by messengu         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:25:15 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,7 @@ void		free_tokens(t_token *tokens);
 int			check_tokens(t_token *tokens);
 void		expand_tokens(t_token *tokens);
 void		remove_quotes(t_token *tokens);
+int			is_meta_char(char c);
+int			is_whitespace(char c);
 
 #endif

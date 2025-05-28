@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/28 11:44:01 by messengu         ###   ########.fr       */
+/*   Updated: 2025/05/28 15:00:07 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #define MINISHELL_H
 
 #include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include <stdlib.h>
 #include "../includes/parsing.h"
 
@@ -60,5 +62,7 @@ void *pop(t_stack **stack);
 void *top(t_stack *stack);
 void clean(t_stack **stack);
 int is_empty(t_stack *stack);
+void print_cmd(t_cmd *cmd);
+int check_cmds(t_cmd *cmd);
 
 #endif

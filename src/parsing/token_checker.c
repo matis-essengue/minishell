@@ -6,13 +6,20 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 14:53:14 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/28 10:14:12 by messengu         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:30:18 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/parsing.h"
 
+/**
+ * @brief Check if the control operator is valid
+ *
+ * @param next The next token
+ * @param prev The previous token
+ * @return 1 if the control operator is valid, 0 otherwise
+ */
 int	check_control_op(t_token *next, t_token *prev)
 {
 	if (!prev)
@@ -26,6 +33,12 @@ int	check_control_op(t_token *next, t_token *prev)
 	return (1);
 }
 
+/**
+ * @brief Check if the redirect operator is valid
+ *
+ * @param next The next token
+ * @return 1 if the redirect operator is valid, 0 otherwise
+ */
 int	check_redirect_op(t_token *next)
 {
 	if (!next)
@@ -41,6 +54,12 @@ int	check_redirect_op(t_token *next)
 	return (1);
 }
 
+/**
+ * @brief Check if the tokens are valid
+ *
+ * @param tokens The list of tokens
+ * @return 1 if the tokens are valid, 0 otherwise
+ */
 int	check_tokens(t_token *tokens)
 {
 	t_token	*prev;
@@ -66,6 +85,5 @@ int	check_tokens(t_token *tokens)
 		prev = current;
 		current = current->next;
 	}
-	printf("tokens are valid\n");
 	return (1);
 }
