@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:31:04 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/10 18:29:52 by messengu         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:32:41 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_cmd	*parse(char *line)
 	// printf("line: %s\n", line);
 	tokens = tokenize(line);
 	if (!tokens)
-		return (1);
+		return (NULL);
 	// current = tokens;
 	// while (current != NULL)
 	// {
@@ -32,7 +32,7 @@ t_cmd	*parse(char *line)
 	// }
 	current = tokens;
 	if (!check_tokens(current))
-		return (1);
+		return (NULL);
 
 	cmds = tokens_to_cmds(tokens);
 	current_cmd = cmds;

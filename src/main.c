@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/10 18:30:08 by messengu         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:31:47 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int main(int argc, char **argv, char **envp)
 {
-	t_cmd *cmds;
+	// t_cmd *cmds;
 
 	(void)argc;
 	(void)argv;
@@ -27,7 +27,7 @@ int main(int argc, char **argv, char **envp)
 		if (line == NULL)
 			break;
 		add_history(line);
-		cmds = parse(line);
+		parse(line);
 		free(line);
 	}
 	// parse(argv[1]);

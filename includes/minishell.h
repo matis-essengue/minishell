@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/03 14:04:25 by messengu         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:32:25 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct s_stack
 // ---- FUNCTIONS ----
 
 // -- stacks
+t_cmd		*parse(char *line);
 t_stack *init_stack();
 void push(t_stack **stack, void *value);
 void *pop(t_stack **stack);
