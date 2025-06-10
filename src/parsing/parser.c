@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:31:04 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/10 18:32:41 by messengu         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:46:48 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,36 +36,12 @@ t_cmd	*parse(char *line)
 
 	cmds = tokens_to_cmds(tokens);
 	current_cmd = cmds;
-	int j = 1;
-	// while (current_cmd != NULL)
-	// {
-	// 	printf("cmd %d:\n", j);
-	// 	print_cmd(current_cmd);
-	// 	current_cmd = current_cmd->next;
-	// 	j++;
-	// }
-	// printf("\n\nEXPANDING TOKENS\n");
-	current_cmd = cmds;
-	expand_cmds(current_cmd);
-	// current = tokens;
-	// while (current != NULL)
-	// {
-	// 	printf("token [%s]: %s\n", get_token_type_str(current->type), current->value);
-	// 	current = current->next;
-	// }
-	// printf("REMOVING QUOTES\n");
-	current_cmd = cmds;
-	remove_quotes(current_cmd);
-	// current = tokens;
-	// while (current != NULL)
-	// {
-	// 	printf("token [%s]: %s\n", get_token_type_str(current->type), current->value);
-	// 	current = current->next;
-	// }
+	expand_cmds(cmds);
+	remove_quotes(cmds);
 
 	printf("\n\033[32mPARSED COMMANDS\033[0m\n");
 	current_cmd = cmds;
-	j = 1;
+	int j = 1;
 	while (current_cmd != NULL)
 	{
 		printf("\033[32mcmd %d:\033[0m\n", j);

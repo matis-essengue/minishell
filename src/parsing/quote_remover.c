@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:29 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/03 12:59:19 by messengu         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:46:10 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,18 +84,20 @@ void	remove_quotes(t_cmd *cmds)
 			current->name = _remove_quotes(current->name);
 		if (current->infile)
 		{
-			while (current->infile)
+			t_file *current_file = current->infile;
+			while (current_file)
 			{
-				current->infile->name = _remove_quotes(current->infile->name);
-				current->infile = current->infile->next;
+				current_file->name = _remove_quotes(current_file->name);
+				current_file = current_file->next;
 			}
 		}
 		if (current->outfile)
 		{
-			while (current->outfile)
+			t_file *current_file = current->outfile;
+			while (current_file)
 			{
-				current->outfile->name = _remove_quotes(current->outfile->name);
-				current->outfile = current->outfile->next;
+				current_file->name = _remove_quotes(current_file->name);
+				current_file = current_file->next;
 			}
 		}
 		if (current->args)
