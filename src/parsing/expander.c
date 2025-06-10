@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/29 15:26:43 by messengu         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:23:15 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,18 @@ char	*expand_word(char *word)
 	char	*temp;
 	char	*start;
 	int		squoted;
+	int		dquoted;
 
 	temp = word;
 	expanded = ft_strdup("");
 	squoted = 0;
+	dquoted = 0;
 	start = word;
 	while (*temp)
 	{
-		if (*temp == '\'')
+		if (*temp == '"' && !squoted)
+			dquoted = !dquoted;
+		if (*temp == '\'' && !dquoted)
 			squoted = !squoted;
 		if (*temp == '$' && !squoted)
 			expanded = expand_variable(&temp, &start, expanded);

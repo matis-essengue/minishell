@@ -6,14 +6,14 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:31:04 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/29 19:43:18 by messengu         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:29:52 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
 #include "../../includes/minishell.h"
 
-int	parse(char *line)
+t_cmd	*parse(char *line)
 {
 	t_token	*tokens;
 	t_token	*current;
@@ -37,16 +37,16 @@ int	parse(char *line)
 	cmds = tokens_to_cmds(tokens);
 	current_cmd = cmds;
 	int j = 1;
-	while (current_cmd != NULL)
-	{
-		printf("cmd %d:\n", j);
-		print_cmd(current_cmd);
-		current_cmd = current_cmd->next;
-		j++;
-	}
+	// while (current_cmd != NULL)
+	// {
+	// 	printf("cmd %d:\n", j);
+	// 	print_cmd(current_cmd);
+	// 	current_cmd = current_cmd->next;
+	// 	j++;
+	// }
 	// printf("\n\nEXPANDING TOKENS\n");
-	// current_cmd = cmds;
-	// expand_cmds(current_cmd);
+	current_cmd = cmds;
+	expand_cmds(current_cmd);
 	// current = tokens;
 	// while (current != NULL)
 	// {
@@ -54,8 +54,8 @@ int	parse(char *line)
 	// 	current = current->next;
 	// }
 	// printf("REMOVING QUOTES\n");
-	// current_cmd = cmds;
-	// remove_quotes(current_cmd);
+	current_cmd = cmds;
+	remove_quotes(current_cmd);
 	// current = tokens;
 	// while (current != NULL)
 	// {
@@ -63,19 +63,19 @@ int	parse(char *line)
 	// 	current = current->next;
 	// }
 
-	// printf("PARSED COMMANDS\n");
-	// current_cmd = cmds;
-	// j = 1;
-	// while (current_cmd != NULL)
-	// {
-	// 	printf("cmd %d: ", j);
-	// 	print_cmd(current_cmd);
-	// 	current_cmd = current_cmd->next;
-	// 	j++;
-	// }
+	printf("\n\033[32mPARSED COMMANDS\033[0m\n");
+	current_cmd = cmds;
+	j = 1;
+	while (current_cmd != NULL)
+	{
+		printf("\033[32mcmd %d:\033[0m\n", j);
+		print_cmd(current_cmd);
+		current_cmd = current_cmd->next;
+		j++;
+	}
 
 	// check_cmds(cmds);
 	free(tokens);
-	return (0);
+	return (cmds);
 }
 

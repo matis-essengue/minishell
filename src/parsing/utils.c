@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:33:04 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/03 14:06:06 by messengu         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:25:54 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,22 @@ void	print_cmd(t_cmd *cmd)
 	{
 		while (cmd->outfile)
 		{
-			printf("  > %s", cmd->outfile->name);
+			if (cmd->outfile->append)
+				printf("  >> %s", cmd->outfile->name);
+			else
+				printf("  > %s", cmd->outfile->name);
 			cmd->outfile = cmd->outfile->next;
+		}
+	}
+	else
+		printf(" NULL");
+	printf("\n[HEREDOC]:");
+	if (cmd->heredocs)
+	{
+		while (cmd->heredocs)
+		{
+			printf("  << %s", cmd->heredocs->delimiter);
+			cmd->heredocs = cmd->heredocs->next;
 		}
 	}
 	else
