@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:33:04 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/28 18:25:49 by messengu         ###   ########.fr       */
+/*   Updated: 2025/06/03 14:06:06 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,26 @@ char	*ft_strndup(const char *s1, int n)
 	return (dup);
 }
 
+char	*get_input_type(t_cmd *cmd)
+{
+	if (cmd->input_type == PIPEIN)
+		return ("PIPEIN");
+	if (cmd->input_type == STDIN)
+		return ("STDIN");
+	if (cmd->input_type == HERE_DOC)
+		return ("HEREDOC");
+	return (NULL);
+}
+
+char	*get_output_type(t_cmd *cmd)
+{
+	if (cmd->output_type == PIPEOUT)
+		return ("PIPEOUT");
+	if (cmd->output_type == STDOUT)
+		return ("STDOUT");
+	return (NULL);
+}
+
 /**
  * @brief [DEBUG FUNCTION] Print a command
  * with its arguments
@@ -49,18 +69,44 @@ void	print_cmd(t_cmd *cmd)
 {
 	int	i;
 
-	i = 0;
-	printf("%s", cmd->name);
-	if (cmd->args == NULL)
+	printf("[NAME]: %s\n", cmd->name);
+	if (cmd->args != NULL)
 	{
+		i = 0;
+		printf("[ARGS]:");
+		while (cmd->args[i])
+		{
+			printf(" %s", cmd->args[i]);
+			i++;
+		}
 		printf("\n");
-		return ;
 	}
-	while (cmd->args[i])
+	else
+		printf("[ARGS]: NULL\n");
+	printf("[INFILE]:");
+	if (cmd->infile != NULL)
 	{
-		printf(" %s", cmd->args[i]);
-		i++;
+		while (cmd->infile)
+		{
+			printf("  > %s", cmd->infile->name);
+			cmd->infile = cmd->infile->next;
+		}
 	}
+	else
+		printf(" NULL");
+	printf("\n[OUTFILE]:");
+	if (cmd->outfile)
+	{
+		while (cmd->outfile)
+		{
+			printf("  > %s", cmd->outfile->name);
+			cmd->outfile = cmd->outfile->next;
+		}
+	}
+	else
+		printf(" NULL");
+	printf("\n[OUTPUT_TYPE]: %s\n", get_output_type(cmd));
+	printf("[INPUT_TYPE]: %s\n", get_input_type(cmd));
 	printf("\n");
 }
 

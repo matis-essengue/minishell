@@ -16,7 +16,8 @@ SRCS = \
 	src/parsing/utils.c \
 	src/parsing/expander.c \
 	src/parsing/quote_remover.c \
-	src/parsing/cmd_checker.c
+	src/parsing/cmd_checker.c \
+	src/parsing/tokens_to_cmds.c
 OBJ_DIR = obj
 DEP_DIR = $(OBJ_DIR)
 OBJS = $(SRCS:src/%.c=$(OBJ_DIR)/%.o)

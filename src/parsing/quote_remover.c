@@ -6,11 +6,12 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:29 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/28 18:37:07 by messengu         ###   ########.fr       */
+/*   Updated: 2025/06/03 12:59:19 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
+#include "../../includes/minishell.h"
 
 /**
  * @brief Handle quote detection and processing
@@ -66,19 +67,45 @@ char	*_remove_quotes(char *word)
 }
 
 /**
- * @brief Remove quotes from the tokens
+ * @brief Remove quotes from the commands
  *
- * @param tokens The list of tokens
+ * @param cmds The list of commands
  */
-void	remove_quotes(t_token *tokens)
+void	remove_quotes(t_cmd *cmds)
 {
-	t_token	*current;
+	t_cmd	*current;
+	int		i;
 
-	current = tokens;
+	current = cmds;
 	while (current)
 	{
-		if (current->type == TOKEN_WORD)
-			current->value = _remove_quotes(current->value);
+		i = 0;
+		if (current->name)
+			current->name = _remove_quotes(current->name);
+		if (current->infile)
+		{
+			while (current->infile)
+			{
+				current->infile->name = _remove_quotes(current->infile->name);
+				current->infile = current->infile->next;
+			}
+		}
+		if (current->outfile)
+		{
+			while (current->outfile)
+			{
+				current->outfile->name = _remove_quotes(current->outfile->name);
+				current->outfile = current->outfile->next;
+			}
+		}
+		if (current->args)
+		{
+			while (current->args[i])
+			{
+				current->args[i] = _remove_quotes(current->args[i]);
+				i++;
+			}
+		}
 		current = current->next;
 	}
 }

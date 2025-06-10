@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:32:41 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/28 18:25:15 by messengu         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:28:10 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ char		*ft_strndup(const char *s1, int n);
 const char	*get_token_type_str(int type);
 void		free_tokens(t_token *tokens);
 int			check_tokens(t_token *tokens);
-void		expand_tokens(t_token *tokens);
-void		remove_quotes(t_token *tokens);
 int			is_meta_char(char c);
 int			is_whitespace(char c);
 
