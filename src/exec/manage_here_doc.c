@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 18:30:11 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/04 16:11:13 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/10 17:59:19 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void	manage_here_doc(t_data *data)
 			break ;
 		if (compare_without_backslash(data, line) == true)
 			break ;
+		// if (here_doc->append)
+		// 	line = parse_heredoc(line);
 		write(pipefd[WRITE], line, ft_strlen(line));
 		free(line);
 	}

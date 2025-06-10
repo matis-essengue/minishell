@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/28 15:14:58 by messengu         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:07:54 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@ int main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	(void)envp;
+	// t_data *data;
+
+	// data->envp = envp;
 	printf("\033[2J\033[H");
 	char *line;
 	while (1)
@@ -27,7 +30,8 @@ int main(int argc, char **argv, char **envp)
 		if (line == NULL)
 			break;
 		add_history(line);
-		parse(line);
+		// data->cmd = parse(line);
+		// exec(data)
 		free(line);
 	}
 	// parse(argv[1]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:31:04 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/29 19:43:18 by messengu         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:08:26 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,23 +45,23 @@ int	parse(char *line)
 		j++;
 	}
 	// printf("\n\nEXPANDING TOKENS\n");
-	// current_cmd = cmds;
-	// expand_cmds(current_cmd);
-	// current = tokens;
-	// while (current != NULL)
-	// {
-	// 	printf("token [%s]: %s\n", get_token_type_str(current->type), current->value);
-	// 	current = current->next;
-	// }
+	current_cmd = cmds;
+	expand_cmds(current_cmd);
+	current = tokens;
+	while (current != NULL)
+	{
+		printf("token [%s]: %s\n", get_token_type_str(current->type), current->value);
+		current = current->next;
+	}
 	// printf("REMOVING QUOTES\n");
-	// current_cmd = cmds;
-	// remove_quotes(current_cmd);
-	// current = tokens;
-	// while (current != NULL)
-	// {
-	// 	printf("token [%s]: %s\n", get_token_type_str(current->type), current->value);
-	// 	current = current->next;
-	// }
+	current_cmd = cmds;
+	remove_quotes(current_cmd);
+	current = tokens;
+	while (current != NULL)
+	{
+		printf("token [%s]: %s\n", get_token_type_str(current->type), current->value);
+		current = current->next;
+	}
 
 	// printf("PARSED COMMANDS\n");
 	// current_cmd = cmds;
@@ -75,6 +75,29 @@ int	parse(char *line)
 	// }
 
 	// check_cmds(cmds);
+	// current_cmd = cmds;
+	// while (current_cmd != NULL)
+	// {
+	// 	printf("test\n");
+	// 	if (current_cmd->output_type == HERE_DOC)
+	// 	{
+	// 		manage_heredoc()
+	// 	}
+	// 	else
+	// 	{
+	// 		t_file *current_file;
+	// 		current_file = current_cmd->outfile;
+	// 		while (current_file != NULL)
+	// 		{
+	// 			if (current_file != NULL)
+	// 				close(current_file);
+	// 			ft_open(current_file->name, current_file->permission);
+	// 			current_file = current_file->next;
+	// 		}
+	// 		// outfile = 
+	// 	}
+	// 	current_cmd = current_cmd->next;
+	// }
 	free(tokens);
 	return (0);
 }

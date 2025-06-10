@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/10 17:28:33 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:07:40 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,22 @@ typedef struct s_heredoc
 {
 	char				*delimiter;
 	char				*content;
-	int					expand_vars;
+	int					expand_vars; // parcing here_doc
 	struct s_heredoc	*next;
 } t_heredoc;
+
+// PARSE HEREDOC
+//
+// while (recup(lige))
+// {
+// 	if 
+// }
 
 typedef struct s_file
 {
 	char			*name;
 	char			permission[3];
-	int				append;
+	int				append; // pour ajouter true or false type
 	struct s_file	*next;
 } t_file;
 
@@ -61,6 +68,12 @@ typedef struct s_cmd
 	t_heredoc		*heredocs;
 	struct s_cmd	*next;
 } t_cmd;
+
+typedef struct s_data
+{
+	t_cmd	*cmd;
+	char	**envp;
+} t_data;
 
 typedef struct s_stack
 {

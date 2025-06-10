@@ -6,11 +6,12 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:05:29 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/04 16:12:40 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:08:06 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
+#include "../../includes/minishell.h"
 
 void	child_call(t_data *data, int *pipefd, int i)
 {
@@ -63,3 +64,30 @@ void	pipe_function(t_data *data)
 	close(STDIN);
 	wait_child();
 }
+
+
+
+// void	pipe_function(t_data *data)
+// {
+// 	pid_t pid;
+// 	int pipefd[2];
+// 	int i;
+
+// 	i = 0;
+// 	t_cmd *cmd;
+// 	while (cmd != NULL)
+// 	{
+// 		if (cmd->output_type == PIPEIN)
+// 			pipe(pipefd);
+// 		pid = fork();
+// 		if (pid == -1)
+// 			error("fork failed\n", 1);
+// 		if (pid == 0)
+// 			child_call(data, pipefd, i, cmd);
+// 		else
+// 			parent_call(pipefd);
+// 		cmd = cmd->next;
+// 	}
+// 	close(STDIN);
+// 	wait_child();
+// }

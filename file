@@ -1,10 +1,2 @@
-file
-includes
-libft
-LICENSE
-Makefile
-minishell
-obj
-README.md
-src
 test
+test fin
