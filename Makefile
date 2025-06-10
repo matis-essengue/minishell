@@ -1,10 +1,23 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -MMD -g3
+CFLAGS = -Wall -Wextra -Werror -MMD
+LDFLAGS = -L/opt/homebrew/opt/readline/lib
+LDLIBS = -lreadline
 RM = rm -f
 
-SRCS = src/main.c src/parsing/parser.c src/exec/errors.c src/exec/get_path.c src/exec/main.c src/exec/pipex.c src/exec/manage_files.c src/exec/manage_here_doc.c
+SRCS = \
+	src/main.c \
+	src/parsing/parser.c \
+	src/parsing/tokenizer.c \
+	src/parsing/token.c \
+	src/parsing/token_checker.c \
+	src/utils/stack.c \
+	src/parsing/utils.c \
+	src/parsing/expander.c \
+	src/parsing/quote_remover.c \
+	src/parsing/cmd_checker.c \
+	src/parsing/tokens_to_cmds.c
 OBJ_DIR = obj
 DEP_DIR = $(OBJ_DIR)
 OBJS = $(SRCS:src/%.c=$(OBJ_DIR)/%.o)
@@ -15,7 +28,7 @@ LIBFT = libft/libft.a
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(LDFLAGS) $(LDLIBS) -o $(NAME)
 
 $(LIBFT):
 	make -C libft
