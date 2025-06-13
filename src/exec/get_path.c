@@ -6,11 +6,12 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/04 16:11:13 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/13 18:59:00 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
+#include "../../includes/minishell.h"
 
 char    **get_path(char **envp)
 {
@@ -66,12 +67,11 @@ void    exec(char *cmd_cut, char **cmd, char **path, char **envp)
     }
 }
 
-bool    exe_my_cmd(char *cmd, char **envp)
+bool    exe_my_cmd(t_cmd *cmd, char **envp)
 {
     char **cmd_cut;
     char **path;
-    
-    cmd_cut = ft_split(cmd, ' ');
+    // recup name + args
     if (cmd_cut == NULL || cmd_cut[0] == NULL)
         return (free_array(cmd_cut), false);
     if (access(cmd_cut[0], F_OK | X_OK) == 0)

@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/10 18:07:40 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/13 18:57:56 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,27 +18,31 @@
 #include <readline/history.h>
 #include <stdlib.h>
 #include "../includes/parsing.h"
+#include "../includes/exec.h"
 
-// ---- STRUCTS ----
+// ---- STRUCTS ENUM ----
 
 typedef enum input_type
 {
-    STDIN,
-    PIPEIN,
+    STDIN = 0,
+    PIPEIN = 0,
     HERE_DOC,
 } t_input_type;
 
 typedef enum output_type
 {
-    STDOUT,
-    PIPEOUT,
+    STDOUT = 1,
+    PIPEOUT = 1,
+	
 } t_output_type;
+
+// ---- STRUCTS ----
 
 typedef struct s_heredoc
 {
 	char				*delimiter;
 	char				*content;
-	int					expand_vars; // parcing here_doc
+	bool					expand_vars; // parcing here_doc
 	struct s_heredoc	*next;
 } t_heredoc;
 
@@ -53,14 +57,14 @@ typedef struct s_file
 {
 	char			*name;
 	char			permission[3];
-	int				append; // pour ajouter true or false type
+	bool			append; // pour ajouter true or false type
 	struct s_file	*next;
 } t_file;
 
 typedef struct s_cmd
 {
 	char			*name;
-	char			**args;
+	char			**args; // les options flag d'une commande
 	t_file			*infile;
 	t_file			*outfile;
 	t_input_type	input_type;
@@ -69,17 +73,32 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 } t_cmd;
 
-typedef struct s_data
-{
-	t_cmd	*cmd;
-	char	**envp;
-} t_data;
-
 typedef struct s_stack
 {
 	void	*value;
 	struct	s_stack *next;
 } t_stack;
+
+// EXEMPLE : cat -e file1 >> file2 file3 | ls -l
+
+// PARSED COMMANDS
+// cmd 1:
+// [NAME]: cat
+// [ARGS]: -e file1 file3
+// [INFILE]: NULL
+// [OUTFILE]:  >> file2
+// [HEREDOC]: NULL
+// [OUTPUT_TYPE]: PIPEOUT
+// [INPUT_TYPE]: STDIN
+
+// cmd 2:
+// [NAME]: ls
+// [ARGS]: -l
+// [INFILE]: NULL
+// [OUTFILE]: NULL
+// [HEREDOC]: NULL
+// [OUTPUT_TYPE]: STDOUT
+// [INPUT_TYPE]: PIPEIN
 
 // ---- FUNCTIONS ----
 

@@ -10,23 +10,24 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-# define STDIN 0
-# define STDOUT 1
+# define FD_STDIN 0
+# define FD_STDOUT 1
 # define READ 0
 # define WRITE 1
 
-typedef struct s_data
-{
-	char	*outfile;
-	char	*infile;
-	int		n_cmd;
-	char	**cmd;
-	char	**envp;
-	bool	here_doc;
-	char	*limiter;
+// typedef struct s_data
+// {
+// 	char	*outfile;
+// 	char	*infile;
+// 	int		n_cmd;
+// 	char	**cmd;
+// 	char	**envp;
+// 	bool	here_doc;
+// 	char	*limiter;
 
-}			t_data;
+// }			t_data;
 
+bool	init_data(t_data *data, int argc, char *argv[], char **envp);
 char		**get_path(char **envp);
 void		free_array(char **split);
 void		pipe_function(t_data *data);

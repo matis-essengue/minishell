@@ -6,11 +6,12 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:22:59 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/04 16:11:13 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/13 18:38:09 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
+#include "../../includes/minishell.h"
 
 void	free_array(char **split)
 {

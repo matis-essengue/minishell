@@ -6,11 +6,12 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 18:30:11 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/10 17:59:19 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/13 18:38:15 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
+#include "../../includes/minishell.h"
 
 int	ft_strcmp(char *s1, char *s2)
 {
@@ -48,7 +49,7 @@ void	manage_here_doc(t_data *data)
 	while (1)
 	{
 		ft_putstr("here_doc>");
-		line = get_next_line(STDIN);
+		line = get_next_line(FD_STDIN);
 		if (line == NULL)
 			break ;
 		if (compare_without_backslash(data, line) == true)
@@ -59,6 +60,6 @@ void	manage_here_doc(t_data *data)
 		free(line);
 	}
 	close(pipefd[WRITE]);
-	dup2(pipefd[READ], STDIN);
+	dup2(pipefd[READ], FD_STDIN);
 	close(pipefd[READ]);
 }

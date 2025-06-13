@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/10 18:07:54 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:16:35 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,8 @@ int main(int argc, char **argv, char **envp)
 {
 // 	t_stack *stack;
 
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	// t_data *data;
+	t_cmd *cmd;
 
-	// data->envp = envp;
 	printf("\033[2J\033[H");
 	char *line;
 	while (1)
@@ -30,8 +26,9 @@ int main(int argc, char **argv, char **envp)
 		if (line == NULL)
 			break;
 		add_history(line);
-		// data->cmd = parse(line);
-		// exec(data)
+		cmd = parse(line);
+		pipe_function(cmd, envp);
+		exec(cmd);
 		free(line);
 	}
 	// parse(argv[1]);
