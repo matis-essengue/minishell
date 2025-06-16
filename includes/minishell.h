@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/13 18:57:56 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/16 12:48:28 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,9 @@ typedef enum output_type
 typedef struct s_heredoc
 {
 	char				*delimiter;
-	char				*content;
 	bool					expand_vars; // parcing here_doc
 	struct s_heredoc	*next;
 } t_heredoc;
-
-// PARSE HEREDOC
-//
-// while (recup(lige))
-// {
-// 	if 
-// }
 
 typedef struct s_file
 {

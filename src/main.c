@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/12 17:16:35 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/16 12:53:42 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ int main(int argc, char **argv, char **envp)
 			break;
 		add_history(line);
 		cmd = parse(line);
-		pipe_function(cmd, envp);
-		exec(cmd);
+		pipe_function(cmd);
 		free(line);
 	}
 	// parse(argv[1]);

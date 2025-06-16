@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/13 18:59:00 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/16 12:15:03 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,25 +67,46 @@ void    exec(char *cmd_cut, char **cmd, char **path, char **envp)
     }
 }
 
+char    **recup_full_cmd(t_cmd *cmd)
+{
+    char **full_cmd;
+    int i;
+    int j;
+    
+    i = 0;
+    if (cmd->name)
+        full_cmd[i] = cmd->name;
+    i++;
+    j = 0;
+    while (cmd->args[j])
+    {
+        full_cmd[i] = cmd->args[j];
+        i++;
+        j++;
+    }
+    return (full_cmd);
+}
+
 bool    exe_my_cmd(t_cmd *cmd, char **envp)
 {
-    char **cmd_cut;
     char **path;
-    // recup name + args
-    if (cmd_cut == NULL || cmd_cut[0] == NULL)
-        return (free_array(cmd_cut), false);
-    if (access(cmd_cut[0], F_OK | X_OK) == 0)
-		execve(cmd_cut[0], cmd_cut, envp);
+    char **full_cmd;
+
+    full_cmd = recup_full_cmd(cmd);
+    if (full_cmd == NULL || full_cmd[0] == NULL)
+        return (free_array(full_cmd), false);
+    if (access(full_cmd[0], F_OK | X_OK) == 0)
+		execve(full_cmd[0], full_cmd, envp);
     path = get_path(envp);
     if (path == NULL)
     {
-        free_array(cmd_cut);
+        free_array(full_cmd);
         free_array(path);
         error("env error", 127);
     }
-    exec(cmd_cut[0], cmd_cut, path, envp);
+    exec(full_cmd[0], full_cmd, path, envp);
     free_array(path);
-    free_array(cmd_cut);
+    free_array(full_cmd);
     error("command not found", 127);
     return (false);
 }

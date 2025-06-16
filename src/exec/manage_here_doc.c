@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 18:30:11 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/13 18:38:15 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/16 12:42:19 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ int	ft_strcmp(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-bool	compare_without_backslash(t_data *data, char *line)
+bool	compare_without_backslash(t_cmd *cmd, char *line)
 {
 	int len;
 	
 	len = ft_strlen(line);
 	if (line[len - 1] == '\n')
 		line[len - 1] = '\0';
-	if (ft_strncmp(line, data->limiter, ft_strlen(line)) == 0)
+	if (ft_strncmp(line, cmd->heredocs->delimiter, ft_strlen(line)) == 0)
 	{
 		free(line);
 		return (true);
@@ -39,7 +39,7 @@ bool	compare_without_backslash(t_data *data, char *line)
 	return (false);
 }
 
-void	manage_here_doc(t_data *data)
+void	manage_here_doc(t_cmd *cmd)
 {
 	char *line;
 	int pipefd[2];
@@ -52,10 +52,8 @@ void	manage_here_doc(t_data *data)
 		line = get_next_line(FD_STDIN);
 		if (line == NULL)
 			break ;
-		if (compare_without_backslash(data, line) == true)
+		if (compare_without_backslash(cmd, line) == true)
 			break ;
-		// if (here_doc->append)
-		// 	line = parse_heredoc(line);
 		write(pipefd[WRITE], line, ft_strlen(line));
 		free(line);
 	}
