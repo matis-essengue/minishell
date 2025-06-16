@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 18:30:11 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/16 12:42:19 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/16 15:35:00 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,15 @@ bool	compare_without_backslash(t_cmd *cmd, char *line)
 	}
 	line[len - 1] = '\n';
 	return (false);
+}
+
+bool	parse_heredocs(t_cmd *cmd)
+{
+	if (cmd->heredocs->delimiter == NULL)
+		return (false);
+	// if ()
+	// 	cmd->heredocs->expand_vars == true;
+	
 }
 
 void	manage_here_doc(t_cmd *cmd)

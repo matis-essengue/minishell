@@ -15,21 +15,11 @@
 # define READ 0
 # define WRITE 1
 
-// typedef struct s_data
-// {
-// 	char	*outfile;
-// 	char	*infile;
-// 	int		n_cmd;
-// 	char	**cmd;
-// 	char	**envp;
-// 	bool	here_doc;
-// 	char	*limiter;
-
-// }			t_data;
+typedef struct s_cmd t_cmd;
 
 char		**get_path(char **envp);
 void		free_array(char **split);
-void		pipe_function(t_cmd *cmd);
+void		pipe_function(t_cmd *cmd, char **envp);
 void		manage_infile(t_cmd *cmd, int *pipefd);
 void		manage_outfile(t_cmd *cmd, int *pipefd);
 bool		exe_my_cmd(char *cmd, char **envp);

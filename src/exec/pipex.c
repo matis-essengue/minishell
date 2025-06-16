@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:05:29 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/13 18:52:45 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/16 16:18:05 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	pipe_function(t_cmd *cmd, char **envp)
 		if (pid == -1)
 			error("fork failed\n", 1);
 		if (pid == 0)
-			child_call(cmd, pipefd, cmd);
+			child_call(cmd, pipefd, envp);
 		else
 			parent_call(pipefd);
 		cmd = cmd->next;

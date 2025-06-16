@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/16 12:53:42 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/16 16:19:24 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ int main(int argc, char **argv, char **envp)
 {
 // 	t_stack *stack;
 
+	(void)argc;
+	(void)argv;
+	
 	t_cmd *cmd;
-
 	printf("\033[2J\033[H");
 	char *line;
 	while (1)
@@ -27,7 +29,7 @@ int main(int argc, char **argv, char **envp)
 			break;
 		add_history(line);
 		cmd = parse(line);
-		pipe_function(cmd);
+		pipe_function(cmd, envp);
 		free(line);
 	}
 	// parse(argv[1]);
