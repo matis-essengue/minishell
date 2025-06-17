@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:32:41 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/10 17:29:19 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/16 16:47:39 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-int			parse(char *line);
 t_token		*tokenize(char *line);
 t_token		*create_token(char *value, int type);
 void		add_token(t_token **tokens, t_token *token);

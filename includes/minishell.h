@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/16 16:01:30 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/16 16:47:03 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ typedef struct s_stack
 // ---- FUNCTIONS ----
 
 // -- stacks
+t_cmd		*parse(char *line);
 t_stack *init_stack();
 void push(t_stack **stack, void *value);
 void *pop(t_stack **stack);

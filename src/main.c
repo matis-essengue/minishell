@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/16 16:19:24 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/16 16:47:24 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int main(int argc, char **argv, char **envp)
 {
-// 	t_stack *stack;
+	// t_cmd *cmds;
 
 	(void)argc;
 	(void)argv;

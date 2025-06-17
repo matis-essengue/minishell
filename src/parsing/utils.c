@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:33:04 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/03 14:06:06 by messengu         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:43:51 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,11 @@ void	print_cmd(t_cmd *cmd)
 	printf("[INFILE]:");
 	if (cmd->infile != NULL)
 	{
-		while (cmd->infile)
+		t_file *current = cmd->infile;
+		while (current)
 		{
-			printf("  > %s", cmd->infile->name);
-			cmd->infile = cmd->infile->next;
+			printf("  > %s", current->name);
+			current = current->next;
 		}
 	}
 	else
@@ -97,10 +98,26 @@ void	print_cmd(t_cmd *cmd)
 	printf("\n[OUTFILE]:");
 	if (cmd->outfile)
 	{
-		while (cmd->outfile)
+		t_file *current = cmd->outfile;
+		while (current)
 		{
-			printf("  > %s", cmd->outfile->name);
-			cmd->outfile = cmd->outfile->next;
+			if (current->append)
+				printf("  >> %s", current->name);
+			else
+				printf("  > %s", current->name);
+			current = current->next;
+		}
+	}
+	else
+		printf(" NULL");
+	printf("\n[HEREDOC]:");
+	if (cmd->heredocs)
+	{
+		t_heredoc *current = cmd->heredocs;
+		while (current)
+		{
+			printf("  << %s", current->delimiter);
+			current = current->next;
 		}
 	}
 	else

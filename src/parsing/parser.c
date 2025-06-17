@@ -6,14 +6,15 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:31:04 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/10 18:08:26 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/16 16:46:20 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../includes/parsing.h"
 #include "../../includes/minishell.h"
 
-int	parse(char *line)
+t_cmd	*parse(char *line)
 {
 	t_token	*tokens;
 	t_token	*current;
@@ -23,7 +24,7 @@ int	parse(char *line)
 	// printf("line: %s\n", line);
 	tokens = tokenize(line);
 	if (!tokens)
-		return (1);
+		return (NULL);
 	// current = tokens;
 	// while (current != NULL)
 	// {
@@ -32,14 +33,19 @@ int	parse(char *line)
 	// }
 	current = tokens;
 	if (!check_tokens(current))
-		return (1);
+		return (NULL);
 
 	cmds = tokens_to_cmds(tokens);
+	current_cmd = cmds;
+	expand_cmds(cmds);
+	remove_quotes(cmds);
+
+	printf("\n\033[32mPARSED COMMANDS\033[0m\n");
 	current_cmd = cmds;
 	int j = 1;
 	while (current_cmd != NULL)
 	{
-		printf("cmd %d:\n", j);
+		printf("\033[32mcmd %d:\033[0m\n", j);
 		print_cmd(current_cmd);
 		current_cmd = current_cmd->next;
 		j++;
@@ -99,6 +105,6 @@ int	parse(char *line)
 	// 	current_cmd = current_cmd->next;
 	// }
 	free(tokens);
-	return (0);
+	return (cmds);
 }
 
