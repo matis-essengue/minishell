@@ -6,14 +6,14 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:05:29 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/16 16:18:05 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:33:46 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-void	child_call(t_cmd *cmd, int *pipefd, char **envp)
+void	child_call(t_cmd *cmd, int *pipefd, char **envp, int argc)
 {
 	if (cmd->heredocs->expand_vars == false)
 		manage_infile(cmd, pipefd);
@@ -25,7 +25,7 @@ void	child_call(t_cmd *cmd, int *pipefd, char **envp)
 		dup2(pipefd[WRITE], FD_STDOUT);
 		close(pipefd[WRITE]);
 	}
-    exe_my_cmd(cmd, envp);
+    exe_my_cmd(cmd, envp, argc);
 }
 
 void	parent_call(int *pipefd)
@@ -41,7 +41,7 @@ void	wait_child(void)
 		;
 }
 
-void	pipe_function(t_cmd *cmd, char **envp)
+void	pipe_function(t_cmd *cmd, char **envp, int argc)
 {
 	pid_t pid;
 	int pipefd[2];

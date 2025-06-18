@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   manage_here_doc.c                                  :+:      :+:    :+:   */
+/*   manage_heredocs.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 18:30:11 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/16 15:35:00 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:52:14 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,12 @@ bool	compare_without_backslash(t_cmd *cmd, char *line)
 	return (false);
 }
 
-bool	parse_heredocs(t_cmd *cmd)
-{
-	if (cmd->heredocs->delimiter == NULL)
-		return (false);
-	// if ()
-	// 	cmd->heredocs->expand_vars == true;
-	
-}
+// bool	parse_heredocs(t_cmd *cmd)
+// {
+// 	if (cmd->heredocs->delimiter == NULL)
+// 		return (false);
+// 	return (true);
+// }
 
 void	manage_here_doc(t_cmd *cmd)
 {
@@ -57,7 +55,7 @@ void	manage_here_doc(t_cmd *cmd)
 		error("pipe failed\n", 1);
 	while (1)
 	{
-		ft_putstr("here_doc>");
+		ft_putstr_fd("here_doc>", 1);
 		line = get_next_line(FD_STDIN);
 		if (line == NULL)
 			break ;

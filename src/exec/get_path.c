@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/16 12:15:03 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:38:01 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,16 @@ void    exec(char *cmd_cut, char **cmd, char **path, char **envp)
     }
 }
 
-char    **recup_full_cmd(t_cmd *cmd)
+char    **recup_full_cmd(t_cmd *cmd, int argc)
 {
     char **full_cmd;
     int i;
     int j;
-    
+
     i = 0;
+    full_cmd = malloc(sizeof(char *) * ((ft_lstsize(argc) + 1)));
+    if (full_cmd == NULL)
+        return (full_cmd);
     if (cmd->name)
         full_cmd[i] = cmd->name;
     i++;
@@ -87,12 +90,12 @@ char    **recup_full_cmd(t_cmd *cmd)
     return (full_cmd);
 }
 
-bool    exe_my_cmd(t_cmd *cmd, char **envp)
+bool    exe_my_cmd(t_cmd *cmd, char **envp, int argc)
 {
     char **path;
     char **full_cmd;
 
-    full_cmd = recup_full_cmd(cmd);
+    full_cmd = recup_full_cmd(cmd, argc);
     if (full_cmd == NULL || full_cmd[0] == NULL)
         return (free_array(full_cmd), false);
     if (access(full_cmd[0], F_OK | X_OK) == 0)

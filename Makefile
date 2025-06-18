@@ -18,8 +18,12 @@ SRCS = \
 	src/parsing/quote_remover.c \
 	src/parsing/cmd_checker.c \
 	src/parsing/tokens_to_cmds.c \
-	src/exec/init_struct.c \
-	
+	src/exec/errors.c \
+	src/exec/get_path.c \
+	src/exec/manage_files.c \
+	src/exec/manage_heredocs.c \
+	src/exec/pipex.c \
+
 OBJ_DIR = obj
 DEP_DIR = $(OBJ_DIR)
 OBJS = $(SRCS:src/%.c=$(OBJ_DIR)/%.o)
