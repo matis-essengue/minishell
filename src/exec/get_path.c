@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/20 16:14:03 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:52:25 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,18 +83,16 @@ char    **recup_full_cmd(t_cmd *cmd)
         full_cmd[i] = cmd->name;
     i++;
     j = 0;
-    cmd->args = malloc(sizeof(char * ) * 4);
-    cmd->args[0] = "proutenflame";
-    printf("%s\n", cmd->args[0]);
-    // while (cmd->args[j])
-    // {
-    //     printf("----------caca");
-    //     full_cmd[i] = cmd->args[j];
-    //     i++;
-    //     j++;
-    // }
+    // cmd->args = malloc(sizeof(char * ) * 4);
+    // cmd->args[0] = "proutenflame";
+    // printf("%s\n", cmd->args[0]);
+    while (cmd->args[j])
+    {
+        full_cmd[i] = cmd->args[j];
+        i++;
+        j++;
+    }
     full_cmd[i] = NULL;
-    // print_tab(full_cmd);
     return (full_cmd);
 }
 
