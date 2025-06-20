@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/18 15:58:48 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:02:20 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct s_file
 typedef struct s_cmd
 {
 	char				*name;
-	char **args; // les options flag d'une commande
+	char 				**args; // les options flag d'une commande
 	t_file				*infile;
 	t_file				*outfile;
 	t_input_type		input_type;

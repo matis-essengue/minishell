@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/18 17:38:01 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:14:03 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,35 +67,43 @@ void    exec(char *cmd_cut, char **cmd, char **path, char **envp)
     }
 }
 
-char    **recup_full_cmd(t_cmd *cmd, int argc)
+// void    print_tab()
+
+char    **recup_full_cmd(t_cmd *cmd)
 {
     char **full_cmd;
     int i;
     int j;
 
     i = 0;
-    full_cmd = malloc(sizeof(char *) * ((ft_lstsize(argc) + 1)));
+    full_cmd = malloc(sizeof(char *) * (count_cmd_args(cmd) + 1));
     if (full_cmd == NULL)
-        return (full_cmd);
+        return (NULL);
     if (cmd->name)
         full_cmd[i] = cmd->name;
     i++;
     j = 0;
-    while (cmd->args[j])
-    {
-        full_cmd[i] = cmd->args[j];
-        i++;
-        j++;
-    }
+    cmd->args = malloc(sizeof(char * ) * 4);
+    cmd->args[0] = "proutenflame";
+    printf("%s\n", cmd->args[0]);
+    // while (cmd->args[j])
+    // {
+    //     printf("----------caca");
+    //     full_cmd[i] = cmd->args[j];
+    //     i++;
+    //     j++;
+    // }
+    full_cmd[i] = NULL;
+    // print_tab(full_cmd);
     return (full_cmd);
 }
 
-bool    exe_my_cmd(t_cmd *cmd, char **envp, int argc)
+bool    exe_my_cmd(t_cmd *cmd, char **envp)
 {
     char **path;
     char **full_cmd;
 
-    full_cmd = recup_full_cmd(cmd, argc);
+    full_cmd = recup_full_cmd(cmd);
     if (full_cmd == NULL || full_cmd[0] == NULL)
         return (free_array(full_cmd), false);
     if (access(full_cmd[0], F_OK | X_OK) == 0)

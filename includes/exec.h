@@ -17,12 +17,14 @@
 
 typedef struct s_cmd	t_cmd;
 
+int						count_cmd(t_cmd *cmd);
+int						count_cmd_args(t_cmd *cmd);
 char					**get_path(char **envp);
 void					free_array(char **split);
-void					pipe_function(t_cmd *cmd, char **envp, int argc);
+void					pipe_function(t_cmd *cmd, char **envp);
 void					manage_infile(t_cmd *cmd, int *pipefd);
 void					manage_outfile(t_cmd *cmd, int *pipefd);
-bool					exe_my_cmd(t_cmd *cmd, char **envp, int argc);
+bool					exe_my_cmd(t_cmd *cmd, char **envp);
 void					error(char *str, int code);
 void					f_error(char *str, int code);
 void					manage_here_doc(t_cmd *cmd);
