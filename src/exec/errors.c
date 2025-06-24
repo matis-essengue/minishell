@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:22:59 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/13 18:38:09 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/20 17:44:40 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,4 @@ void	f_error(char *str, int code)
 {
 	fprintf(stderr, "%s", str);
 	exit(code);
-}
+} 

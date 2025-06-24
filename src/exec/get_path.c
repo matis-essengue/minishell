@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/20 16:52:25 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/23 16:58:43 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ char    **recup_full_cmd(t_cmd *cmd)
     j = 0;
     // cmd->args = malloc(sizeof(char * ) * 4);
     // cmd->args[0] = "proutenflame";
-    // printf("%s\n", cmd->args[0]);
-    while (cmd->args[j])
+    // printf("cmd: %s\n", cmd->args[0]);
+    while (cmd->args && cmd->args[j])
     {
-        full_cmd[i] = cmd->args[j];
+        full_cmd[i] = strdup(cmd->args[j]);
         i++;
         j++;
     }

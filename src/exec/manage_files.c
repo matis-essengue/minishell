@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:27:07 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/17 15:44:44 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/23 15:05:22 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void    manage_infile(t_cmd *cmd, int *pipefd)
 {
     int fd;
 
+    // printf("infile start");
     close(pipefd[READ]);
     dup2(pipefd[WRITE], FD_STDOUT);
     close(pipefd[WRITE]);
@@ -30,6 +31,7 @@ void    manage_infile(t_cmd *cmd, int *pipefd)
         dup2(fd, FD_STDIN);
         close(fd);
     }
+    // printf("infile end");
 }
 // revoir la gestion des heredocs et append
 
@@ -37,6 +39,7 @@ void    manage_outfile(t_cmd *cmd, int *pipefd)
 {
     int fd;
     
+    // printf("infile start");
     close(pipefd[WRITE]);
     dup2(pipefd[WRITE], FD_STDIN);
     close(pipefd[READ]);
@@ -56,4 +59,5 @@ void    manage_outfile(t_cmd *cmd, int *pipefd)
         dup2(fd, FD_STDOUT);
         close(fd);
     }
+    // printf("outfile end");
 }
