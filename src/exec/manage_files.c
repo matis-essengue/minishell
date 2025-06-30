@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:27:07 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/23 15:05:22 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/30 17:14:13 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,47 +17,49 @@
 
 void    manage_infile(t_cmd *cmd, int *pipefd)
 {
-    int fd;
-
-    // printf("infile start");
-    close(pipefd[READ]);
-    dup2(pipefd[WRITE], FD_STDOUT);
-    close(pipefd[WRITE]);
-    if (cmd->heredocs->content == NULL)
+    if (is_first()) 
     {
-        fd = open(cmd->infile->name, O_RDONLY | O_CREAT);
-        if (fd == -1)
-            return (error("infile error\n", 1));
-        dup2(fd, FD_STDIN);
-        close(fd);
+        close(pipefd[WRITE]);
+        dup2(pipefd[READ], STDIN_FILENO);
+        close(pipefd[READ]);
     }
-    // printf("infile end");
+    int fd;
+    t_file *file;
+
+    file = cmd->infile;
+    while (file)
+    {
+        fd = open(file->name, O_RDONLY);
+        if (fd == -1)
+            return (error("infile open failed\n", 1));
+        dup2(fd, STDIN_FILENO);
+        close(fd);
+        file = file->next;
+    }
 }
 // revoir la gestion des heredocs et append
 
 void    manage_outfile(t_cmd *cmd, int *pipefd)
 {
     int fd;
-    
-    // printf("infile start");
-    close(pipefd[WRITE]);
-    dup2(pipefd[WRITE], FD_STDIN);
-    close(pipefd[READ]);
-    if (cmd->heredocs == NULL)
+    t_file *file;
+
+    if () 
     {
-        fd = open(cmd->outfile->name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        if (fd == -1)
-            return (error("outfile error\n", 1));
-        dup2(fd, FD_STDOUT);
-        close(fd);
+        close(pipefd[READ]);
+        dup2(pipefd[WRITE], STDOUT_FILENO);
+        close(pipefd[WRITE]);
     }
-    else
+    file = cmd->outfile;
+    while (file)
     {
-        fd = open(cmd->outfile->name, O_WRONLY | O_CREAT | O_APPEND, 0644);
-        if (fd == -1)
-            return (error("outfile error\n", 1));
-        dup2(fd, FD_STDOUT);
+        fd = open(file->name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (fd == -1) {
+            error("outfile open failed", 1);
+            return;
+        }
+        dup2(fd, STDOUT_FILENO);
         close(fd);
+        file = file->next;
     }
-    // printf("outfile end");
 }

@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/23 14:45:40 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/30 17:03:39 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ int	count_cmd_args(t_cmd *cmd)
 			res++;
 		tmp = tmp->next;
 	}
-	// printf("final res : %d\n", res);
 	return (res);
 }
 

@@ -19,6 +19,7 @@ typedef struct s_cmd	t_cmd;
 
 int						count_cmd(t_cmd *cmd);
 int						count_cmd_args(t_cmd *cmd);
+void                    restore_all_in_out(int saved_stdin, int saved_stdout);
 char					**get_path(char **envp);
 void					free_array(char **split);
 void					pipe_function(t_cmd *cmd, char **envp);

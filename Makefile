@@ -23,6 +23,7 @@ SRCS = \
 	src/exec/manage_files.c \
 	src/exec/manage_heredocs.c \
 	src/exec/pipex.c \
+	src/exec/utils.c \
 
 OBJ_DIR = obj
 DEP_DIR = $(OBJ_DIR)

@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:05:29 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/23 16:47:46 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/06/30 16:38:13 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,33 +17,20 @@
 // {
 // }
 
-void	one_command(t_cmd *cmd, char **envp)
-{
-	if (cmd->input_type == HERE_DOC)
-		manage_here_doc(cmd);
-	exe_my_cmd(cmd, envp);
-}
-
 // cmd->heredocs->expand_vars == false && 
 
-void	child_call(t_cmd *cmd, int *pipefd, char **envp, int i)
+void	child_call(t_cmd *cmd, int *pipefd, char **envp)
 {
-	if (i == 0)
-	{
-		printf("111111111111");
+	if (cmd->infile != NULL)
 		manage_infile(cmd, pipefd);
-	}
-	else if (i == count_cmd(cmd))
-	{
-		printf("2222222222");
+	else if (cmd->outfile != NULL)
 		manage_outfile(cmd, pipefd);
-	}
-	else if (cmd->input_type == HERE_DOC)
-		manage_here_doc(cmd);
-	else
+	// else if (cmd->input_type == HERE_DOC)
+	// 	manage_here_doc(cmd);
+	else if (cmd->next)
 	{
 		close(pipefd[READ]);
-		dup2(pipefd[WRITE], FD_STDOUT);
+		dup2(pipefd[WRITE], STDOUT_FILENO);
 		close(pipefd[WRITE]);
 	}
     exe_my_cmd(cmd, envp);
@@ -66,9 +53,11 @@ void	pipe_function(t_cmd *cmd, char **envp)
 {
 	pid_t pid;
 	int pipefd[2];
-	int i;
+	int saved_stdin;
+	int saved_stdout;
 
-	i = 0;
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
 	while (cmd != NULL)
 	{
 		if (cmd->input_type == PIPEIN || count_cmd(cmd) > 1)
@@ -77,12 +66,11 @@ void	pipe_function(t_cmd *cmd, char **envp)
 		if (pid == -1)
 			error("fork failed\n", 1);
 		if (pid == 0)
-			child_call(cmd, pipefd, envp, i);
+			child_call(cmd, pipefd, envp);
 		else
 			parent_call(pipefd);
 		cmd = cmd->next;
-		i++;
 	}
-	// close(STDIN);
 	wait_child();
+	restore_all_in_out(saved_stdin, saved_stdout);
 }
