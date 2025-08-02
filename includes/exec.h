@@ -2,6 +2,7 @@
 # define EXEC_H
 
 # include "../libft/libft.h"
+# include "minishell.h"
 # include <fcntl.h>
 # include <stdbool.h>
 # include <stdio.h>
@@ -17,17 +18,20 @@
 
 typedef struct s_cmd	t_cmd;
 
-int						count_cmd(t_cmd *cmd);
-int						count_cmd_args(t_cmd *cmd);
-void                    restore_all_in_out(int saved_stdin, int saved_stdout);
+bool					is_built_in(char *cmd);
 char					**get_path(char **envp);
 void					free_array(char **split);
+void					open_infile(t_cmd *cmd, int *pipe_fd);
+void					open_outfile(t_cmd *cmd, int *pipe_fd);
+void					manage_heredocs(t_cmd *cmd);
 void					pipe_function(t_cmd *cmd, char **envp);
-void					manage_infile(t_cmd *cmd, int *pipefd);
-void					manage_outfile(t_cmd *cmd, int *pipefd);
+void					wait_child(void);
 bool					exe_my_cmd(t_cmd *cmd, char **envp);
-void					error(char *str, int code);
-void					f_error(char *str, int code);
-void					manage_here_doc(t_cmd *cmd);
+void					error(t_cmd *cmd, char *str, int code);
+void					close_all_fd(int *fd);
+int						count_cmd(t_cmd *cmd);
+int						count_cmd_args(t_cmd *cmd);
+// void					open_heredocs(t_cmd *cmd, int *pipe_fd);
+// void					manage_here_doc(t_cmd *cmd);
 
 #endif

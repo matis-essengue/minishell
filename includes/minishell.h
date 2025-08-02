@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/30 17:01:20 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/02 12:12:15 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,28 +20,27 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-// ---- STRUCTS ENUM ----
+// ---- STRUCTS ----
 
 typedef enum input_type
 {
-	STDIN = 0,
-	PIPEIN = 0,
+	STDIN,
+	PIPEIN,
 	HERE_DOC,
 }						t_input_type;
 
 typedef enum output_type
 {
-	STDOUT = 1,
-	PIPEOUT = 1,
+	STDOUT,
+	PIPEOUT,
 }						t_output_type;
-
-// ---- STRUCTS ----
 
 typedef struct s_heredoc
 {
 	char				*delimiter;
 	char				*content;
-	bool expand_vars; // parcing here_doc
+	int					expand_vars;
+	int					heredoc_fd;
 	struct s_heredoc	*next;
 }						t_heredoc;
 
@@ -49,16 +48,14 @@ typedef struct s_file
 {
 	char				*name;
 	char				permission[3];
-	bool append; // pour ajouter true or false type
+	int					append;
 	struct s_file		*next;
 }						t_file;
 
 typedef struct s_cmd
 {
-	bool				is_first;
-	bool				is_last;
 	char				*name;
-	char 				**args; // les options flag d'une commande
+	char				**args;
 	t_file				*infile;
 	t_file				*outfile;
 	t_input_type		input_type;
@@ -67,19 +64,11 @@ typedef struct s_cmd
 	struct s_cmd		*next;
 }						t_cmd;
 
-typedef struct s_stack
-{
-	void				*value;
-	struct s_stack		*next;
-}						t_stack;
+
+// ---- FUNCTIONS ----
 
 t_cmd					*parse(char *line);
-t_stack					*init_stack(void);
-void					push(t_stack **stack, void *value);
-void					*pop(t_stack **stack);
-void					*top(t_stack *stack);
-void					clean(t_stack **stack);
-int						is_empty(t_stack *stack);
+void    				pipe_function(t_cmd *cmd, char **envp);
 void					print_cmd(t_cmd *cmd);
 int						check_cmds(t_cmd *cmd);
 t_cmd					*tokens_to_cmds(t_token *tokens);

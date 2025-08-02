@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:12:25 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/17 12:49:37 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/02 12:15:39 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 						heredoc->delimiter = current->next->value;
 						heredoc->content = NULL;
 						heredoc->expand_vars = 1;
+						heredoc->heredoc_fd = -1;
 						heredoc->next = NULL;
 						cmds->input_type = HERE_DOC;
 						if (cmds->heredocs == NULL)

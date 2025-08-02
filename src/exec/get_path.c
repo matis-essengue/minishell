@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/06/30 14:48:25 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/07/31 14:05:28 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ char    **get_path(char **envp)
         }
         i++;
     }
-    error("path not found", 1);
     return (NULL);
 }
 
@@ -60,14 +59,12 @@ void    exec(char *cmd_cut, char **cmd, char **path, char **envp)
         full_path = join_slash(path[i], cmd_cut);
         if (full_path == NULL)
             return ;
-        if (access(path[i], F_OK | X_OK) == 0)
+        if (access(full_path, F_OK | X_OK) == 0)
             execve(full_path, cmd, envp);
         free(full_path);
         i++;
     }
 }
-
-// void    print_tab()
 
 char    **recup_full_cmd(t_cmd *cmd)
 {
@@ -85,7 +82,9 @@ char    **recup_full_cmd(t_cmd *cmd)
     j = 0;
     while (cmd->args && cmd->args[j])
     {
-        full_cmd[i] = strdup(cmd->args[j]);
+        full_cmd[i] = ft_strdup(cmd->args[j]);
+        // if (full_cmd[i] == NULL)
+        //     break ;
         i++;
         j++;
     }
@@ -108,11 +107,11 @@ bool    exe_my_cmd(t_cmd *cmd, char **envp)
     {
         free_array(full_cmd);
         free_array(path);
-        error("env error", 127);
+        error(cmd, "env error", 127);
     }
     exec(full_cmd[0], full_cmd, path, envp);
     free_array(path);
     free_array(full_cmd);
-    error("command not found", 127);
+    error(cmd, "command not found", 127);
     return (false);
 }
