@@ -6,24 +6,16 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 12:22:05 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/17 16:30:36 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/07/28 16:17:50 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include <fcntl.h>
-# include <limits.h>
-# include <stdarg.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 2000000
-
-# endif
 
 typedef struct s_list
 {
@@ -37,10 +29,6 @@ int					ft_isalnum(int c);
 int					ft_isascii(int c);
 int					ft_isprint(int c);
 size_t				ft_strlen(const char *str);
-size_t				ft_strlen_opti(char *str);
-int					search_char(char *str, char c);
-char				*ft_strndup_gnl(char *str, char c);
-char				*get_next_line(int fd);
 void				*ft_memset(void *b, int c, size_t len);
 void				ft_bzero(void *s, size_t n);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
@@ -52,6 +40,7 @@ int					ft_tolower(int c);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strrchr(const char *s, int c);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
+int					ft_strcmp(char *s1, char *s2);
 void				*ft_memchr(const void *s, int c, size_t n);
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
 char				*ft_strnstr(const char *haystack, const char *needle,
