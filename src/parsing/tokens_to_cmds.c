@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:12:25 by messengu          #+#    #+#             */
-/*   Updated: 2025/08/02 12:15:39 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/08/15 18:34:11 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ void	init_cmd(t_cmd *cmd)
 {
 	cmd->name = NULL;
 	cmd->args = NULL;
+	cmd->pipefd[0] = -1;
+	cmd->pipefd[1] = -1;
+	cmd->exit_status = 0;
 	cmd->infile = NULL;
 	cmd->outfile = NULL;
 	cmd->next = NULL;
@@ -30,7 +33,6 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 {
 	t_cmd	*first_cmd;
 	t_cmd	*cmds;
-	// t_token	*temp;
 	t_token	*current;
 	t_token	*start;
 	t_heredoc	*heredoc;
@@ -43,22 +45,25 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 	init_cmd(cmds);
 	first_cmd = cmds;
 	current = tokens;
-	// start = current;
 	i = 0;
+	
+	// Initialiser les variables pour éviter les problèmes
+	start_infile = NULL;
+	start_outfile = NULL;
+	
 	while (current)
 	{
 		if (current->type != TOKEN_CONTROL_OP)
 		{
 			// ADDING NAME AND COUNTING ARGS
 			start = current;
-			// printf("STARTING AT : %s\n", current->value);
 			arg_count = 0;
 			while (current && current->type != TOKEN_CONTROL_OP)
 			{
 				if (current->type == TOKEN_WORD)
 				{
 					if (cmds->name == NULL)
-						cmds->name = current->value;
+						cmds->name = ft_strdup(current->value);  // DUPLIQUER!
 					else
 						arg_count++;
 				}
@@ -73,13 +78,12 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 				cmds->args = malloc(sizeof(char *) * (arg_count + 1));
 				i = -1;
 				current = start;
-				// printf("STARTING AT : %s\n", current->value);
 				while (current && current->type != TOKEN_CONTROL_OP)
 				{
 					if (current->type == TOKEN_WORD)
 					{
 						if (i >= 0)
-							cmds->args[i] = current->value;
+							cmds->args[i] = ft_strdup(current->value);  // DUPLIQUER!
 						i++;
 					}
 					else
@@ -91,13 +95,10 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 
 			// ADDING INFILE, OUTFILE AND HEREDOC
 			current = start;
-			// printf("STARTING AT : %s\n", current->value);
 			while (current && current->type != TOKEN_CONTROL_OP)
 			{
-				// printf("CURRENT : %s\n", current->value);
 				if (current->type == TOKEN_REDIRECT_OP)
 				{
-					// printf("REDIRECT_OP : %s\n", current->value);
 					if (ft_strncmp(current->value, ">>", 2) == 0)
 					{
 						if (cmds->outfile == NULL)
@@ -110,18 +111,19 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 							cmds->outfile->next = malloc(sizeof(t_file));
 							cmds->outfile = cmds->outfile->next;
 						}
-						cmds->outfile->name = current->next->value;
+						cmds->outfile->name = ft_strdup(current->next->value);  // DUPLIQUER!
 						cmds->outfile->permission[0] = '2';
 						cmds->outfile->permission[1] = '2';
 						cmds->outfile->permission[2] = '2';
 						cmds->outfile->append = 1;
+						cmds->outfile->fd = -1;
 						cmds->outfile->next = NULL;
 						current = current->next;
 					}
 					else if (ft_strncmp(current->value, "<<", 2) == 0)
 					{
 						heredoc = malloc(sizeof(t_heredoc));
-						heredoc->delimiter = current->next->value;
+						heredoc->delimiter = ft_strdup(current->next->value);  // DUPLIQUER!
 						heredoc->content = NULL;
 						heredoc->expand_vars = 1;
 						heredoc->heredoc_fd = -1;
@@ -138,7 +140,6 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 					}
 					else if (ft_strncmp(current->value, "<", 1) == 0)
 					{
-						// printf("INFILE\n");
 						if (cmds->infile == NULL)
 						{
 							cmds->infile = malloc(sizeof(t_file));
@@ -149,11 +150,12 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 							cmds->infile->next = malloc(sizeof(t_file));
 							cmds->infile = cmds->infile->next;
 						}
-						cmds->infile->name = current->next->value;
+						cmds->infile->name = ft_strdup(current->next->value);  // DUPLIQUER!
 						cmds->infile->permission[0] = '4';
 						cmds->infile->permission[1] = '4';
 						cmds->infile->permission[2] = '4';
 						cmds->infile->append = 0;
+						cmds->infile->fd = -1;
 						cmds->infile->next = NULL;
 						current = current->next;
 					}
@@ -169,16 +171,29 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 							cmds->outfile->next = malloc(sizeof(t_file));
 							cmds->outfile = cmds->outfile->next;
 						}
-						cmds->outfile->name = current->next->value;
+						cmds->outfile->name = ft_strdup(current->next->value);  // DUPLIQUER!
 						cmds->outfile->permission[0] = '2';
 						cmds->outfile->permission[1] = '2';
 						cmds->outfile->permission[2] = '2';
 						cmds->outfile->append = 0;
+						cmds->outfile->fd = -1;
 						cmds->outfile->next = NULL;
 						current = current->next;
 					}
 				}
 				current = current->next;
+			}
+			
+			// Réinitialiser les pointeurs au début des listes
+			if (start_infile)
+			{
+				cmds->infile = start_infile;
+				start_infile = NULL;  // Réinitialiser pour la prochaine commande
+			}
+			if (start_outfile)
+			{
+				cmds->outfile = start_outfile;
+				start_outfile = NULL;  // Réinitialiser pour la prochaine commande
 			}
 		}
 
@@ -195,9 +210,6 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 		if (current)
 			current = current->next;
 	}
-	if (cmds->infile)
-		cmds->infile = start_infile;
-	if (cmds->outfile)
-		cmds->outfile = start_outfile;
+	
 	return (first_cmd);
 }
