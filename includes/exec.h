@@ -10,6 +10,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <termios.h>
 
 # define FD_STDIN 0
 # define FD_STDOUT 1
@@ -102,5 +103,10 @@ int						count_cmd(t_cmd *cmd);
 int						count_args(t_cmd *cmd);
 int						count_all_cmd_args(t_cmd *cmd);
 void					print_array(char **array);
+
+// term state
+
+int						save_termios(struct termios *out_saved);
+void 					restore_termios(const struct termios *saved);
 
 #endif

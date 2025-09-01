@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 18:07:34 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/17 14:01:58 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/01 15:45:48 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,9 @@ int 	return_char_pos(char *str, char c)
 
 int	check_is_same_var(char *s1, char *s2)
 {
-	int	i;
 	int	len_s1;
 	int	len_s2;
 
-	i = 0;
 	len_s1 = return_char_pos(s1, '=');
 	len_s2 = return_char_pos(s2, '=');
 	if (len_s1 == 0 || len_s2 == 0)

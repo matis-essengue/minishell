@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:58 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/01 12:21:31 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/01 15:45:53 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,8 @@ int	check_head_var(char *var)
 
 int	check_export_format(char *var)
 {
-	int	sign;
 	int	i;
 
-	sign = 0;
 	i = check_head_var(var);
 	if (i == -1)
 		return (1);

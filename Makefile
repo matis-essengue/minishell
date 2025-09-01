@@ -24,6 +24,7 @@ SRCS = \
 	src/exec/utils.c \
 	src/exec/errors.c \
 	src/exec/init_struct_env.c \
+	src/exec/term_state.c \
 	src/built-in/built_in.c \
 	src/built-in/cd.c \
 	src/built-in/echo.c \
