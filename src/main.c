@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/01 15:48:51 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/01 16:56:38 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	main(int argc, char **argv, char **envp)
 		if (line == NULL)
 			break ;
 		add_history(line);
-		cmd = parse(line);
+		cmd = parse(line, my_env);
 		check_exit(cmd, 0);
 		execute_command(cmd, my_env);
 		free(line);

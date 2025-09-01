@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/06/10 18:23:15 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/01 16:50:40 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
 #include "../../includes/minishell.h"
 
-static char	*expand_variable(char **temp, char **start, char *expanded)
+static char	*expand_variable(char **temp, char **start, char *expanded, t_env *env)
 {
 	if (*(*temp + 1) && *(*temp + 1) == '$')
 	{
@@ -32,13 +32,13 @@ static char	*expand_variable(char **temp, char **start, char *expanded)
 	(*temp)++;
 	while (**temp && **temp != ' ' && **temp != '\t' && **temp != '\n' && **temp != '"' && **temp != '$' && **temp != '\'')
 		(*temp)++;
-	if (getenv(ft_strndup(*start + 1, *temp - *start - 1)) != NULL)
-		expanded = ft_strjoin(expanded, getenv(ft_strndup(*start + 1, *temp - *start - 1)));
+	if (ft_getenv(ft_strndup(*start + 1, *temp - *start - 1), env->env) != NULL)
+		expanded = ft_strjoin(expanded, ft_getenv(ft_strndup(*start + 1, *temp - *start - 1), env->env));
 	*start = *temp;
 	return (expanded);
 }
 
-char	*expand_word(char *word)
+char	*expand_word(char *word, t_env *env)
 {
 	char	*expanded;
 	char	*temp;
@@ -58,7 +58,7 @@ char	*expand_word(char *word)
 		if (*temp == '\'' && !dquoted)
 			squoted = !squoted;
 		if (*temp == '$' && !squoted)
-			expanded = expand_variable(&temp, &start, expanded);
+			expanded = expand_variable(&temp, &start, expanded, env);
 		else
 			temp++;
 	}
@@ -66,7 +66,7 @@ char	*expand_word(char *word)
 	return (expanded);
 }
 
-void	expand_cmds(t_cmd *tokens)
+void	expand_cmds(t_cmd *tokens, t_env *env)
 {
 	t_cmd	*current;
 	int		i;
@@ -79,7 +79,7 @@ void	expand_cmds(t_cmd *tokens)
 			i = 0;
 			while (current->args[i])
 			{
-				current->args[i] = expand_word(current->args[i]);
+				current->args[i] = expand_word(current->args[i], env);
 				i++;
 			}
 		}
