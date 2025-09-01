@@ -6,15 +6,58 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/01 16:50:40 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/01 17:37:01 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
 #include "../../includes/minishell.h"
 
+
+int	found(char *var, char *env_var)
+{
+	int	i;
+
+	i = 0;
+	while (env_var[i] && env_var[i])
+	{
+		if (env_var[i] == '=')
+		{
+			if (var[i] == '\0')
+				return (1);
+			else
+				return (0);
+		}
+		if (env_var[i] != var[i])
+			return (0);
+		i++;
+	}
+	return (0);
+}
+
+char	*ft_getenvx(char *var, char **env)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (env[i])
+	{
+		if (found(var, env[i]))
+		{
+			j = 0;
+			while (env[i][j] && env[i][j] != '=')
+				j++;
+			return (ft_strndup(env[i] + j + 1, ft_strlen(env[i]) - j - 1));
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 static char	*expand_variable(char **temp, char **start, char *expanded, t_env *env)
 {
+	char *var;
 	if (*(*temp + 1) && *(*temp + 1) == '$')
 	{
 		(*temp)++;
@@ -32,11 +75,16 @@ static char	*expand_variable(char **temp, char **start, char *expanded, t_env *e
 	(*temp)++;
 	while (**temp && **temp != ' ' && **temp != '\t' && **temp != '\n' && **temp != '"' && **temp != '$' && **temp != '\'')
 		(*temp)++;
-	if (ft_getenv(ft_strndup(*start + 1, *temp - *start - 1), env->env) != NULL)
-		expanded = ft_strjoin(expanded, ft_getenv(ft_strndup(*start + 1, *temp - *start - 1), env->env));
+	var = ft_strndup(*start + 1, *temp - *start - 1);
+	char *env_var = ft_getenvx(var, env->env);
+	if (env_var)
+	{
+		expanded = ft_strjoin(expanded, env_var);
+	}
 	*start = *temp;
 	return (expanded);
 }
+
 
 char	*expand_word(char *word, t_env *env)
 {
@@ -74,6 +122,8 @@ void	expand_cmds(t_cmd *tokens, t_env *env)
 	current = tokens;
 	while (current)
 	{
+		if (current->name)
+			current->name = expand_word(current->name, env);
 		if (current->args)
 		{
 			i = 0;
