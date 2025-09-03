@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/03 16:29:18 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/03 16:54:42 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int	main(int argc, char **argv, char **envp)
 		check_exit(cmd, 0); //handle quit signal ?
 		my_env->exit_status = execute_command(cmd, my_env);
 		free(line);
-		free_cmds(cmd);
 	}
 	free_my_env(my_env);
 	return (0);

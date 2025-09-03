@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:12:25 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/03 11:52:35 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/03 16:51:32 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ static void	handle_heredoc(t_cmd *cmd, t_token *current)
 	heredoc = malloc(sizeof(t_heredoc));
 	heredoc->delimiter = ft_strdup(current->next->value);
 	heredoc->content = NULL;
-	heredoc->expand_vars = 1;
 	heredoc->heredoc_fd = -1;
 	heredoc->next = NULL;
 	cmd->input_type = HERE_DOC;

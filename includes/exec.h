@@ -126,4 +126,9 @@ int							count_args(t_cmd *cmd);
 int							count_all_cmd_args(t_cmd *cmd);
 void						print_array(char **array);
 
+// term state
+
+int							save_termios(struct termios *out_saved);
+void						restore_termios(const struct termios *saved);
+
 #endif
