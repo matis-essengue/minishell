@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 20:17:52 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/03 16:54:21 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/03 16:59:29 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ t_env	*init_env(char **envp)
 		return (NULL);
 	}
 	my_env->is_cpy = 1;
+	my_env->exit_status = 0;
 	return (my_env);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/03 11:51:46 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/03 16:53:58 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,12 @@ void	open_outfile(t_cmd *cmd)
 		close(file->fd);
 		file = file->next;
 	}
-}	
+}
 
 int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 {
 	char	*line;
-	char 	*expand;
 
-	expand = NULL;
 	close(pipe_fd_h[READ]);
 	while (1)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_checker.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:01:04 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/28 18:39:23 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/03 16:02:11 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,10 @@ int	is_valid_export(t_cmd *cmd)
 				printf(
 					"minishell: export: `%s': not a valid identifier\n",
 					var_name);
+				free(var_name);
 				return (0);
 			}
+			free(var_name);
 			i++;
 		}
 	}

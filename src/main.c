@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/01 17:22:11 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/03 16:54:42 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ int	main(int argc, char **argv, char **envp)
 		if (line == NULL)
 			break ;
 		add_history(line);
-		cmd = parse(line);
+		cmd = parse(line, my_env);
 		check_exit(cmd, 0); //handle quit signal ?
-		execute_command(cmd, my_env);
+		my_env->exit_status = execute_command(cmd, my_env);
 		free(line);
 	}
 	free_my_env(my_env);

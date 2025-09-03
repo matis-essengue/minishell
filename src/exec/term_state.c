@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   term_state.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/28 16:15:22 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/03 16:30:31 by matis            ###   ########.fr       */
+/*   Created: 2025/09/01 15:52:40 by matis             #+#    #+#             */
+/*   Updated: 2025/09/01 15:59:32 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/exec.h"
 
-int	ft_strcmp(char *s1, char *s2)
-{
-	int i;
+int save_termios(struct termios *out_saved) {
+	if (tcgetattr(STDIN_FILENO, out_saved) == -1) {
+		perror("tcgetattr");
+		return -1;
+	}
+	return 0;
+}
 
-	i = 0;
-	while (s1[i] && s2[i] && s1[i] == s2[i])
-		i++;
-	return (s1[i] - s2[i]);
+void restore_termios(const struct termios *saved) {
+	if (tcsetattr(STDIN_FILENO, TCSANOW, saved) == -1) {
+		perror("tcsetattr");
+	}
 }

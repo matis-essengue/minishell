@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote_remover.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:29 by messengu          #+#    #+#             */
-/*   Updated: 2025/08/05 17:44:55 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/03 16:49:48 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,18 @@ char	*_remove_quotes(char *word)
 	return (new_word);
 }
 
+void	rm_quotes_for_all_files(t_file *first_file)
+{
+	t_file	*current_file;
+
+	current_file = first_file;
+	while (current_file)
+	{
+		current_file->name = _remove_quotes(current_file->name);
+		current_file = current_file->next;
+	}
+}
+
 /**
  * @brief Remove quotes from the commands
  *
@@ -83,23 +95,9 @@ void	remove_quotes(t_cmd *cmds)
 		if (current->name)
 			current->name = _remove_quotes(current->name);
 		if (current->infile)
-		{
-			t_file *current_file = current->infile;
-			while (current_file)
-			{
-				current_file->name = _remove_quotes(current_file->name);
-				current_file = current_file->next;
-			}
-		}
+			rm_quotes_for_all_files(current->infile);
 		if (current->outfile)
-		{
-			t_file *current_file = current->outfile;
-			while (current_file)
-			{
-				current_file->name = _remove_quotes(current_file->name);
-				current_file = current_file->next;
-			}
-		}
+			rm_quotes_for_all_files(current->outfile);
 		if (current->args)
 		{
 			while (current->args[i])
