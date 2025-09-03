@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 16:15:22 by armosnie          #+#    #+#             */
-/*   Updated: 2025/07/28 16:17:18 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/03 14:16:39 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_strcmp(char *s1, char *s2)
 	int i;
 
 	i = 0;
-	while (s1 && s2 && s1[i] == s2[i])
+	while (s1[i] && s2[i] && s1[i] == s2[i])
 		i++;
 	return (s1[i] - s2[i]);
 }
