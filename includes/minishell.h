@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/03 11:29:00 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/03 16:32:06 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 
 // ---- STRUCTS ----
 
+typedef struct sigaction		t_sa;
+extern volatile sig_atomic_t	g_signal;
+
 typedef enum input_type
 {
 	STDIN,
@@ -43,7 +46,6 @@ typedef struct s_heredoc
 {
 	char				*delimiter;
 	char				*content;
-	int expand_vars; // a implenter dans mon heredoc
 	int					heredoc_fd;
 	struct s_heredoc	*next;
 }						t_heredoc;

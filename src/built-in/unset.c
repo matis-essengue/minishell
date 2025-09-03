@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:20:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 18:38:54 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/03 16:34:11 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,18 @@ char	**unset_replace_my_env(char **env, char *var)
 int	get_my_unset_env(char ***env, char *new_var)
 {
 	char **tmp;
+	char *var_path;
 	int i;
 
 	i = 0;
+	var_path = get_var_path(*(env), new_var);
+	if (var_path == NULL)
+		return (1);
 	while ((*env)[i])
 	{
-		if (check_is_same_var((*env)[i], new_var))
+		if (check_is_same_var((*env)[i], var_path))
 		{
-			tmp = unset_replace_my_env(*env, new_var);
+			tmp = unset_replace_my_env(*env, var_path);
 			if (!tmp)
 				return (1);
 			free_array(*env);

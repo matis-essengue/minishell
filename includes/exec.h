@@ -17,96 +17,113 @@
 # define READ 0
 # define WRITE 1
 
-typedef struct s_cmd	t_cmd;
-typedef struct s_env	t_env;
+typedef struct s_cmd		t_cmd;
+typedef struct s_env		t_env;
+typedef struct s_heredoc	t_heredoc;
 
 // struct t_env
 
-t_env					*init_env(char **envp);
-char					**copy_env(char **envp);
-void					free_my_env(t_env *my_env);
+t_env						*init_env(char **envp);
+char						**copy_env(char **envp);
+void						free_my_env(t_env *my_env);
 
 // built-in utils
 
-long long				ft_atoll(char *str);
-int						check_long(char *str);
-int						is_valid_number(char *str);
-int						invalid_option(char **args, char *str);
-int						env_len(char **envp);
-int						check_is_same_var(char *s1, char *s2);
-char					*find_var(char *target_var, char **env);
-char					**copy_and_replace_my_env(char **env, char *var);
+long long					ft_atoll(char *str);
+int							check_long(char *str);
+int							is_valid_number(char *str);
+int							invalid_option(char **args, char *str);
+int							env_len(char **envp);
+int							check_is_same_var(char *s1, char *s2);
+char						*find_var(char *target_var, char **env);
+char						**copy_and_replace_my_env(char **env, char *var);
+int							return_char_pos(char *str, char c);
 
 // built-in : export unset utils
 
-char					*ft_getenv(char *var, char **env);
-int						get_my_export_env(char ***env, char *new_var);
-char					**copy_and_add_my_env(char **env, char *var);
-char					**copy_and_replace_my_env(char **env, char *var);
+char						*ft_getenv(char *var, char **env);
+int							get_my_export_env(char ***env, char *new_var);
+char						**copy_and_add_my_env(char **env, char *var);
+char						**copy_and_replace_my_env(char **env, char *var);
+int							get_my_unset_env(char ***env, char *new_var);
 
-int						get_my_unset_env(char ***env, char *new_var);
+// built-in utils 2
+
+char						*get_var_path(char **envp, char *var);
+char						**get_path(char **envp);
 
 // built-in
 
-int						child_process_built_in(t_cmd *cmd, t_env *env);
-int						parent_process_built_in(t_cmd *cmd, t_env *env);
-bool					is_built_in(t_cmd *cmd);
-int						built_in_echo(t_cmd *cmd);
-int						built_in_cd(t_cmd *cmd, t_env *env);
-int						built_in_pwd(t_cmd *cmd);
-int						built_in_export(t_cmd *cmd, t_env *env, int code_error);
-int						built_in_unset(t_cmd *cmd, t_env *env);
-int						built_in_env(t_cmd *cmd, t_env *env);
-int						built_in_exit(t_cmd *cmd, int status);
+int							child_process_built_in(t_cmd *cmd, t_env *env);
+int							parent_process_built_in(t_cmd *cmd, t_env *env);
+bool						is_built_in(t_cmd *cmd);
+int							built_in_echo(t_cmd *cmd);
+int							built_in_cd(t_cmd *cmd, t_env *env);
+int							built_in_pwd(t_cmd *cmd);
+int							built_in_export(t_cmd *cmd, t_env *env,
+								int code_error);
+int							built_in_unset(t_cmd *cmd, t_env *env);
+int							built_in_env(t_cmd *cmd, t_env *env);
+int							built_in_exit(t_cmd *cmd, int status);
 
 // errors
 
-void					free_array(char **split);
-void					error(t_cmd *cmd, char *str, int code);
-void					free_all_struct(t_cmd *cmd);
-void					close_all_fd(int *fd);
+void						free_all_struct(t_cmd *cmd);
+void						error(t_cmd *cmd, char *str, int code);
+
+// errors 2
+
+void						pipe_and_pid_error(t_cmd *cmd, t_heredoc *heredoc,
+								int *pipe_fd_h, int err);
+void						free_array(char **split);
+void						close_all_fd(int *fd);
 
 // parent process
 
-int						execute_command(t_cmd *cmd, t_env *env);
-int						pipe_function(t_cmd *cmd, pid_t *pid, int exit_status,
-							t_env *env);
-int						parent_call(t_cmd *cmd, int prev_read_fd);
-void					pipe_check_or_create(t_cmd *cmd, int prev_read_fd);
-void					pidarray_check(t_cmd *cmd, pid_t *pid, int prev_read_fd,
-							int i);
+int							execute_command(t_cmd *cmd, t_env *env);
+int							pipe_function(t_cmd *cmd, pid_t *pid,
+								int exit_status, t_env *env);
+int							parent_call(t_cmd *cmd, int prev_read_fd);
+void						pipe_check_or_create(t_cmd *cmd, int prev_read_fd);
+void						pidarray_check(t_cmd *cmd, pid_t *pid,
+								int prev_read_fd, int i);
 
 // child process
 
-void					child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env,
-							int prev_read_fd);
-void					files_and_management(t_cmd *cmd, t_cmd *cmd_list,
-							int prev_read_fd);
-void					unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
-int						wait_child(pid_t *pid, int size);
+void						child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env,
+								int prev_read_fd);
+void						files_and_management(t_cmd *cmd, t_cmd *cmd_list,
+								int prev_read_fd);
+void						unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
+int							wait_child(pid_t *pid, int size);
 
 // manage_files
 
-void					open_infile(t_cmd *cmd);
-void					open_outfile(t_cmd *cmd);
-void					manage_heredocs(t_cmd *cmd, t_env *env);
+void						open_infile(t_cmd *cmd);
+void						open_outfile(t_cmd *cmd);
+void						manage_heredocs(t_cmd *cmd);
 
 // get_path
 
-char					**get_path(char **envp);
-bool					exe_my_cmd(t_cmd *cmd, t_env *env);
+bool						exe_my_cmd(t_cmd *cmd, t_env *env);
 
+// // init interface utilisateur
+
+// void							handle_sigint(int sig);
+// void							exec_handle_sigint(int sig);
+// void							handle_sigquit(int sig);
+
+// // sig handlers
+
+// void							handle_child_signal(void);
+// void							handle_interactive_signal(void);
+// void							handle_exec_signal(void);
 
 // utils
 
-int						count_cmd(t_cmd *cmd);
-int						count_args(t_cmd *cmd);
-int						count_all_cmd_args(t_cmd *cmd);
-void					print_array(char **array);
-
-// term state
-
-int						save_termios(struct termios *out_saved);
-void 					restore_termios(const struct termios *saved);
+int							count_cmd(t_cmd *cmd);
+int							count_args(t_cmd *cmd);
+int							count_all_cmd_args(t_cmd *cmd);
+void						print_array(char **array);
 
 #endif

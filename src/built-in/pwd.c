@@ -3,15 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:20:01 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/17 12:31:07 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/03 16:33:55 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
+
+// char *get_pwd(char **envp)
+// {
+//     char *pwd;
+//     char buffer[1024];
+
+//     pwd = getcwd(buffer, 1024);
+//     if (!pwd)
+//     {
+
+//         perror("");
+//         return (1);
+//     }
+//     return (pwd);
+// }
 
 int built_in_pwd(t_cmd *cmd)
 {
