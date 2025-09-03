@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/01 20:19:00 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/03 11:32:37 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,16 @@ static char	*expand_variable(
 	}
 	if (*(*temp + 1) && *(*temp + 1) == '?')
 	{
-		// TODO: expand $?
+		printf("expanding exit status\n");
+		printf("expanded: %s\n", expanded);
+		printf("exit status: %d\n", env->exit_status);
+		printf("tmp: %s\n", *temp);
+		expanded = ft_strjoin(expanded, ft_itoa(env->exit_status));
 		(*temp)++;
 		(*temp)++;
+		printf("tmp after: %s\n", *temp);
+		printf("expanded after: %s\n", expanded);
+		*start = *temp;
 		return (expanded);
 	}
 	expanded = ft_strjoin(expanded, ft_strndup(*start, *temp - *start));

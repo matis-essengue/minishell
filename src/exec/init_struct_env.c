@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_struct_env.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 20:17:52 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/13 11:49:43 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/03 11:29:43 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	**copy_env(char **envp)
 t_env   *init_env(char **envp)
 {
     t_env   *my_env;
-    
+
     my_env = malloc(sizeof(t_env));
     if (!my_env)
         return (NULL);
@@ -53,6 +53,7 @@ t_env   *init_env(char **envp)
         return (NULL);
     }
     my_env->is_cpy = 1;
+	my_env->exit_status = 0;
     return (my_env);
 }
 

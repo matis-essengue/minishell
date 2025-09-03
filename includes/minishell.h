@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/03 11:21:46 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/03 11:29:00 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_env
 {
 	char				**env;
 	int					is_cpy;
+	int					exit_status;
 }						t_env;
 
 // ---- FUNCTIONS ----
