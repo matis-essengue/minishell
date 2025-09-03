@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/03 11:32:37 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/03 14:41:06 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,43 +54,34 @@ char	*ft_getenvx(char *var, char **env)
 	return (NULL);
 }
 
-static char	*expand_variable(
-		char **temp, char **start, char *expanded, t_env *env)
+static void	expand_variable(
+		char **temp, char **start, char **expanded, t_env *env)
 {
 	char	*var;
 	char	*env_var;
 
 	if (*(*temp + 1) && *(*temp + 1) == '$')
-	{
 		(*temp)++;
-		return (expanded);
-	}
 	if (*(*temp + 1) && *(*temp + 1) == '?')
 	{
-		printf("expanding exit status\n");
-		printf("expanded: %s\n", expanded);
-		printf("exit status: %d\n", env->exit_status);
-		printf("tmp: %s\n", *temp);
-		expanded = ft_strjoin(expanded, ft_itoa(env->exit_status));
-		(*temp)++;
-		(*temp)++;
-		printf("tmp after: %s\n", *temp);
-		printf("expanded after: %s\n", expanded);
+		*expanded = ft_strjoin(*expanded, ft_itoa(env->exit_status));
+		(*temp)+=2;
 		*start = *temp;
-		return (expanded);
 	}
-	expanded = ft_strjoin(expanded, ft_strndup(*start, *temp - *start));
-	*start = *temp;
-	(*temp)++;
-	while (**temp && **temp != ' ' && **temp != '\t' && **temp != '\n'
-		&& **temp != '"' && **temp != '$' && **temp != '\'')
+	else
+	{
+		*expanded = ft_strjoin(*expanded, ft_strndup(*start, *temp - *start));
+		*start = *temp;
 		(*temp)++;
-	var = ft_strndup(*start + 1, *temp - *start - 1);
-	env_var = ft_getenvx(var, env->env);
-	if (env_var)
-		expanded = ft_strjoin(expanded, env_var);
-	*start = *temp;
-	return (expanded);
+		while (**temp && **temp != ' ' && **temp != '\t' && **temp != '\n'
+			&& **temp != '"' && **temp != '$' && **temp != '\'')
+			(*temp)++;
+		var = ft_strndup(*start + 1, *temp - *start - 1);
+		env_var = ft_getenvx(var, env->env);
+		if (env_var)
+			*expanded = ft_strjoin(*expanded, env_var);
+		*start = *temp;
+	}
 }
 
 char	*expand_word(char *word, t_env *env)
@@ -113,7 +104,7 @@ char	*expand_word(char *word, t_env *env)
 		if (*temp == '\'' && !dquoted)
 			squoted = !squoted;
 		if (*temp == '$' && !squoted)
-			expanded = expand_variable(&temp, &start, expanded, env);
+			expand_variable(&temp, &start, &expanded, env);
 		else
 			temp++;
 	}
