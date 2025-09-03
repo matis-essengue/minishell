@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:12:25 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/03 11:17:20 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/03 11:52:35 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	allocate_and_fill_args(t_cmd *cmd, t_token *tokens, int arg_count)
 static void	handle_heredoc(t_cmd *cmd, t_token *current)
 {
 	t_heredoc	*heredoc;
+	t_heredoc	*tmp;
 
 	heredoc = malloc(sizeof(t_heredoc));
 	heredoc->delimiter = ft_strdup(current->next->value);
@@ -53,8 +54,10 @@ static void	handle_heredoc(t_cmd *cmd, t_token *current)
 		cmd->heredocs = heredoc;
 	else
 	{
-		heredoc->next = cmd->heredocs;
-		cmd->heredocs = heredoc;
+		tmp = cmd->heredocs;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = heredoc;
 	}
 }
 
