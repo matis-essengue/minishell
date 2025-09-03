@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:22:59 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/03 15:24:39 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/03 15:29:49 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	free_all_struct(t_cmd *cmd)
 
 void	error(t_cmd *cmd, char *str, int code)
 {
-	free_all_struct(cmd);
 	perror(str);
+	free_all_struct(cmd);
 	exit(code);
 }
