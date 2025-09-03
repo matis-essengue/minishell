@@ -6,13 +6,12 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/01 17:37:01 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/01 20:19:00 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
 #include "../../includes/minishell.h"
-
 
 int	found(char *var, char *env_var)
 {
@@ -55,9 +54,12 @@ char	*ft_getenvx(char *var, char **env)
 	return (NULL);
 }
 
-static char	*expand_variable(char **temp, char **start, char *expanded, t_env *env)
+static char	*expand_variable(
+		char **temp, char **start, char *expanded, t_env *env)
 {
-	char *var;
+	char	*var;
+	char	*env_var;
+
 	if (*(*temp + 1) && *(*temp + 1) == '$')
 	{
 		(*temp)++;
@@ -73,18 +75,16 @@ static char	*expand_variable(char **temp, char **start, char *expanded, t_env *e
 	expanded = ft_strjoin(expanded, ft_strndup(*start, *temp - *start));
 	*start = *temp;
 	(*temp)++;
-	while (**temp && **temp != ' ' && **temp != '\t' && **temp != '\n' && **temp != '"' && **temp != '$' && **temp != '\'')
+	while (**temp && **temp != ' ' && **temp != '\t' && **temp != '\n'
+		&& **temp != '"' && **temp != '$' && **temp != '\'')
 		(*temp)++;
 	var = ft_strndup(*start + 1, *temp - *start - 1);
-	char *env_var = ft_getenvx(var, env->env);
+	env_var = ft_getenvx(var, env->env);
 	if (env_var)
-	{
 		expanded = ft_strjoin(expanded, env_var);
-	}
 	*start = *temp;
 	return (expanded);
 }
-
 
 char	*expand_word(char *word, t_env *env)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_checker.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 14:53:14 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/28 18:30:18 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/03 11:24:08 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ int	check_redirect_op(t_token *next)
 	}
 	if (next->type != TOKEN_WORD)
 	{
-		printf("minishell: syntax error near unexpected token `%s'\n", next->value);
+		printf("minishell: syntax error near unexpected token `%s'\n",
+			next->value);
 		return (0);
 	}
 	return (1);

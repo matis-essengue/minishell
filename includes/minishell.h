@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/01 16:49:47 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/03 11:21:46 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,5 @@ t_cmd					*parse(char *line, t_env *env);
 int						execute_command(t_cmd *cmd, t_env *env);
 void					print_cmd(t_cmd *cmd);
 int						check_cmds(t_cmd *cmd);
-t_cmd					*tokens_to_cmds(t_token *tokens);
-void					expand_cmds(t_cmd *tokens, t_env *env);
-void					remove_quotes(t_cmd *cmds);
 
 #endif
