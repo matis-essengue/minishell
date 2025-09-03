@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/17 14:15:41 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/03 11:51:46 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,9 @@ void	open_outfile(t_cmd *cmd)
 		close(file->fd);
 		file = file->next;
 	}
-}
+}	
 
-char	*change_into_vars(char *line)
-{
-	(void)line;
-	return (NULL);
-}
-
-int	child_process_heredoc(t_cmd *cmd, t_env *env, t_heredoc *heredoc, int *pipe_fd_h)
+int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 {
 	char	*line;
 	char 	*expand;
@@ -74,14 +68,7 @@ int	child_process_heredoc(t_cmd *cmd, t_env *env, t_heredoc *heredoc, int *pipe_
 			exit(1);
 		if (ft_strncmp(heredoc->delimiter, line, ft_strlen(line)) == 0)
 			break ;
-		if (heredoc->expand_vars)
-		{
-			expand = find_var(line, env->env);
-			write(pipe_fd_h[WRITE], expand, ft_strlen(expand));
-			free(expand);
-		}
-		else
-			write(pipe_fd_h[WRITE], line, ft_strlen(line)); // a finir
+		write(pipe_fd_h[WRITE], line, ft_strlen(line));
 		write(pipe_fd_h[WRITE], "\n", 1);
 		free(line);
 	}
@@ -96,7 +83,7 @@ int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
 	return (pipe_fd_h[READ]);
 }
 
-void	manage_heredocs(t_cmd *cmd, t_env *env)
+void	manage_heredocs(t_cmd *cmd)
 {
 	t_heredoc	*heredoc;
 	pid_t		pid;
@@ -106,21 +93,12 @@ void	manage_heredocs(t_cmd *cmd, t_env *env)
 	while (heredoc)
 	{
 		if (pipe(pipe_fd_h) == -1)
-		{
-			if (heredoc->heredoc_fd != -1)
-				close(heredoc->heredoc_fd);
-			error(cmd, "pipe failed\n", 1);
-		}
+			pipe_and_pid_error(cmd, heredoc, pipe_fd_h, 1);
 		pid = fork();
 		if (pid == -1)
-		{
-			close_all_fd(pipe_fd_h);
-			if (heredoc->heredoc_fd != -1)
-				close(heredoc->heredoc_fd);
-			error(cmd, "fork failed", 1);
-		}
+			pipe_and_pid_error(cmd, heredoc, pipe_fd_h, 2);
 		if (pid == 0)
-			child_process_heredoc(cmd, env, heredoc, pipe_fd_h);
+			child_process_heredoc(cmd, heredoc, pipe_fd_h);
 		else
 			heredoc->heredoc_fd = parent_process_heredoc(pid, pipe_fd_h);
 		if (heredoc->next && heredoc->heredoc_fd != -1)

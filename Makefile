@@ -23,8 +23,12 @@ SRCS = \
 	src/exec/manage_files.c \
 	src/exec/utils.c \
 	src/exec/errors.c \
+	src/exec/errors2.c \
 	src/exec/init_struct_env.c \
+	src/exec/manage_signal.c \
+	src/exec/signal.c \
 	src/built-in/built_in.c \
+	src/built-in/built_in_utils2.c \
 	src/built-in/cd.c \
 	src/built-in/echo.c \
 	src/built-in/env.c \

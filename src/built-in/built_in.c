@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:48:50 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 15:59:30 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/03 14:41:58 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	parent_process_built_in(t_cmd *cmd, t_env *env)
     int code_error;
 
     code_error = 0;
+
+	//redir les built in avec manage files !!!
 	if (ft_strncmp(cmd->name, "echo", 4) == 0)
 		code_error = built_in_echo(cmd);
 	if (ft_strncmp(cmd->name, "cd", 2) == 0)

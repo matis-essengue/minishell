@@ -6,36 +6,12 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:22:59 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 18:38:10 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/03 11:33:03 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
-
-void	free_array(char **split)
-{
-	int	j;
-
-	j = 0;
-	if (!split)
-		return ;
-	while (split[j])
-	{
-		free(split[j]);
-		split[j] = NULL;
-		j++;
-	}
-	free(split);
-}
-
-void	close_all_fd(int *fd)
-{
-	if (fd[READ] != -1)
-		close(fd[READ]);
-	if (fd[WRITE] != -1)
-		close(fd[WRITE]);
-}
 
 void	free_heredocs(t_heredoc *heredocs)
 {
