@@ -6,32 +6,12 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/03 15:28:23 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/03 15:41:08 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
-
-char	**get_path(char **envp)
-{
-	char	**path;
-	int		i;
-
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-		{
-			path = ft_split(envp[i] + 5, ':');
-			if (path == NULL)
-				return (NULL);
-			return (path);
-		}
-		i++;
-	}
-	return (NULL);
-}
 
 char	*join_slash(char *path, char *cmd_cut)
 {
@@ -66,6 +46,20 @@ void	exec(char *cmd_cut, char **cmd, char **path, char **envp)
 	}
 }
 
+char	**recup_all_args(t_cmd *cmd, char **full_cmd, int i, int j)
+{
+	while (cmd->args && cmd->args[j])
+	{
+		full_cmd[i] = ft_strdup(cmd->args[j]);
+		if (full_cmd[i] == NULL)
+			return (free_array(full_cmd), NULL);
+		i++;
+		j++;
+	}
+	full_cmd[i] = NULL;
+	return (full_cmd);
+}
+
 char	**recup_full_cmd(t_cmd *cmd)
 {
 	char	**full_cmd;
@@ -88,15 +82,9 @@ char	**recup_full_cmd(t_cmd *cmd)
 		i++;
 	}
 	j = 0;
-	while (cmd->args && cmd->args[j])
-	{
-		full_cmd[i] = ft_strdup(cmd->args[j]);
-		if (full_cmd[i] == NULL)
-			return (free_array(full_cmd), NULL);
-		i++;
-		j++;
-	}
-	full_cmd[i] = NULL;
+	full_cmd = recup_all_args(cmd, full_cmd, i, j);
+	if (full_cmd == NULL)
+		return (NULL);
 	return (full_cmd);
 }
 
@@ -117,12 +105,12 @@ bool	exe_my_cmd(t_cmd *cmd, t_env *env)
 	{
 		free_array(full_cmd);
 		free_array(path);
-		error(cmd, "env:", 127);
+		error(cmd, cmd->name, 127);
+			// pas de minishell: lorsque unset path ensuite ls comme dans bash posix
 	}
 	exec(full_cmd[0], full_cmd, path, env->env);
 	free_array(path);
 	free_array(full_cmd);
-	// printf("cmd name : %s\n", cmd->name); // cmd->name dans error = comportement indefini
 	error(cmd, cmd->name, 127);
 	return (false);
 }

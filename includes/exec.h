@@ -49,6 +49,7 @@ int							get_my_unset_env(char ***env, char *new_var);
 // built-in utils 2
 
 char						*get_var_path(char **envp, char *var);
+char						**get_path(char **envp);
 
 // built-in
 
@@ -103,7 +104,6 @@ void						manage_heredocs(t_cmd *cmd);
 
 // get_path
 
-char						**get_path(char **envp);
 bool						exe_my_cmd(t_cmd *cmd, t_env *env);
 
 // // init interface utilisateur
