@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:20:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/03 13:47:31 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/03 15:20:54 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,13 @@ int	get_my_unset_env(char ***env, char *new_var)
 
 	i = 0;
 	var_path = get_var_path(*(env), new_var);
-	printf("var path : %s\n", var_path);
 	if (var_path == NULL)
 		return (1);
 	while ((*env)[i])
 	{
-		if (check_is_same_var((*env)[i], var_path)) // probleme ici
+		if (check_is_same_var((*env)[i], var_path))
 		{
-			printf("true check is same var\n");
-			tmp = unset_replace_my_env(*env, new_var);
+			tmp = unset_replace_my_env(*env, var_path);
 			if (!tmp)
 				return (1);
 			free_array(*env);
