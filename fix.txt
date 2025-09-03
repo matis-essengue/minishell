@@ -1,0 +1,439 @@
+//////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                          //
+//                                                                                          //
+//                                        PARCING                                           //
+//                                                                                          //
+//                                                                                          //
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+heredoc: a faire dans le parsing, au meme moment que la verification de la syntaxe
+
+bash-5.1$ << asd wer
+> aaaa
+> aaa
+> asd
+bash: wer: command not found
+
+
+bien differencier argument et options
+
+
+
+il faut la liste complete des infiles et des outfiles dans les redirections, pas seulement le dernier.
+En effet, il faut les dup2 successivement.
+ex:
+
+echo aaa > out1 > out2 > out3 > /dev/stdout
+
+-> ici, aaa est ecrit dans out3, car le stdout est successivement dup2 jusqu a out3, et comme stdout = out3 voila t a compris le s.
+
+
+
+
+L'expand se fait avant le parsing.
+
+Si je fais:
+
+bash-5.1$ export a="ls -"
+bash-5.1$ export b="la"
+bash-5.1$ $a$b
+total 56
+drwxr-xr-x 8 armosnie 2024_paris   221 Jul 29 14:42 .
+drwxr-xr-x 7 armosnie 2024_paris    93 Jul 28 14:01 ..
+-rw-r--r-- 1 armosnie 2024_paris     0 Jul 29 14:37 file1
+-rw-r--r-- 1 armosnie 2024_paris     0 Jul 29 14:37 file2
+-rw-r--r-- 1 armosnie 2024_paris     4 Jul 29 14:37 file3
+
+
+car a et b ont etes export, or dans votre cas, $a$b est un seul token,
+donc l'expand va transformer la string en "ls -la", ce qui va donner command not found
+
+
+minishell> ls<out45|cat
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: ls
+[ARGS]: NULL
+[INFILE]:  > out45
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: PIPEOUT -> ici
+[INPUT_TYPE]: STDIN
+
+cmd 2:
+[NAME]: cat
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: PIPEIN ->ici
+
+c'est l'inverse, pipein et pipeout, mais vous vous comprenez je suis juste un gros casse couille en gros.
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: (null)
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << EOF1  << EOF
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> armand
+heredoc> EOF1
+heredoc> armand2
+heredoc> EOF
+minishell> 
+
+les heredocs sont traites a l'envers dans bash c'est EOF et apres EOF1
+
+minishell> << q1 << q2 << q3 << q4 << q5
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: (null)
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << q5  << q4  << q3  << q2  << q1
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> armand
+heredoc> q5
+heredoc> dofoaef
+heredoc> q4
+heredoc> fjoifejip
+heredoc> q3
+heredoc> gsoigjrs
+heredoc> q2
+heredoc> sgrjpgrj
+heredoc> q1
+minishell> 
+
+minishell> echo armand
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: echo
+[ARGS]: armand
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+==60764== Invalid read of size 1
+==60764==    at 0x40488C: ft_strcmp (in /home/armosnie/42/3_circle/new_minishell/minishell)
+==60764==    by 0x403373: is_built_in (built_in.c:47)
+==60764==    by 0x403C98: execute_command (exec.c:126)
+==60764==    by 0x4012D0: main (main.c:30)
+==60764==  Address 0x4b642f5 is 0 bytes after a block of size 5 alloc'd
+==60764==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==60764==    by 0x404CD7: ft_strjoin (in /home/armosnie/42/3_circle/new_minishell/minishell)
+==60764==    by 0x4025F2: _remove_quotes (quote_remover.c:65)
+==60764==    by 0x40272F: remove_quotes (quote_remover.c:84)
+==60764==    by 0x40136E: parse (parser.c:40)
+==60764==    by 0x4012BF: main (main.c:29)
+
+comparaison foireuse car \0 pas mis a la fin de la commande echo alors que ft_strcmp fait la cmp avec i guess
+
+gerer echo $? en tant qu'expand pour les erreurs
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                          //
+//                                                                                          //
+//                                        EXECUTABLE                                        //
+//                                                                                          //
+//                                                                                          //
+//////////////////////////////////////////////////////////////////////////////////////////////
+minishell> grep a < ftext
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: grep
+[ARGS]: a
+[INFILE]:  > ftext
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+armosnie@f1r11s10:~/42/3circle/new_minishell$ cat << EOF << E
+OF1
+> echo aaaa
+> EOF
+> echo bbb
+> EOF1
+echo bbb
+
+besoin de proteger les fermetures de pipe a chaque erreur
+
+bash-5.1$  cat < file1 << e < file2
+> je
+> suis
+> e
+15
+
+
+bash-5.1$ cat < file1 > out << e >> out < file2 > out2
+> je
+> suis
+> e
+bash-5.1$ cat file1
+error test : error nothing can exist here in the hell :
+transmission end:
+bash-5.1$ cat out
+bash-5.1$ cat out2
+15
+
+ordre des priorites et execution reelle : file2 > out2 sur cat < file1 > out << e >> out < file2 > out2 
+mais les autres fichiers ont exites
+
+[NAME]: echo
+[ARGS]: $?
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+conditional jump
+
+<< e << a | cat << u > file4
+
+heredoc> armand
+heredoc> a
+heredoc> mosnier
+heredoc> e
+heredoc> kiki
+heredoc> a
+=== BEFORE redirections ===
+FD 0: OPEN
+FD 1: OPEN
+FD 2: OPEN
+FD 3: OPEN
+FD 4: OPEN
+FD 5: OPEN
+FD 6: OPEN
+FD 7: CLOSED
+FD 8: CLOSED
+FD 9: CLOSED
+==========
+=== BEFORE execve ===
+FD 0: OPEN
+FD 1: OPEN
+FD 2: OPEN
+FD 3: OPEN
+FD 4: OPEN
+FD 5: CLOSED
+FD 6: CLOSED
+FD 7: CLOSED
+FD 8: CLOSED
+FD 9: CLOSED
+==========
+heredoc> 2004hmheredoc> marm
+heredoc> 2004l
+heredoc> 2004hmheredoc> mda
+heredoc> 2004l
+heredoc> 2004hmheredoc> m
+heredoc> 2004l
+heredoc> === BEFORE redirections ===
+FD 0: OPEN
+FD 1: OPEN
+FD 2: OPEN
+FD 3: OPEN
+FD 4: OPEN
+FD 5: CLOSED
+FD 6: CLOSED
+FD 7: CLOSED
+FD 8: CLOSED
+FD 9: CLOSED
+==========
+=== BEFORE execve ===
+FD 0: OPEN
+FD 1: OPEN
+FD 2: OPEN
+FD 3: OPEN
+FD 4: OPEN
+FD 5: CLOSED
+FD 6: CLOSED
+FD 7: CLOSED
+FD 8: CLOSED
+FD 9: CLOSED
+==========
+id^M^M^M^M^M^M
+
+comportement trop bizarre
+
+minishell> << e
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: (null)
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << e
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> armand
+heredoc> e
+==152362== 
+==152362== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==152362== 
+==152362== HEAP SUMMARY:
+==152362==     in use at exit: 214,442 bytes in 536 blocks
+==152362==   total heap usage: 937 allocs, 401 frees, 255,503 bytes allocated
+==152362== 
+==152362== LEAK SUMMARY:
+==152362==    definitely lost: 744 bytes in 155 blocks
+==152362==    indirectly lost: 844 bytes in 67 blocks
+==152362==      possibly lost: 0 bytes in 0 blocks
+==152362==    still reachable: 212,854 bytes in 314 blocks
+==152362==         suppressed: 0 bytes in 0 blocks
+==152362== Rerun with --leak-check=full to see details of leaked memory
+==152362== 
+==152362== For lists of detected and suppressed errors, rerun with: -s
+==152362== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+minishell> armand
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: armand
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+command not found: No such file or directory
+==152364== 
+==152364== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==152364== 
+==152364== HEAP SUMMARY:
+==152364==     in use at exit: 214,513 bytes in 543 blocks
+==152364==   total heap usage: 978 allocs, 435 frees, 257,258 bytes allocated
+==152364== 
+==152364== LEAK SUMMARY:
+==152364==    definitely lost: 766 bytes in 159 blocks
+==152364==    indirectly lost: 844 bytes in 67 blocks
+==152364==      possibly lost: 0 bytes in 0 blocks
+==152364==    still reachable: 212,903 bytes in 317 blocks
+==152364==         suppressed: 0 bytes in 0 blocks
+==152364== Rerun with --leak-check=full to see details of leaked memory
+==152364== 
+==152364== For lists of detected and suppressed errors, rerun with: -s
+==152364== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+minishell> ==152363== 
+==152363== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==152363== 
+==152363== HEAP SUMMARY:
+==152363==     in use at exit: 210,442 bytes in 484 blocks
+==152363==   total heap usage: 945 allocs, 461 frees, 256,669 bytes allocated
+==152363== 
+==152363== LEAK SUMMARY:
+==152363==    definitely lost: 766 bytes in 159 blocks
+==152363==    indirectly lost: 844 bytes in 67 blocks
+==152363==      possibly lost: 0 bytes in 0 blocks
+==152363==    still reachable: 208,832 bytes in 258 blocks
+==152363==         suppressed: 0 bytes in 0 blocks
+==152363== Rerun with --leak-check=full to see details of leaked memory
+==152363== 
+==152363== For lists of detected and suppressed errors, rerun with: -s
+==152363== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+minishell> 
+
+une comparaison avec un invalid read of size 8 + segfault facilement :
+
+gerer echo $? c'est un expand
+
+gerer les built-in et expand dans le heredoc
+
+armosnie@f4r2s8:~/42/3_circle/new_minishell$ exit -- 234
+exit
+➜  new_minishell git:(main) ✗ echo $?
+234
+
+minishell> exit -- 234
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: exit
+[ARGS]: -- 234
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+➜  new_minishell git:(main) ✗ echo $?                                                  
+2
+
+
+je ne comprends pas a debug lol
+
+///////////////////////////////////////////////////////////////////////////////
+
+new_env[i] est un pointeur vers une chaîne (type char *)
+*new_env[i] essaie de prendre le premier caractère de cette chaîne (type char)
+
+pourquoi pointe sur le premier char *new_env[i] pour moi je pensais qu'il pointait sur un tableau de string
+
+envp → pointeur vers → tableau de pointeurs → vers des chaînes
+ ***        **                *                  char
+
+ imaginons que je veux acceder a un char specifique dans une des chaines de char a la fin ?
+
+ Quand vous voulez accéder au tableau lui-même, vous devez déréférencer une fois : *envp. Quand vous voulez accéder à une chaîne dans ce tableau, vous utilisez (*envp)[i].
+
+ je capte pas la nuance
+
+
+ char ***envp;  // envp pointe vers notre structure
+
+1. envp        → Type: char*** , Valeur: adresse du pointeur vers le tableau
+2. *envp       → Type: char**  , Valeur: adresse du tableau lui-même
+3. **envp      → Type: char*   , Valeur: adresse de la première chaîne
+4. ***envp     → Type: char    , Valeur: premier caractère de la première chaîne
+5. (*envp)[1]  → Type: char*   , Valeur: adresse de la deuxième chaîne
+06. (*envp)[1][4] → Type: char  , Valeur: cinquième caractère de la deuxième chaîne
+
+/////////////////////////////////////////////////////////////////////////////////
+
+nm -U (normi)
+
+Env -i | grep PATH (créer un mini env)
+
+Readline leak (fichier gitignore)
+
+Export a=$a -> 1 (bien export et proteger line too long)
+
+Echo a > /dev/full (pwd et echo avec un strlen qui retourne la taille pour voir si ça a fonctionné, problème de redirection)
+.
+Vim ; pkill vim (proteger avec la restauration avec tcsetattr et tcgetattr)
+
+
+
+minishell> UNSET ARMAND
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: UNSET
+[ARGS]: ARMAND
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+env error: No such file or directory
