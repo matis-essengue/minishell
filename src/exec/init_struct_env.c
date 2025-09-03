@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 20:17:52 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/01 16:35:41 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/03 16:54:21 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,43 @@
 // SHLVL=1
 // _=/usr/bin/env
 
-// char	**build_mini_env(char **envp)
-// {
-// 	char *pwd;
+char	*get_pwd(void)
+{
+	char	*pwd;
+	char	buffer[1024];
 
-// 	pwd = getcwd(buffer, 1024);
-//     if (!pwd)
-//     {
-//         perror("");
-//         return (1);
-//     }
-// }
+	pwd = getcwd(buffer, 1024);
+	if (!pwd)
+	{
+		perror("");
+		return (NULL);
+	}
+	return (pwd);
+}
+
+char	**build_mini_env()
+{
+	char	**mini_env;
+	int		i;
+
+	i = 0;
+	
+	mini_env = malloc(sizeof(char *) * (4));
+	if (!mini_env)
+		return (NULL);
+	mini_env[i] = get_pwd();
+	if (!mini_env[i])
+		return (perror(""), NULL);
+	i++;
+	mini_env[i] = ft_strdup("SHLVL=1");
+	if (!mini_env)
+		return (NULL);
+	mini_env[++i] = ft_strdup("_=/usr/bin/env");
+	if (!mini_env)
+		return (free_array(mini_env), NULL);
+	mini_env[++i] = NULL;
+	return (mini_env);
+}
 
 char	**copy_env(char **envp)
 {
@@ -35,8 +61,11 @@ char	**copy_env(char **envp)
 	char	**new_env;
 
 	i = 0;
-	// if (!envp)
-	// 	return (build_mini_env(envp));
+	if (!envp)
+	{
+		new_env = build_mini_env();
+		return (new_env);
+	}
 	new_env = malloc(sizeof(char *) * (env_len(envp) + 1));
 	while (envp[i])
 	{
