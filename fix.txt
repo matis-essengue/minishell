@@ -437,3 +437,89 @@ cmd 1:
 [INPUT_TYPE]: STDIN
 
 env error: No such file or directory
+
+minishell> export z=11111111
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: export
+[ARGS]: z=11111111
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+minishell> export z=$z$z$z$z$z
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: export
+[ARGS]: z=1111111111111111111111111111111111111111
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+==285787== Invalid write of size 8
+==285787==    at 0x40716E: copy_and_replace_my_env (export_utils.c:38)
+==285787==    by 0x40731D: get_my_export_env (export_utils.c:81)
+==285787==    by 0x4067FB: built_in_export (export.c:71)
+==285787==    by 0x40540A: parent_process_built_in (built_in.c:49)
+==285787==    by 0x403B11: execute_command (parent_process.c:100)
+==285787==    by 0x4013FF: main (main.c:55)
+==285787==  Address 0x4b710c0 is 464 bytes inside a block of size 465 alloc'd
+==285787==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==285787==    by 0x40709F: copy_and_replace_my_env (export_utils.c:22)
+==285787==    by 0x40731D: get_my_export_env (export_utils.c:81)
+==285787==    by 0x4067FB: built_in_export (export.c:71)
+==285787==    by 0x40540A: parent_process_built_in (built_in.c:49)
+==285787==    by 0x403B11: execute_command (parent_process.c:100)
+==285787==    by 0x4013FF: main (main.c:55)
+==285787== 
+minishell> export z=$z$
+==285787== Conditional jump or move depends on uninitialised value(s)
+==285787==    at 0x402394: ft_getenvx (expander.c:43)
+==285787==    by 0x4027E0: expand_variable (expander.c:80)
+==285787==    by 0x402562: expand_word (expander.c:107)
+==285787==    by 0x4028B0: expand_cmds (expander.c:130)
+==285787==    by 0x401515: parse (parser.c:44)
+==285787==    by 0x4013E3: main (main.c:53)
+==285787== 
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: export
+[ARGS]: z=1111111111111111111111111111111111111111
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+==285787== Conditional jump or move depends on uninitialised value(s)
+==285787==    at 0x406DD3: env_len (built_in_utils.c:47)
+==285787==    by 0x40708F: copy_and_replace_my_env (export_utils.c:22)
+==285787==    by 0x40731D: get_my_export_env (export_utils.c:81)
+==285787==    by 0x4067FB: built_in_export (export.c:71)
+==285787==    by 0x40540A: parent_process_built_in (built_in.c:49)
+==285787==    by 0x403B11: execute_command (parent_process.c:100)
+==285787==    by 0x4013FF: main (main.c:55)
+==285787== 
+==285787== Conditional jump or move depends on uninitialised value(s)
+==285787==    at 0x4070CE: copy_and_replace_my_env (export_utils.c:25)
+==285787==    by 0x40731D: get_my_export_env (export_utils.c:81)
+==285787==    by 0x4067FB: built_in_export (export.c:71)
+==285787==    by 0x40540A: parent_process_built_in (built_in.c:49)
+==285787==    by 0x403B11: execute_command (parent_process.c:100)
+==285787==    by 0x4013FF: main (main.c:55)
+==285787== 
+==285787== Conditional jump or move depends on uninitialised value(s)
+==285787==    at 0x404CE5: free_array (errors2.c:23)
+==285787==    by 0x407344: get_my_export_env (export_utils.c:84)
+==285787==    by 0x4067FB: built_in_export (export.c:71)
+==285787==    by 0x40540A: parent_process_built_in (built_in.c:49)
+==285787==    by 0x403B11: execute_command (parent_process.c:100)
+==285787==    by 0x4013FF: main (main.c:55)
+==285787== 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 14:27:20 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/03 16:33:27 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/04 11:10:47 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	**copy_and_replace_my_env(char **env, char *var)
 		}
 		i++;
 	}
-	tmp[i] = NULL;
+	tmp[++i] = NULL;
 	return (tmp);
 }
 
