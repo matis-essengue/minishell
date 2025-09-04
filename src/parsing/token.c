@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.f>           +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:32:15 by messengu          #+#    #+#             */
-/*   Updated: 2025/05/28 18:08:31 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/04 12:06:24 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,15 @@ const char	*get_token_type_str(int type)
 void	free_tokens(t_token *tokens)
 {
 	t_token	*current;
+	t_token	*temp;
 
 	current = tokens;
 	while (current != NULL)
 	{
-		free(current->value);
-		current = current->next;
+		temp = current->next;
+		if (current->value)
+			free(current->value);
+		free(current);
+		current = temp;
 	}
-	free(tokens);
 }

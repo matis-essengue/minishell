@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote_remover.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:29 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/03 16:49:48 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/04 12:03:14 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ char	*_remove_quotes(char *word)
 	char	quote;
 	char	*start;
 	char	*temp;
+	char	*dup;
+	char	*res;
 
 	new_word = ft_strdup("");
 	quote = 0;
@@ -62,8 +64,12 @@ char	*_remove_quotes(char *word)
 			quote = _handle_quotes(temp, quote, &start, &new_word);
 		temp++;
 	}
-	new_word = ft_strjoin(new_word, ft_strndup(start, temp - start));
-	return (new_word);
+	dup = ft_strndup(start, temp - start);
+	res = ft_strjoin(new_word, dup);
+	free(new_word);
+	free(dup);
+	free(word);
+	return (res);
 }
 
 void	rm_quotes_for_all_files(t_file *first_file)

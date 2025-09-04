@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/03 16:54:42 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/04 12:02:18 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	void_silenced_args(int argc, char **argv)
 	(void)argv;
 }
 
-void	check_exit(t_cmd *cmd, int exit_status)
+void	check_exit(t_cmd *cmd, int exit_status, t_env *env)
 {
 	if (!cmd)
 		return ;
@@ -27,11 +27,22 @@ void	check_exit(t_cmd *cmd, int exit_status)
 		if (cmd->args[0] && is_built_in(cmd))
 			if (ft_strncmp(cmd->name, "exit", 4) == 0)
 			{
-				exit_status = built_in_exit(cmd, 0);
+				exit_status = built_in_exit(cmd, 0, env);
+				printf("freeing cmd\n");
+				free_all_struct(cmd);
+				free_my_env(env);
 				exit(exit_status);
 			}
 	}
 }
+
+void	free_cmd(t_cmd *cmd)
+{
+	if (!cmd)
+		return ;
+	free_all_struct(cmd);
+}
+
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -51,7 +62,7 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		add_history(line);
 		cmd = parse(line, my_env);
-		check_exit(cmd, 0); //handle quit signal ?
+		check_exit(cmd, 0, my_env); //handle quit signal ?
 		my_env->exit_status = execute_command(cmd, my_env);
 		free(line);
 	}

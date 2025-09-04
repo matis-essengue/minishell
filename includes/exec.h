@@ -64,7 +64,7 @@ int							built_in_export(t_cmd *cmd, t_env *env,
 								int code_error);
 int							built_in_unset(t_cmd *cmd, t_env *env);
 int							built_in_env(t_cmd *cmd, t_env *env);
-int							built_in_exit(t_cmd *cmd, int status);
+int							built_in_exit(t_cmd *cmd, int status, t_env *env);
 
 // errors
 
