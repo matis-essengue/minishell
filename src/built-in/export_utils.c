@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 14:27:20 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 11:21:45 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/04 15:50:32 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 char	**copy_and_replace_my_env(char **env, char *var)
 {
-	int i;
-	char **tmp;
+	int		i;
+	char	**tmp;
 
 	i = 0;
 	tmp = malloc(sizeof(char *) * (env_len(env) + 1));
@@ -41,8 +41,8 @@ char	**copy_and_replace_my_env(char **env, char *var)
 
 char	**copy_and_add_my_env(char **env, char *var)
 {
-	int i;
-	char **tmp;
+	int		i;
+	char	**tmp;
 
 	i = 0;
 	tmp = malloc(sizeof(char *) * (env_len(env) + 2));
@@ -61,8 +61,8 @@ char	**copy_and_add_my_env(char **env, char *var)
 	tmp[i] = ft_strdup(var);
 	if (!tmp[i])
 	{
-			free_array(tmp);
-			return (NULL);
+		free_array(tmp);
+		return (NULL);
 	}
 	tmp[++i] = NULL;
 	return (tmp);
@@ -70,8 +70,8 @@ char	**copy_and_add_my_env(char **env, char *var)
 
 int	get_my_export_env(char ***env, char *new_var)
 {
-	char **tmp;
-	int i;
+	char	**tmp;
+	int		i;
 
 	i = 0;
 	while ((*env)[i])
@@ -95,14 +95,12 @@ int	get_my_export_env(char ***env, char *new_var)
 	return (0);
 }
 
-char *ft_getenv(char *var, char **env)
+char	*ft_getenv(char *var, char **env)
 {
-	char *expand;
-	int i;
-	int len;
-	int j;
+	int		i;
+	int		len;
+	int		j;
 
-	expand = NULL;
 	i = 0;
 	j = 0;
 	len = ft_strlen(var);
@@ -117,8 +115,7 @@ char *ft_getenv(char *var, char **env)
 			if (env[i][j] == '=')
 			{
 				j++;
-				expand = ft_strdup((env[i] + j));
-				return (expand);
+				return (ft_strdup(env[i] + j));
 			}
 		}
 		i++;

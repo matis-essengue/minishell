@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:54 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 13:48:20 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/04 15:48:08 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ static void	free_everything(t_cmd *cmd, t_env *env)
 	free_all_struct(cmd);
 	free_my_env(env);
 }
-
 
 int	built_in_exit(t_cmd *cmd, int exit_status, t_env *env)
 {

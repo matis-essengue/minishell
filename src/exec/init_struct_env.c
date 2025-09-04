@@ -6,21 +6,17 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 20:17:52 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 13:24:19 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/04 15:37:46 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-// PWD=/home/armosnie/42/3_circle/armandbranch
-// SHLVL=1
-// _=/usr/bin/env
-
 char	*get_pwd(void)
 {
 	char	*pwd;
-	char *result;
+	char	*result;
 
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
@@ -33,7 +29,7 @@ char	*get_pwd(void)
 	return (result);
 }
 
-char	**build_mini_env()
+char	**build_mini_env(void)
 {
 	char	**mini_env;
 
@@ -61,10 +57,7 @@ char	**copy_env(char **envp)
 
 	i = 0;
 	if (!envp || !envp[0])
-	{
-		new_env = build_mini_env();
-		return (new_env);
-	}
+		return (build_mini_env());
 	new_env = malloc(sizeof(char *) * (env_len(envp) + 1));
 	while (envp[i])
 	{

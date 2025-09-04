@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 18:07:34 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/03 16:32:17 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/04 15:39:44 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int	invalid_option(char **args, char *str)
 {
 	if (args)
 	{
-		if ((args[0][0] == '-' && args[0][1])
-			|| (args[0][0] == '-' && !args[0][1]))
+		if ((args[0][0] == '-' && args[0][1]) || (args[0][0] == '-'
+				&& !args[0][1]))
 		{
 			if (ft_strncmp(str, "env", 3) == 0)
 				return (2);
@@ -51,10 +51,10 @@ int	env_len(char **envp)
 
 char	*find_var(char *target_var, char **env)
 {
-	int	i;
-	int	len;
-	int equal_len;
-	char *ret_path;
+	int		i;
+	int		len;
+	int		equal_len;
+	char	*ret_path;
 
 	i = 0;
 	ret_path = NULL;
@@ -76,9 +76,9 @@ char	*find_var(char *target_var, char **env)
 	return (NULL);
 }
 
-int 	return_char_pos(char *str, char c)
+int	return_char_pos(char *str, char c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str || !str[i])
@@ -101,8 +101,7 @@ int	check_is_same_var(char *s1, char *s2)
 	len_s2 = return_char_pos(s2, '=');
 	if (len_s1 == 0 || len_s2 == 0)
 		return (0);
-	if (ft_strncmp(s1, s2, len_s1) == 0
-		&& len_s2 == len_s1)
+	if (ft_strncmp(s1, s2, len_s1) == 0 && len_s2 == len_s1)
 		return (1);
 	return (0);
 }

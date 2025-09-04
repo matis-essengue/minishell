@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:58 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 11:40:11 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/04 15:53:53 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	check_head_var(char *var)
 int	check_export_format(char *var)
 {
 	int	i;
-	int len;
+	int	len;
 
 	i = check_head_var(var);
 	if (i == -1)

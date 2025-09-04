@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:43 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/17 12:30:56 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/04 15:46:22 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,16 @@ int	change_update_pwd_and_env(char ***env)
 int	handle_cd_errors(t_cmd *cmd)
 {
 	if (!cmd->args)
-		return (printf("minishell: cd: absolute or relative path only allowed\n"),
-			1);
+		return (printf
+			("minishell: cd: absolute or relative path only allowed\n"), 1);
 	if (cmd->args[0] && cmd->args[1])
 		return (printf("minishell: cd: too many arguments\n"), 1);
 	if (cmd->args[0][0] == '-' && cmd->args[0][1])
 		return (printf("minishell: cd: '-': There is no option allowed\n"), 2);
 	if ((cmd->args && cmd->args[0][0] == '~' && !cmd->args[0][1]) || (cmd->args
 			&& cmd->args[0][0] == '-' && !cmd->args[0][1]))
-		return (printf("minishell: cd: absolute or relative path only allowed\n"),
-			1);
+		return (printf
+			("minishell: cd: absolute or relative path only allowed\n"), 1);
 	return (0);
 }
 
@@ -100,7 +100,3 @@ int	built_in_cd(t_cmd *cmd, t_env *env)
 	}
 	return (0);
 }
-
-// si il y a pas eu de changement de directory avec cd, oldpwd doit etre NULL
-
-// test a faire : enlever le OLDPWD ou HOME et voir si getenv chope la variable a partir de ma struct env ou du vrai env
