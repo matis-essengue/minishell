@@ -8,6 +8,7 @@ RM = rm -f
 
 SRCS = \
 	src/main.c \
+	src/signal_utils.c \
 	src/parsing/parser.c \
 	src/parsing/tokenizer.c \
 	src/parsing/token.c \

@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:19:43 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/03 16:32:06 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/04 15:08:47 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,6 @@ t_cmd					*parse(char *line, t_env *env);
 int						execute_command(t_cmd *cmd, t_env *env);
 void					print_cmd(t_cmd *cmd);
 int						check_cmds(t_cmd *cmd);
+void					set_signal_action(void);
 
 #endif
