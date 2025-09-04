@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 20:17:52 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/03 16:59:29 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/04 10:36:13 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,38 +20,37 @@
 char	*get_pwd(void)
 {
 	char	*pwd;
-	char	buffer[1024];
+	char *result;
 
-	pwd = getcwd(buffer, 1024);
+	pwd = getcwd(NULL, 0);
 	if (!pwd)
 	{
 		perror("");
 		return (NULL);
 	}
-	return (pwd);
+	result = ft_strjoin("PWD=", pwd);
+	free(pwd);
+	return (result);
 }
 
 char	**build_mini_env()
 {
 	char	**mini_env;
-	int		i;
 
-	i = 0;
-	
+	printf("build_mini_env\n");
 	mini_env = malloc(sizeof(char *) * (4));
 	if (!mini_env)
 		return (NULL);
-	mini_env[i] = get_pwd();
-	if (!mini_env[i])
-		return (perror(""), NULL);
-	i++;
-	mini_env[i] = ft_strdup("SHLVL=1");
-	if (!mini_env)
-		return (NULL);
-	mini_env[++i] = ft_strdup("_=/usr/bin/env");
-	if (!mini_env)
+	mini_env[0] = get_pwd();
+	if (!mini_env[0])
+		return (free(mini_env), NULL);
+	mini_env[1] = ft_strdup("SHLVL=1");
+	if (!mini_env[1])
 		return (free_array(mini_env), NULL);
-	mini_env[++i] = NULL;
+	mini_env[2] = ft_strdup("_=/usr/bin/env");
+	if (!mini_env[2])
+		return (free_array(mini_env), NULL);
+	mini_env[3] = NULL;
 	return (mini_env);
 }
 
@@ -61,7 +60,7 @@ char	**copy_env(char **envp)
 	char	**new_env;
 
 	i = 0;
-	if (!envp)
+	if (!envp || !envp[0])
 	{
 		new_env = build_mini_env();
 		return (new_env);
@@ -77,8 +76,7 @@ char	**copy_env(char **envp)
 				free(new_env[i]);
 				i--;
 			}
-			free(new_env);
-			return (NULL);
+			return (free(new_env), NULL);
 		}
 		i++;
 	}
