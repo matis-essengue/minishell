@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/03 14:41:06 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/04 12:04:44 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ static void	expand_variable(
 {
 	char	*var;
 	char	*env_var;
+	char	*dup;
 
 	if (*(*temp + 1) && *(*temp + 1) == '$')
 		(*temp)++;
@@ -70,7 +71,9 @@ static void	expand_variable(
 	}
 	else
 	{
-		*expanded = ft_strjoin(*expanded, ft_strndup(*start, *temp - *start));
+		dup = ft_strndup(*start, *temp - *start);
+		*expanded = ft_strjoin(*expanded, dup);
+		free(dup);
 		*start = *temp;
 		(*temp)++;
 		while (**temp && **temp != ' ' && **temp != '\t' && **temp != '\n'
@@ -91,6 +94,8 @@ char	*expand_word(char *word, t_env *env)
 	char	*start;
 	int		squoted;
 	int		dquoted;
+	char	*res;
+	char	*dup;
 
 	temp = word;
 	expanded = ft_strdup("");
@@ -108,8 +113,12 @@ char	*expand_word(char *word, t_env *env)
 		else
 			temp++;
 	}
-	expanded = ft_strjoin(expanded, ft_strndup(start, temp - start));
-	return (expanded);
+	dup = ft_strndup(start, temp - start);
+	res = ft_strjoin(expanded, dup);
+	free(expanded);
+	free(dup);
+	free(word);
+	return (res);
 }
 
 void	expand_cmds(t_cmd *tokens, t_env *env)

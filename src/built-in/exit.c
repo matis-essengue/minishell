@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:54 by armosnie          #+#    #+#             */
-/*   Updated: 2025/08/15 13:31:13 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/04 11:15:08 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,57 +78,64 @@ long long	ft_atoll(char *str)
 	return (res * neg);
 }
 
-int	built_in_exit(t_cmd *cmd, int exit_status)
+static void	free_everything(t_cmd *cmd, t_env *env)
+{
+	free_all_struct(cmd);
+	free_my_env(env);
+}
+
+
+int	built_in_exit(t_cmd *cmd, int exit_status, t_env *env)
 {
 	if (!(cmd->args && cmd->args[0]))
 	{
 		printf("exit\n");
-		return (free_all_struct(cmd), exit(exit_status), 0);
+		return (free_everything(cmd, env), exit(exit_status), 0);
 	}
 	if (cmd->args && invalid_option(cmd->args, "exit") == 2)
 	{
 		return (printf("minishell: exit: %c: There is no option allowed\n",
-				cmd->args[0][0]), free_all_struct(cmd), exit(2), 2);
+				cmd->args[0][0]), free_everything(cmd, env), exit(2), 2);
 	}
 	if (is_valid_number(cmd->args[0]) == 2)
 	{
 		printf("minishell: exit: %s: numeric argument required\n",
 			cmd->args[0]);
-		return (free_all_struct(cmd), exit(2), 2);
+		return (free_everything(cmd, env), exit(2), 2);
 	}
 	if (check_long(cmd->args[0]) == 1)
 	{
 		printf("minishell: exit: %s: numeric argument required\n",
 			cmd->args[0]);
-		return (free_all_struct(cmd), exit(2), 2);
+		return (free_everything(cmd, env), exit(2), 2);
 	}
 	if (cmd->args[1])
 		return (printf("minishell: exit: too many arguments\n"), 2);
 	return (printf("exit\n"), ft_atoll(cmd->args[0]) % 256);
 }
 
-int	built_in_exit_bis(t_cmd *cmd, int exit_status)
-{
-	if (!(cmd->args && cmd->args[0]))
-	{
-		return (free_all_struct(cmd), exit(exit_status), 0);
-	}
-	if (is_valid_number(cmd->args[0]) == 2)
-	{
-		printf("minishell: exit: %s: numeric argument required\n",
-			cmd->args[0]);
-		return (free_all_struct(cmd), exit(2), 2);
-	}
-	if (check_long(cmd->args[0]) == 1)
-	{
-		printf("minishell: exit: %s: numeric argument required\n",
-			cmd->args[0]);
-		return (free_all_struct(cmd), exit(2), 2);
-	}
-	if (cmd->args[1])
-	{
-		printf("minishell: exit: too many arguments\n");
-		return (2);
-	}
-	return (ft_atoll(cmd->args[0]) % 256);
-}
+// int	built_in_exit_bis(t_cmd *cmd, int exit_status)
+// {
+// 	if (!(cmd->args && cmd->args[0]))
+// 	{
+// 		return (free_all_struct(cmd), exit(exit_status), 0);
+// 	}
+// 	if (is_valid_number(cmd->args[0]) == 2)
+// 	{
+// 		printf("minishell: exit: %s: numeric argument required\n",
+// 			cmd->args[0]);
+// 		return (free_all_struct(cmd), exit(2), 2);
+// 	}
+// 	if (check_long(cmd->args[0]) == 1)
+// 	{
+// 		printf("minishell: exit: %s: numeric argument required\n",
+// 			cmd->args[0]);
+// 		return (free_all_struct(cmd), exit(2), 2);
+// 	}
+// 	if (cmd->args[1])
+// 	{
+// 		printf("minishell: exit: too many arguments\n");
+// 		return (2);
+// 	}
+// 	return (ft_atoll(cmd->args[0]) % 256);
+// }

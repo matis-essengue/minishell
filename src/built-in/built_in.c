@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:48:50 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 12:04:32 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/04 13:23:54 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	parent_process_built_in(t_cmd *cmd, t_env *env)
 	if (ft_strcmp(cmd->name, "env") == 0)
 		code_error = built_in_env(cmd, env);
 	if (ft_strcmp(cmd->name, "exit") == 0)
-	    code_error = built_in_exit(cmd, code_error);
+	    code_error = built_in_exit(cmd, code_error, env);
     return (code_error);
 }
 

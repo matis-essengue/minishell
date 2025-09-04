@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:31:04 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/03 16:49:37 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/04 10:50:29 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ t_cmd	*parse(char *line, t_env *env)
 	if (!check_tokens(current))
 		return (NULL);
 	cmds = tokens_to_cmds(tokens);
+	free_tokens(tokens);
 	expand_cmds(cmds, env);
 	remove_quotes(cmds);
 	debug_cmds(cmds);
-	free(tokens);
 	return (cmds);
 }
