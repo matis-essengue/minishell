@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:48:50 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/03 16:32:52 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/04 12:04:32 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ int	parent_process_built_in(t_cmd *cmd, t_env *env)
     int code_error;
 
     code_error = 0;
+	if (cmd->outfile && cmd->outfile->name)
+	{
+		open_outfile(cmd);
+	}
 	if (ft_strcmp(cmd->name, "echo") == 0)
 		code_error = built_in_echo(cmd);
 	if (ft_strcmp(cmd->name, "cd") == 0)
