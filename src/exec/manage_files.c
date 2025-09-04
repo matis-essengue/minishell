@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 11:54:42 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/04 13:41:47 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,3 +107,9 @@ void	manage_heredocs(t_cmd *cmd)
 		heredoc = heredoc->next;
 	}
 }
+
+
+
+
+
+// free everything

@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/04 13:24:33 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/04 13:47:17 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	check_exit(t_cmd *cmd, int exit_status, t_env *env)
 			if (ft_strncmp(cmd->name, "exit", 4) == 0)
 			{
 				exit_status = built_in_exit(cmd, 0, env);
-				printf("freeing cmd\n");
 				free_all_struct(cmd);
 				free_my_env(env);
 				exit(exit_status);
@@ -50,10 +49,12 @@ int	main(int argc, char **argv, char **envp)
 	t_env	*my_env;
 	char	*line;
 
+	void_silenced_args(argc, argv);
+	if (!isatty(0))
+        return (printf("minishell: tty required\n"), 1);
 	my_env = init_env(envp);
 	if (!my_env)
 		return (1);
-	void_silenced_args(argc, argv);
 	printf("\033[2J\033[H");
 	while (1)
 	{
