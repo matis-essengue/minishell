@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 11:32:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/03 11:52:44 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/04 15:35:01 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	close_all_fd(int *fd)
 		close(fd[WRITE]);
 }
 
-void	pipe_and_pid_error(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h, int err)
+void	pipe_and_pid_error(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h,
+		int err)
 {
 	if (err == 1)
 	{

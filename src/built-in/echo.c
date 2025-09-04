@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:26 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/01 12:03:06 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/04 16:06:18 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 
 int	built_in_echo(t_cmd *cmd)
 {
-	int newline;
-	int i = 0;
+	int	newline;
+	int	i;
 
+	i = 0;
 	if (cmd->args && cmd->args[i] && ft_strncmp(cmd->args[i], "-n", 2) == 0)
 	{
 		newline = 0;
@@ -28,7 +29,7 @@ int	built_in_echo(t_cmd *cmd)
 	while (cmd->args && cmd->args[i])
 	{
 		printf("%s", cmd->args[i]);
-        // check arg size
+		// check arg size
 		if (cmd->args[i + 1])
 			if (printf(" ") < 0)
 				return (1);

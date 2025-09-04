@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:58 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/03 16:33:39 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/04 15:53:53 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,17 @@ int	check_head_var(char *var)
 int	check_export_format(char *var)
 {
 	int	i;
+	int	len;
 
 	i = check_head_var(var);
 	if (i == -1)
 		return (1);
 	i++;
+	len = ft_strlen(var);
 	while (var[i])
 	{
 		if (ft_isalnum(var[i]) == 0 && var[i] != '_' && var[i] != '/'
-			&& var[i] != ' ' && var[i] != '-' && var[i] == '=')
+			&& var[i] != ' ' && var[i] != '-' && var[i] == '=' && len > 100)
 			return (1);
 		i++;
 	}

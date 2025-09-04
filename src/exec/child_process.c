@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 13:46:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/03 17:23:49 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/04 15:36:10 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	files_and_management(t_cmd *cmd, t_cmd *cmd_list, int prev_read_fd)
 {
-	unused_heredoc_fd(cmd, cmd_list); // pas derrier la condition suivante ?
+	unused_heredoc_fd(cmd, cmd_list);
 	if (cmd->heredocs && cmd->heredocs->heredoc_fd != -1)
 	{
 		dup2(cmd->heredocs->heredoc_fd, FD_STDIN);
@@ -45,7 +45,6 @@ void	child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env, int prev_read_fd)
 	}
 	if (is_built_in(cmd))
 	{
-		printf("here\n");
 		exit_status = child_process_built_in(cmd, env);
 		exit(exit_status);
 	}

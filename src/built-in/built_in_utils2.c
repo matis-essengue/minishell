@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 13:24:49 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 16:13:37 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/04 16:17:28 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ char	**get_path(char **envp)
 
 char	*get_var_path(char **envp, char *var)
 {
-	int i;
-	int len;
+	int	i;
+	int	len;
 
 	i = 0;
 	len = ft_strlen(var);

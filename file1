@@ -1,0 +1,14 @@
+total 160
+-rw-r--r-- 1 armosnie 2024_paris      0 Sep  4 15:30 file1
+-rw-r--r-- 1 armosnie 2024_paris  14949 Sep  4 13:23 fix.txt
+-rw-r--r-- 1 armosnie 2024_paris   4036 Sep  4 13:23 ftext.txt
+drwxr-xr-x 2 armosnie 2024_paris     56 Sep  4 13:23 includes
+-rw-r--r-- 1 armosnie 2024_paris   9148 Sep  3 16:59 leak.md
+drwxr-xr-x 2 armosnie 2024_paris   4096 Sep  3 17:26 libft
+-rw-r--r-- 1 armosnie 2024_paris   1071 Aug 11 11:59 LICENSE
+-rw-r--r-- 1 armosnie 2024_paris   1533 Sep  3 16:59 Makefile
+-rwxr-xr-x 1 armosnie 2024_paris 107920 Sep  4 15:30 minishell
+drwxr-xr-x 5 armosnie 2024_paris     77 Sep  4 14:12 obj
+-rw-r--r-- 1 armosnie 2024_paris     43 Aug 11 11:59 README.md
+drwxr-xr-x 5 armosnie 2024_paris     63 Sep  4 13:23 src
+-rw-r--r-- 1 armosnie 2024_paris    490 Sep  4 13:23 valgrind.supp

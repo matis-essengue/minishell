@@ -9,8 +9,8 @@
 # include <stdlib.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <unistd.h>
 # include <termios.h>
+# include <unistd.h>
 
 # define FD_STDIN 0
 # define FD_STDOUT 1
@@ -107,17 +107,17 @@ void						manage_heredocs(t_cmd *cmd);
 
 bool						exe_my_cmd(t_cmd *cmd, t_env *env);
 
-// // init interface utilisateur
+// init interface utilisateur
 
-// void							handle_sigint(int sig);
-// void							exec_handle_sigint(int sig);
-// void							handle_sigquit(int sig);
+void							handle_sigint(int sig);
+void							exec_handle_sigint(int sig);
+void							handle_sigquit(int sig);
 
-// // sig handlers
+// sig handlers
 
-// void							handle_child_signal(void);
-// void							handle_interactive_signal(void);
-// void							handle_exec_signal(void);
+void							handle_child_signal(void);
+void							handle_interactive_signal(void);
+void							handle_exec_signal(void);
 
 // utils
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/03 16:47:40 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/04 13:47:50 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ bool	exe_my_cmd(t_cmd *cmd, t_env *env)
 		free_array(full_cmd);
 		free_array(path);
 		error(cmd, cmd->name, 127);
-			// pas de minishell: lorsque unset path ensuite ls comme dans bash posix
 	}
 	exec(full_cmd[0], full_cmd, path, env->env);
 	free_array(path);

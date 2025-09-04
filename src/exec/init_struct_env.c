@@ -3,31 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   init_struct_env.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 20:17:52 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 11:26:35 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/04 15:37:46 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-// PWD=/home/armosnie/42/3_circle/armandbranch
-// SHLVL=1
-// _=/usr/bin/env
+char	*get_pwd(void)
+{
+	char	*pwd;
+	char	*result;
 
-// char	**build_mini_env(char **envp)
-// {
-// 	char *pwd;
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+	{
+		perror("");
+		return (NULL);
+	}
+	result = ft_strjoin("PWD=", pwd);
+	free(pwd);
+	return (result);
+}
 
-// 	pwd = getcwd(buffer, 1024);
-//     if (!pwd)
-//     {
-//         perror("");
-//         return (1);
-//     }
-// }
+char	**build_mini_env(void)
+{
+	char	**mini_env;
+
+	printf("build_mini_env\n");
+	mini_env = malloc(sizeof(char *) * (4));
+	if (!mini_env)
+		return (NULL);
+	mini_env[0] = get_pwd();
+	if (!mini_env[0])
+		return (free(mini_env), NULL);
+	mini_env[1] = ft_strdup("SHLVL=1");
+	if (!mini_env[1])
+		return (free_array(mini_env), NULL);
+	mini_env[2] = ft_strdup("_=/usr/bin/env");
+	if (!mini_env[2])
+		return (free_array(mini_env), NULL);
+	mini_env[3] = NULL;
+	return (mini_env);
+}
 
 char	**copy_env(char **envp)
 {
@@ -35,8 +56,8 @@ char	**copy_env(char **envp)
 	char	**new_env;
 
 	i = 0;
-	// if (!envp)
-	// 	return (build_mini_env(envp));
+	if (!envp || !envp[0])
+		return (build_mini_env());
 	new_env = malloc(sizeof(char *) * (env_len(envp) + 1));
 	while (envp[i])
 	{
@@ -48,8 +69,7 @@ char	**copy_env(char **envp)
 				free(new_env[i]);
 				i--;
 			}
-			free(new_env);
-			return (NULL);
+			return (free(new_env), NULL);
 		}
 		i++;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/04 15:09:26 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/04 16:17:56 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ int	main(int argc, char **argv, char **envp)
 	t_env	*my_env;
 	char	*line;
 
+	void_silenced_args(argc, argv);
+	if (!isatty(0))
+		return (printf("minishell: tty required\n"), 1);
 	my_env = init_env(envp);
 	if (!my_env)
 		return (1);
