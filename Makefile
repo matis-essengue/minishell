@@ -1,6 +1,7 @@
 NAME = minishell
 
 CC = cc
+TEST_FILE = file1 file2 file3
 CFLAGS = -Wall -Wextra -Werror -MMD -g3 
 LDFLAGS = -L/opt/homebrew/opt/readline/lib
 LDLIBS = -lreadline
@@ -65,9 +66,11 @@ $(OBJ_DIR)/%.o: src/%.c
 
 -include $(DEPS)
 
+fresh: 
+	@rm $(TEST_FILE) > /dev/null
+
 clean:
 	$(RM) -r $(OBJ_DIR)
-	make clean -C libft
 
 fclean: clean
 	$(RM) $(NAME)

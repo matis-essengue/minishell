@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:20:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 15:54:12 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/05 18:29:00 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	get_my_unset_env(char ***env, char *new_var)
 	i = 0;
 	var_path = get_var_path(*(env), new_var);
 	if (var_path == NULL)
-		return (1);
+		return (0);
 	while ((*env)[i])
 	{
 		if (check_is_same_var((*env)[i], var_path))
