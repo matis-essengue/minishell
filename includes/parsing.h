@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:32:41 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/03 16:54:34 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 13:15:38 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,15 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef struct s_expand_state
+{
+	char	*result;
+	int		i;
+	int		start;
+	int		squoted;
+	int		dquoted;
+}	t_expand_state;
+
 
 
 t_token					*tokenize(char *line);
@@ -53,7 +62,9 @@ void					reset_file_pointers(t_cmd *cmd, t_file **start_infile, t_file **start_o
 void					handle_input_redirect(t_cmd *cmd, t_token *current, t_file **start_infile);
 void					handle_output_redirect(t_cmd *cmd, t_token *current, t_file **start_outfile);
 t_cmd					*tokens_to_cmds(t_token *tokens);
-void					expand_cmds(t_cmd *tokens, t_env *env);
+void					expand_line(char **line, t_env *env);
 void					remove_quotes(t_cmd *cmds);
+char					*expand_variable(char *str, t_env *env, int *consumed);
+
 
 #endif

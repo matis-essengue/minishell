@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:54 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 15:48:08 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/08 11:04:00 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,18 +84,17 @@ static void	free_everything(t_cmd *cmd, t_env *env)
 	free_my_env(env);
 }
 
-int	built_in_exit(t_cmd *cmd, int exit_status, t_env *env)
+int	built_in_exit(t_cmd *cmd, t_env *env)
 {
+	int	last_exit_status;
+
+	last_exit_status = env->exit_status;
 	if (!(cmd->args && cmd->args[0]))
-	{
-		printf("exit\n");
-		return (free_everything(cmd, env), exit(exit_status), 0);
-	}
+		return (printf("exit\n"), free_everything(cmd, env),
+				exit(last_exit_status), 0);
 	if (cmd->args && invalid_option(cmd->args, "exit") == 2)
-	{
 		return (printf("minishell: exit: %c: There is no option allowed\n",
 				cmd->args[0][0]), free_everything(cmd, env), exit(2), 2);
-	}
 	if (is_valid_number(cmd->args[0]) == 2)
 	{
 		printf("minishell: exit: %s: numeric argument required\n",
