@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/08 11:30:35 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 11:53:06 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,12 @@ static void	expand_variable(
 	char	*env_var;
 	char	*dup;
 
+	if (ft_strcmp(*temp + 1, "\0") == 0 || ft_strcmp(*temp + 1, " ") == 0)
+	{
+		printf("expand_variable: no variable found\n");
+		(*temp)++;
+		return ;
+	}
 	if (*(*temp + 1) && *(*temp + 1) == '$')
 		(*temp)++;
 	if (*(*temp + 1) && *(*temp + 1) == '?')
@@ -104,7 +110,8 @@ void	expand_word(char *word, t_env *env,
 			*dquoted = !(*dquoted);
 		if (*temp == '\'' && !(*dquoted))
 			*squoted = !(*squoted);
-		if (*temp == '$' && !(*squoted))
+		if (*temp == '$' && !(*squoted) && (*temp + 1)
+			&& *(temp + 1) != '\0' && *(temp + 1) != ' ')
 			expand_variable(&temp, &start, &expanded, env);
 		else
 			temp++;
