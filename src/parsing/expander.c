@@ -6,13 +6,12 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/08 13:14:43 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 13:17:14 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
 #include "../../includes/minishell.h"
-
 
 static char	*join_and_free(char *s1, char *s2)
 {
