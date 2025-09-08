@@ -3,143 +3,82 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/04 12:04:44 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/08 13:17:14 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
 #include "../../includes/minishell.h"
 
-int	found(char *var, char *env_var)
+static char	*join_and_free(char *s1, char *s2)
 {
-	int	i;
+	char	*result;
 
-	i = 0;
-	while (env_var[i] && env_var[i])
-	{
-		if (env_var[i] == '=')
-		{
-			if (var[i] == '\0')
-				return (1);
-			else
-				return (0);
-		}
-		if (env_var[i] != var[i])
-			return (0);
-		i++;
-	}
-	return (0);
+	result = ft_strjoin(s1, s2);
+	free(s1);
+	free(s2);
+	return (result);
 }
 
-char	*ft_getenvx(char *var, char **env)
+static void	handle_dollar_sign(char **line, t_env *env, t_expand_state *s)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	while (env[i])
-	{
-		if (found(var, env[i]))
-		{
-			j = 0;
-			while (env[i][j] && env[i][j] != '=')
-				j++;
-			return (ft_strndup(env[i] + j + 1, ft_strlen(env[i]) - j - 1));
-		}
-		i++;
-	}
-	return (NULL);
-}
-
-static void	expand_variable(
-		char **temp, char **start, char **expanded, t_env *env)
-{
-	char	*var;
-	char	*env_var;
-	char	*dup;
-
-	if (*(*temp + 1) && *(*temp + 1) == '$')
-		(*temp)++;
-	if (*(*temp + 1) && *(*temp + 1) == '?')
-	{
-		*expanded = ft_strjoin(*expanded, ft_itoa(env->exit_status));
-		(*temp)+=2;
-		*start = *temp;
-	}
-	else
-	{
-		dup = ft_strndup(*start, *temp - *start);
-		*expanded = ft_strjoin(*expanded, dup);
-		free(dup);
-		*start = *temp;
-		(*temp)++;
-		while (**temp && **temp != ' ' && **temp != '\t' && **temp != '\n'
-			&& **temp != '"' && **temp != '$' && **temp != '\'')
-			(*temp)++;
-		var = ft_strndup(*start + 1, *temp - *start - 1);
-		env_var = ft_getenvx(var, env->env);
-		if (env_var)
-			*expanded = ft_strjoin(*expanded, env_var);
-		*start = *temp;
-	}
-}
-
-char	*expand_word(char *word, t_env *env)
-{
-	char	*expanded;
 	char	*temp;
-	char	*start;
-	int		squoted;
-	int		dquoted;
-	char	*res;
-	char	*dup;
+	char	*expanded;
+	int		consumed;
 
-	temp = word;
-	expanded = ft_strdup("");
-	squoted = 0;
-	dquoted = 0;
-	start = word;
-	while (*temp)
+	if (s->i > s->start)
 	{
-		if (*temp == '"' && !squoted)
-			dquoted = !dquoted;
-		if (*temp == '\'' && !dquoted)
-			squoted = !squoted;
-		if (*temp == '$' && !squoted)
-			expand_variable(&temp, &start, &expanded, env);
-		else
-			temp++;
+		temp = ft_strndup(*line + s->start, s->i - s->start);
+		s->result = join_and_free(s->result, temp);
 	}
-	dup = ft_strndup(start, temp - start);
-	res = ft_strjoin(expanded, dup);
-	free(expanded);
-	free(dup);
-	free(word);
-	return (res);
+	expanded = expand_variable(*line + s->i, env, &consumed);
+	s->result = join_and_free(s->result, expanded);
+	s->i += consumed;
+	s->start = s->i;
 }
 
-void	expand_cmds(t_cmd *tokens, t_env *env)
+static void	process_char(char **line, t_env *env, t_expand_state *state)
 {
-	t_cmd	*current;
-	int		i;
-
-	current = tokens;
-	while (current)
+	if ((*line)[state->i] == '\'' && !state->dquoted)
+		state->squoted = !state->squoted;
+	else if ((*line)[state->i] == '"' && !state->squoted)
+		state->dquoted = !state->dquoted;
+	else if ((*line)[state->i] == '$' && !state->squoted)
 	{
-		if (current->name)
-			current->name = expand_word(current->name, env);
-		if (current->args)
-		{
-			i = 0;
-			while (current->args[i])
-			{
-				current->args[i] = expand_word(current->args[i], env);
-				i++;
-			}
-		}
-		current = current->next;
+		handle_dollar_sign(line, env, state);
+		return ;
 	}
+	state->i++;
+}
+
+static void	finalize_expansion(char **line, t_expand_state *state)
+{
+	char	*temp;
+
+	if (state->i > state->start)
+	{
+		temp = ft_strndup(*line + state->start, state->i - state->start);
+		state->result = join_and_free(state->result, temp);
+	}
+	free(*line);
+	*line = state->result;
+}
+
+void	expand_line(char **line, t_env *env)
+{
+	t_expand_state	state;
+
+	state.result = ft_strdup("");
+	state.i = 0;
+	state.start = 0;
+	state.squoted = 0;
+	state.dquoted = 0;
+	while ((*line)[state.i])
+	{
+		process_char(line, env, &state);
+	}
+	finalize_expansion(line, &state);
 }

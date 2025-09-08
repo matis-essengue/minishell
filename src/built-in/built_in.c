@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:48:50 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 15:22:13 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/08 11:01:21 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	parent_process_built_in(t_cmd *cmd, t_env *env)
 	if (ft_strcmp(cmd->name, "env") == 0)
 		code_error = built_in_env(cmd, env);
 	if (ft_strcmp(cmd->name, "exit") == 0)
-		code_error = built_in_exit(cmd, code_error, env);
+		code_error = built_in_exit(cmd, env);
 	if (prev_old_fd != -1)
 		return (dup2(prev_old_fd, FD_STDOUT), close(prev_old_fd), code_error);
 	return (code_error);

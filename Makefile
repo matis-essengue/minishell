@@ -16,6 +16,7 @@ SRCS = \
 	src/parsing/token_checker.c \
 	src/parsing/utils.c \
 	src/parsing/expander.c \
+	src/parsing/expander_utils.c \
 	src/parsing/quote_remover.c \
 	src/parsing/cmd_checker.c \
 	src/parsing/tokens_to_cmds.c \

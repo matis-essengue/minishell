@@ -415,3 +415,1024 @@ nm -U (normi)
 Export a=$a -> 1 (bien export et proteger line too long)
 
 Echo a > /dev/full (pwd et echo avec un strlen qui retourne la taille pour voir si ça a fonctionné, problème de redirection)
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\
+CTRL C + heredoc = error 
+\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+heredoc> armand
+heredoc> 
+minishell> << e
+heredoc> ==12507== Conditional jump or move depends on uninitialised value(s)
+==12507==    at 0x403ECF: wait_child (child_process.c:65)
+==12507==    by 0x403B8A: pipe_function (parent_process.c:79)
+==12507==    by 0x403C76: execute_command (parent_process.c:102)
+==12507==    by 0x401412: main (main.c:52)
+==12507==  Uninitialised value was created by a stack allocation
+==12507==    at 0x403E80: wait_child (child_process.c:55)
+==12507== 
+==12507== Conditional jump or move depends on uninitialised value(s)
+==12507==    at 0x403EFA: wait_child (child_process.c:67)
+==12507==    by 0x403B8A: pipe_function (parent_process.c:79)
+==12507==    by 0x403C76: execute_command (parent_process.c:102)
+==12507==    by 0x401412: main (main.c:52)
+==12507==  Uninitialised value was created by a stack allocation
+==12507==    at 0x403E80: wait_child (child_process.c:55)
+==12507== 
+tcsetattr: Inappropriate ioctl for device
+minishell> armand
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: armand
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+tcgetattr: Inappropriate ioctl for device
+armand: No such file or directory
+==12508== 
+==12508== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==12508== 
+==12508== HEAP SUMMARY:
+==12508==     in use at exit: 212,343 bytes in 288 blocks
+==12508==   total heap usage: 623 allocs, 335 frees, 238,538 bytes allocated
+==12508== 
+==12508== LEAK SUMMARY:
+==12508==    definitely lost: 0 bytes in 0 blocks
+==12508==    indirectly lost: 0 bytes in 0 blocks
+==12508==      possibly lost: 0 bytes in 0 blocks
+==12508==    still reachable: 212,343 bytes in 288 blocks
+==12508==         suppressed: 0 bytes in 0 blocks
+==12508== Reachable blocks (those to which a pointer was found) are not shown.
+==12508== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==12508== 
+==12508== For lists of detected and suppressed errors, rerun with: -s
+==12508== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+==12507== Conditional jump or move depends on uninitialised value(s)
+==12507==    at 0x403C8D: execute_command (parent_process.c:104)
+==12507==    by 0x401412: main (main.c:52)
+==12507==  Uninitialised value was created by a stack allocation
+==12507==    at 0x403BA4: execute_command (parent_process.c:84)
+==12507== 
+==12507== Syscall param ioctl(TCSET{S,SW,SF}) points to uninitialised byte(s)
+==12507==    at 0x49E1DE5: tcsetattr (tcsetattr.c:83)
+==12507==    by 0x403F98: restore_termios (term_state.c:27)
+==12507==    by 0x403C9E: execute_command (parent_process.c:105)
+==12507==    by 0x401412: main (main.c:52)
+==12507==  Address 0x1ffefff870 is on thread 1's stack
+==12507==  in frame #0, created by tcsetattr (tcsetattr.c:45)
+==12507==  Uninitialised value was created by a stack allocation
+==12507==    at 0x403BA4: execute_command (parent_process.c:84)
+==12507== 
+tcsetattr: Inappropriate ioctl for device
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+heredoc dans heredoc error avec tcgetattr
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+minishell> <<e
+<<e
+heredoc> 
+PARSED COMMANDS
+cmd 1:
+[NAME]: (null)
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << e
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+tcgetattr: Inappropriate ioctl for device
+heredoc> << e
+<< e
+heredoc> heredoc> << e
+<< e
+heredoc> heredoc> << e
+<< e
+heredoc> heredoc> <<e
+<<e
+heredoc> heredoc> e
+==12505== 
+==12505== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==12505== 
+==12505== HEAP SUMMARY:
+==12505==     in use at exit: 212,294 bytes in 285 blocks
+==12505==   total heap usage: 611 allocs, 326 frees, 237,315 bytes allocated
+==12505== 
+==12505== LEAK SUMMARY:
+==12505==    definitely lost: 0 bytes in 0 blocks
+==12505==    indirectly lost: 0 bytes in 0 blocks
+==12505==      possibly lost: 0 bytes in 0 blocks
+==12505==    still reachable: 212,294 bytes in 285 blocks
+==12505==         suppressed: 0 bytes in 0 blocks
+==12505== Reachable blocks (those to which a pointer was found) are not shown.
+==12505== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==12505== 
+==12505== For lists of detected and suppressed errors, rerun with: -s
+==12505== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==12540== 
+==12540== FILE DESCRIPTORS: 4 open (3 std) at exit.
+==12540== Open file descriptor 4:
+==12540==    at 0x49DD07D: pipe (pipe.c:29)
+==12540==    by 0x40471E: manage_heredocs (manage_files.c:93)
+==12540==    by 0x403AE4: pipe_function (parent_process.c:66)
+==12540==    by 0x403C76: execute_command (parent_process.c:102)
+==12540==    by 0x401412: main (main.c:52)
+==12540== 
+==12540== 
+==12540== HEAP SUMMARY:
+==12540==     in use at exit: 213,506 bytes in 294 blocks
+==12540==   total heap usage: 625 allocs, 331 frees, 239,585 bytes allocated
+==12540== 
+==12540== LEAK SUMMARY:
+==12540==    definitely lost: 0 bytes in 0 blocks
+==12540==    indirectly lost: 0 bytes in 0 blocks
+==12540==      possibly lost: 0 bytes in 0 blocks
+==12540==    still reachable: 213,506 bytes in 294 blocks
+==12540==         suppressed: 0 bytes in 0 blocks
+==12540== Reachable blocks (those to which a pointer was found) are not shown.
+==12540== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==12540== 
+==12540== For lists of detected and suppressed errors, rerun with: -s
+==12540== ERROR SUMMARY: 4 errors from 4 contexts (suppressed: 0 from 0)
+tcsetattr: Inappropriate ioctl for device
+minishell> << e
+
+/////////////////////////////
+double free CTRL + D
+/////////////////////////////
+
+minishell> 
+free(): double free detected in tcache 2
+[1]    19574 IOT instruction (core dumped)  ./minishell
+
+
+/////////////////////
+minishell tester
+////////////////////
+
+
+gerer le $ seul entre quote dans l'expand
+
+Test  13: ❌ echo "> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<" 
+mini output = (> >> < bash_outfiles bash.supp bonus bonus_bonus builtins extras local.supp loop.out manual_tests mini_outfiles os_specific outfiles pipes README.md redirects syntax tester test_files wildcards ? [ ] | ; [ ] || && ( ) & # <<)
+bash output = (> >> < bash_outfiles bash.supp bonus bonus_bonus builtins extras local.supp loop.out manual_tests mini_outfiles os_specific outfiles pipes README.md redirects syntax tester test_files wildcards ? [ ] | ; [ ] || && ( ) & # $ <<)
+mini error = ( invalid pointer)
+bash error = ()
+Test  14: ✅⚠️  echo '> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<' 
+mini error = ( invalid pointer)
+bash error = ()
+test 15 : prblm parcing 
+minishell> echo "exit_code ->$? user ->$USER home -> $HOME"
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: echo
+[ARGS]: 0 user ->armosnie home -> /home/armosnie
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+i : 0 - args[i] : 0 user ->armosnie home -> /home/armosnie
+0 user ->armosnie home -> /home/armosnie
+Test  15: ❌ echo "exit_code ->$? user ->$USER home -> $HOME" 
+mini output = (0 user ->armosnie home -> /home/armosnie)
+bash output = (exit_code ->0 user ->armosnie home -> /home/armosnie)
+mini error = ( invalid pointer)
+bash error = ()
+Test  16: ✅⚠️  echo 'exit_code ->$? user ->$USER home -> $HOME' 
+mini error = ( invalid pointer)
+bash error = ()
+
+parcing expand
+Test  17: ❌ echo "$" 
+
+mini output = ()
+bash output = ($)
+mini error = ( invalid pointer)
+bash error = ()
+Test  18: ✅⚠️  echo '$' 
+mini error = ( invalid pointer)
+bash error = ()
+
+parcing expand
+Test  19: ❌ echo $ 
+minishell> << a << b cat
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: cat
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << a  << b
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> armand
+heredoc> a
+heredoc> benoit
+heredoc> b
+
+
+mini output = ()
+bash output = ($)
+mini error = ( invalid pointer)
+bash error = ()
+Test  20: ✅⚠️  echo $? 
+mini error = ( invalid pointer)
+bash error = ()
+Test  21: ✅⚠️  echo $?HELLO 
+mini error = ( invalid pointer)
+bash error = ()
+Test  22: ✅⚠️  pwd 
+mini error minishell> << a << b cat
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: cat
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << a  << b
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> armand
+heredoc> a
+heredoc> benoit
+heredoc> b
+
+= ( double free detected in tcache 2)
+bash error = ()
+Test  23: ✅⚠️  pwd oi 
+mini error = ( invalid pointer)
+bash error = ()
+Test  24: ❌ export hello 
+mini output = (minishell: export: hello: not a valid identifier code error : 0)
+bash output = ()
+mini exit code = 1
+bash exit code = 0
+Test  25: ✅ export HELLO=123 
+Test  26: ❌ export A- 
+mini output = (minishell: export: A-: not a valid identifier code error : 0)
+bash output = ()
+mini error = ()
+bash error = ( not a valid identifier)
+Test  27: ❌ export HELLO=123 A 
+mini output = (minishell: export: A: not a valid identifier code error : 0)
+bash output = ()
+mini exit code = 1
+bash exit code = 0
+Test  28: ✅ export HELLO="123 A-" 
+Test  29: ❌ export hello world 
+mini output = (minishell: export: hello: not a valid identifier code error : 0 minishell: export: world: not a valid identifier code error : 1)
+bash output = ()
+mini exit code = 1
+bash exit code = 0
+Test  30: ❌ export HELLO-=123 
+mini output = (minishell: export: HELLO-=123: not a valid identifier code error : 0)
+bash output = ()
+mini error = ()
+bash error = ( not a valid identifier)
+Test  31: ❌ export = 
+mini output = (minishell: export: =: not a valid identifier code error : 0)
+bash output = ()
+mini error = ()
+bash error = ( not a valid identifier)
+Test  32: ❌ export 123 
+mini outputminishell> << a << b cat
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: cat
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << a  << b
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> armand
+heredoc> a
+heredoc> benoit
+heredoc> b
+
+ = (minishell: export: 123: not a valid identifier code error : 0)
+bash output = ()
+mini error = ()
+bash error = ( not a valid identifier)
+Test  33: ✅⚠️  unset 
+mini error = ( double free detected in tcache 2)
+bash error = ()
+Test  34: ❌ unset HELLO 
+mini exit code = 1
+bash exit code = 0
+mini error = ( invalid pointer)
+bash error = ()
+Test  35: ❌ unset HELLO1 HELLO2 
+mini exit code = 1
+bash exit code = 0
+mini error = ( invalid pointer)
+bash error = ()
+Test  36: ✅ unset HOME 
+Test  37: ✅ unset PATH 
+Test  38: ✅ unset SHELL 
+Test  39: ❌ cd $PWD 
+mini exit code = 1
+bash exit code = 0
+mini error = ( invalid pointer)
+bash error = ()
+Test  40: ❌ cd $PWD hi 
+mini output = (minishell: cd: too many arguments)
+bash output = ()
+mini error = ( invalid pointer)
+bash error = ( too many arguments)
+Test  41: ✅⚠️  cd 123123 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+Test  42: ✅⚠️  exit 123 
+mini error = ( invalid pointer)
+bash error = ()
+Test  43: ✅⚠️  exit 298 
+mini error = ( invalid pointer)
+bash error = ()
+Test  44: ✅⚠️  exit +100 
+mini error = ( invalid pointer)
+bash error = ()
+Test  45: ✅⚠️  exit "+100" 
+mini error = ( invalid pointer)
+bash error = ()
+Test  46: ✅⚠️  exit +"100" 
+mini error = ( invalid pointer)
+bash error = ()
+Test  47: ❌ exit -100 
+mini output = (minishell: exit: -: There is no option allowed)
+bash output = ()
+mini exit code = 2
+bash exit code = 156
+Test  48: ❌ exit "-100" 
+mini output = (minishell: exit: -: There is no option allowed)
+bash output = ()
+mini exit code = 2
+bash exit minishell> << a << b cat
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: cat
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << a  << b
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> armand
+heredoc> a
+heredoc> benoit
+heredoc> b
+
+code = 156
+Test  49: ❌ exit -"100" 
+mini output = (minishell: exit: -: There is no option allowed)
+bash output = ()
+mini exit code = 2
+bash exit code = 156
+Test  50: ❌ exit hello 
+mini output = (minishell: exit: hello: numeric argument required)
+bash output = ()
+mini errorminishell> << a << b cat
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: cat
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << a  << b
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> armand
+heredoc> a
+heredoc> benoit
+heredoc> b
+
+ = ()
+bash error = ( numeric argument required)
+Test  51: ❌ exit 42 world 
+mini output = (minishell: exit: too many arguments)
+bash output = ()
+mini exit code = 2
+bash exit code = 1
+mini error = ( invalid pointer)
+bash error = ( too many arguments)
+Test  52: ❌  
+mini exit code = 139
+bash exit code = 0
+——————————minishell> << a << b cat
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: cat
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << a  << b
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> armand
+heredoc> a
+heredoc> benoit
+heredoc> b
+
+—— pipes
+Test  53: ✅⚠️  env | sort | grep -v SHLVL | grep -v ^_ 
+mini error = ( invalid pointer)
+bash error = ()
+Test  54: ✅⚠️  cat ./test_files/infile_big | grep oi 
+mini error = ( invalid pointer)
+bash error = ()
+Test  55: ✅⚠️  cat minishell.h | grep ");"$ 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+Test  56: ✅⚠️  export GHOST=123 | env | grep GHOST 
+mini error = ( invalid pointer)
+bash error = ()
+———————————— redirects
+Test  57: ✅⚠️  grep hi <./test_files/infile 
+mini error = ( invalid pointer)
+bash error = ()
+Test  58: ✅⚠️  grep hi "<infile" <         ./test_files/infile 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+Test  59: ✅⚠️  echo hi < ./test_files/infile bye bye 
+mini error = ( invalid pointer)
+bash error = ()
+Test  60: ✅⚠️  grep hi <./test_files/infile_big <./test_files/infile 
+mini error = ( invalid pointer)
+bash error = ()
+Test  61: ✅⚠️  echo <"./test_files/infile" "bonjour       42" 
+mini error = ( invalid pointer)
+bash error = ()
+Test  62: ✅⚠️  cat <"./test_files/file name with spaces" 
+mini error = ( invalid pointer)
+bash error = ()
+Test  63: ✅⚠️  cat <./test_files/infile_big ./test_files/infile 
+mini error = ( invalid pointer)
+bash error = ()
+Test  64: ✅⚠️  cat <"1""2""3""4""5" 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+Test  65: ❌ echo <"./test_files/infile" <missing <"./test_files/infile" 
+mini exit code = 0
+bash exit code = 1
+mini error = ( invalid pointer)
+bash error = ( No such file or directory)
+Test  66: ❌ echo <missing <"./test_files/infile" <missing 
+mini exit code = 0
+bash exit code = 1
+mini error = ( invalid pointer)
+bash error = ( No such file or directory)
+Test  67: ✅⚠️  cat <"./test_files/infile" 
+mini error = ( invalid pointer)
+bash error = ()
+Test  68: ✅⚠️  echo <"./test_files/infile_big" | cat <"./test_files/infile" 
+mini error = ( invalid pointer)
+bash error = ()
+Test  69: ✅⚠️  echo <"./test_files/infile_big" | cat "./test_files/infile" 
+mini error = ( invalid pointer)
+bash error = ()
+Test  70: ✅⚠️  echo <"./test_files/infile_big" | echo <"./test_files/infile" 
+mini error = ( invalid pointer)
+bash error = ()
+Test  71: ✅⚠️  echo hi | cat <"./test_files/infile" 
+mini error = ( invalid pointer)
+bash error = ()
+Test  72: ✅⚠️  echo hi | cat "./test_files/infile" 
+mini error = ( invalid pointer)
+bash error = ()
+Test  73: ✅⚠️  cat <"./test_files/infile" | echo hi 
+mini error = ( Broken pipe invalid pointer)
+bash error = ( Broken pipe)
+Test  74: ✅⚠️  cat <"./test_files/infile" | grep hello 
+mini error = ( invalid pointer)
+bash error = ()
+Test  75: ✅⚠️  cat <"./test_files/infile_big" | echo hi 
+mini error = ( Broken pipe invalid pointer)
+bash error = ( Broken pipe)
+Test  76: ✅⚠️  cat <missing 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+Test  77: ✅⚠️  cat <missing | cat 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+Test  78: ✅⚠️  cat <missing | echo oi 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+Test  79: ✅⚠️  cat <missing | cat <"./test_files/infile" 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+Test  80: ✅⚠️  echo <123 <456 hi | echo 42 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+Test  81: ✅⚠️  ls >./outfiles/outfile01 
+mini error = ( invalid pointer)
+bash error = ()
+Test  82: ✅⚠️  ls >         ./outfiles/outfile01 
+mini error = ( invalid pointer)
+bash error = ()
+Test  83: ❌ echo hi >         ./outfiles/outfile01 bye 
+Files ./mini_outfiles/outfile01 and ./bash_outfiles/outfile01 differ
+mini outfiles:
+bash outfiles:
+hi bye
+mini output = (hi bye)
+bash output = ()
+mini error = ( invalid pointer)
+bash error = ()
+Test  84: ✅⚠️  ls >./outfiles/outfile01 >./outfiles/outfile02 
+mini error = ( invalid pointer)
+bash error = ()
+Test  85: ✅⚠️  ls >./outfiles/outfile01 >./test_files/invalid_permission 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test  86: ✅⚠️  ls >"./outfiles/outfile with spaces" 
+mini error = ( invalid pointer)
+bash error = ()
+Test  87: ✅⚠️  ls >"./outfiles/outfile""1""2""3""4""5" 
+mini errorminishell> << a << b cat
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: cat
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << a  << b
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> armand
+heredoc> a
+heredoc> benoit
+heredoc> b
+
+ = ( invalid pointer)
+bash error = ()
+Test  88: ✅⚠️  ls >"./outfiles/outfile01" >./test_files/invalid_permission >"./outfiles/outfile02" 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test  89: ✅⚠️  ls >./test_files/invalid_permission >"./outfiles/outfile01" >./test_files/invalid_permission 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test  90: ✅⚠️  cat <"./test_files/infile" >"./outfiles/outfile01" 
+mini error = ( invalid pointer)
+bash error = ()
+Test  91: ❌ echo hi >./outfiles/outfile01 | echo bye 
+Files ./mini_outfiles/outfile01 and ./bash_outfiles/outfile01 differ
+mini outfiles:
+bash outfiles:
+hi
+mini error = ( invalid pointer)
+bash error = ()
+Test  92: ❌ echo hi >./outfiles/outfile01 >./outfiles/outfile02 | echo bye 
+Files ./mini_outfiles/outfile02 and ./bash_outfiles/outfile02 differ
+mini outfiles:
+bash outfiles:
+hi
+mini error = ( invalid pointer)
+bash error = ()
+Test  93: ✅⚠️  echo hi | echo >./outfiles/outfile01 bye 
+mini error = ( invalid pointer)
+bash error = ()
+Test  94: ✅⚠️  echo hi | echo bye >./outfiles/outfile01 >./outfiles/outfile02 
+mini error = ( invalid pointer)
+bash error = ()
+Test  95: ❌ echo hi >./outfiles/outfile01 | echo bye >./outfiles/outfile02 
+Files ./mini_outfiles/outfile01 and ./bash_outfiles/outfile01 differ
+mini outfiles:
+bye
+bash outfiles:
+hi
+bye
+mini error = ( invalid pointer)
+bash error = ()
+Test  96: ✅⚠️  echo hi >./outfiles/outfile01 >./test_files/invalid_permission | echo bye 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test  97: ✅⚠️  echo hi >./test_files/invalid_permission | echo bye 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test  98: ✅⚠️  echo hi >./test_files/invalid_permission >./outfiles/outfile01 | echo bye 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test  99: ✅⚠️  echo hi | echo bye >./test_files/invalid_permission 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test 100: ✅⚠️  echo hi | >./outfiles/outfile01 echo bye >./test_files/invalid_permission 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test 101: ✅⚠️  echo hi | echo bye >./test_files/invalid_permission >./outfiles/outfile01 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test 102: ✅⚠️  cat <"./test_files/infile" >./test_files/invalid_permission 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test 103: ✅⚠️  cat >./test_files/invalid_permission <"./test_files/infile" 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test 104: ✅⚠️  cat <missing >./outfiles/outfile01 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+Test 105: ❌ cat >./outfiles/outfile01 <missing 
+Only in ./bash_outfiles: outfile01
+mini outfiles:
+cat: './mini_outfiles/*': No such file or directory
+bash outfiles:
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+Test 106: ✅⚠️  cat <missing >./test_files/invalid_permission 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+Test 107: ✅⚠️  cat >./test_files/invalid_permission <missing 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( Permission denied)
+Test 108: ❌ cat >./outfiles/outfile01 <missing >./test_files/invalid_permission 
+Only in ./bash_outfiles: outfile01
+mini outfiles:
+cat: './mini_outfiles/*': No such file or directory
+bash outfiles:
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+Test 109: ✅⚠️  ls >>./outfiles/outfile01 
+mini error = ( invalid pointer)
+bash error = ()
+Test 110: ✅⚠️  ls >>      ./outfiles/outfile01 
+mini error = ( invalid pointer)
+bash error = ()
+Test 111: ✅⚠️  ls >>./outfiles/outfile01 >./outfiles/outfile01 
+mini error = ( invalid pointer)
+bash error = ()
+Test 112: ✅⚠️  ls >./outfiles/outfile01 >>./outfiles/outfile01 
+mini error = ( invalid pointer)
+bash error = ()
+Test 113: ✅⚠️  ls >./outfiles/outfile01 >>./outfiles/outfile01 >./outfiles/outfile02 
+mini error = ( invalid pointer)
+bash error = ()
+Test 114: ✅⚠️  ls >>./outfiles/outfile01 >>./outfiles/outfile02 
+mini error = ( invalid pointer)
+bash error = ()
+Test 115: ✅⚠️  ls >>./test_files/invalid_permission 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test 116: ✅⚠️  ls >>./test_files/invalid_permission >>./outfiles/outfile01 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test 117: ✅⚠️  ls >>./outfiles/outfile01 >>./test_files/invalid_permission 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test 118: ✅⚠️  ls >./outfiles/outfile01 >>./test_files/invalid_permission >>./outfiles/outfile02 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test 119: ✅⚠️  ls <missing >>./test_files/invalid_permission >>./outfiles/outfile02 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+Test 120: ✅⚠️  ls >>./test_files/invalid_permission >>./outfiles/outfile02 <missing 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( Permission denied)
+Test 121: ❌ echo hi >>./outfiles/outfile01 | echo bye 
+Files ./mini_outfiles/outfile01 and ./bash_outfiles/outfile01 differ
+mini outfiles:
+bash outfiles:
+hi
+mini error = ( invalid pointer)
+bash error = ()
+Test 122: ❌ echo hi >>./outfiles/outfile01 >>./outfiles/outfile02 | echo bye 
+Files ./mini_outfiles/outfile02 and ./bash_outfiles/outfile02 differ
+mini outfiles:
+bash outfiles:
+hi
+mini error = ( invalid pointer)
+bash error = ()
+Test 123: ✅⚠️  echo hi | echo >>./outfiles/outfile01 bye 
+mini error = ( invalid pointer)
+bash error = ()
+Test 124: ✅⚠️  echo hi | echo bye >>./outfiles/outfile01 >>./outfiles/outfile02 
+mini error = ( invalid pointer)
+bash error = ()
+Test 125: ❌ echo hi >>./outfiles/outfile01 | echo bye >>./outfiles/outfile02 
+Files ./mini_outfiles/outfile01 and ./bash_outfiles/outfile01 differ
+mini outfiles:
+bye
+bash outfiles:
+hi
+bye
+mini error = ( invalid pointer)
+bash error = ()
+Test 126: ✅⚠️  echo hi >>./test_files/invalid_permission | echo bye 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test 127: ✅⚠️  echo hi >>./test_files/invalid_permission >./outfiles/outfile01 | echo bye 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test 128: ✅⚠️  echo hi | echo bye >>./test_files/invalid_permission 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test 129: ✅⚠️  echo hi | echo >>./outfiles/outfile01 bye >./test_files/invalid_permission 
+mini error = ( Permission denied invalid pointer)
+bash error = ( Permission denied)
+Test 130: ✅⚠️  cat <minishell.h>./outfiles/outfile 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+Test 131: ✅⚠️  cat <minishell.h|ls 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( No such file or directory)
+———————————— extras
+Test 132: ❌  
+mini exit code = 139
+bash exit code = 0
+Test 133: ❌ $PWD 
+mini exit code = 127
+bash exit code = 126
+mini error = ( No such file or directory invalid pointer)
+bash error = ( Is a directory)
+Test 134: ❌ $EMPTY 
+mini exit code = 127
+bash exit code = 0
+mini error = (Permission denied invalid pointer)
+bash error = ()
+Test 135: ❌ $EMPTY echo hi 
+mini output = ()
+bash output = (hi)
+mini exit code = 127
+bash exit code = 0
+mini error = (Permission denied invalid pointer)
+bash error = ()
+Test 136: ❌ ./test_files/invalid_permission 
+mini exit code = 127
+bash exit code = 126
+mini error = ( No such file or directory invalid pointer)
+bash error = ( Permission denied)
+Test 137: ✅⚠️  ./missing.out 
+mini error = ( No such file or directory double free detected in tcache 2)
+bash error = ( No such file or directory)
+Test 138: ✅⚠️  missing.out 
+mini error = ( No such file or directory double free detected in tcache 2)
+bash error = ( command not found)
+Test 139: ✅⚠️  "aaa" 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( command not found)
+Test 140: ✅⚠️  test_files 
+mini error = ( No such file or directory double free detected in tcache 2)
+bash error = ( command not found)
+Test 141: ❌ ./test_files 
+mini exit code = 127
+bash exit code = 126
+mini error = ( No such file or directory double free detected in tcache 2)
+bash error = ( Is a directory)
+Test 142: ✅⚠️  /test_files 
+mini error = ( No such file or directory double free detected in tcache 2)
+bash error = ( No such file or directory)
+Test 143: ✅⚠️  minishell.h 
+mini error = ( No such file or directory double free detected in tcache 2)
+bash error = ( command not found)
+Test 144: ✅⚠️  $ 
+mini error = (Permission denied invalid pointer)
+bash error = ( command not found)
+Test 145: ✅⚠️  $? 
+mini error = ( No such file or directory invalid pointer)
+bash error = ( command not found)
+Test 146: ✅⚠️  README.md 
+mini error = ( No such file or directory double free detected in tcache 2)
+bash error = ( command not found)
+108/146
+
+
+minishell> echo hi >echo hi > p lol > d | echo bye > file1
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: echo
+[ARGS]: hi lol
+[INFILE]: NULL
+[OUTFILE]:  > p  > d
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: PIPEOUT
+[INPUT_TYPE]: STDIN
+
+cmd 2:
+[NAME]: echo
+[ARGS]: bye
+[INFILE]: NULL
+[OUTFILE]:  > file1
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: PIPEIN
+
+probleme logique parcing hi et bye 2 argument au lieu de hi ET lol avant le pipe
+
+
+minishell> <<a<<b<<c cat
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: cat
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << a  << b  << c
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> gr
+heredoc> rgr
+heredoc> a
+heredoc> tretre
+heredoc> b
+heredoc> tyjyujty
+heredoc> c
+
+//////////////////////
+boucle infini heredoc/
+//////////////////////
+
+code erreur signal 
+
+minishell> ^C
+minishell> ^C
+minishell> ^C
+minishell> ^C
+minishell> ^C
+minishell> echo $?
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: echo
+[ARGS]: 0
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+0
+
+last error code
+
+2
+minishell> echo $?
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: echo
+[ARGS]: 0
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT2
+minishell> echo $?
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: echo
+[ARGS]: 0
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+0
+minishell> e
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: e
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+e: No such file or directory
+minishell> exit
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: exit
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+exit
+➜  armandbranch git:(armand) ✗ echo $?
+0
+
+[INPUT_TYPE]: STDIN
+
+0
+minishell> e
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: e
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+e: No such file or directory
+minishell> exit
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: exit
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+exit
+➜  armandbranch git:(armand) ✗ echo $?
+0
+
+n'efface pas l'entree apres un CTRL + C
+
+minishell> ^C
+minishell> ^C
+minishell> dwrqaw^C
+minishell> dwrqaw^C
+minishell> dwrqaw^C
+minishell> dwrqaw^C
+minishell> dwrqaw^C
+minishell> dwrqaw^C
+minishell> dwrqaw
+
+
+CTRL + C BUG IN HEREDOC
+
+minishell> << a << b <<c
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: (null)
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << a  << b  << c
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> 
+^Cminishell> << a << b <<c
+^Credoc> heredoc> ^C
+
+minishell> << a << b <<cheredoc> 
+^Credoc> ^C
+^C
+
+minishell> << a << b <<c
+^Cnishell> ^C
+^C
+
+
+minishell> << a << b <<c
+heredoc> heredoc> ^Cheredoc> ^C
+^C
+
+heredoc> 
+heredoc> 
+heredoc> ^C
+^Cminishell> 
+
+
+heredoc> 
+^Cnishell> ^C
+^Credoc> ^C
+
+CTR + D = double free
+
+minishell> 
+free(): invalid pointer
+minishell> 
+free(): invalid pointer
+[1]    395140 IOT instruction (core dumped)  ./minishell
