@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/08 11:53:06 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 13:01:56 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,84 +54,100 @@ char	*ft_getenvx(char *var, char **env)
 	return (NULL);
 }
 
-static void	expand_variable(
-		char **temp, char **start, char **expanded, t_env *env)
+static char	*get_var_name(char *str)
 {
-	char	*var;
-	char	*env_var;
-	char	*dup;
+	int		i;
+	char	*var_name;
 
-	if (ft_strcmp(*temp + 1, "\0") == 0 || ft_strcmp(*temp + 1, " ") == 0)
-	{
-		printf("expand_variable: no variable found\n");
-		(*temp)++;
-		return ;
-	}
-	if (*(*temp + 1) && *(*temp + 1) == '$')
-		(*temp)++;
-	if (*(*temp + 1) && *(*temp + 1) == '?')
-	{
-		*expanded = ft_strjoin(*expanded, ft_itoa(env->exit_status));
-		(*temp)+=2;
-		*start = *temp;
-	}
-	else
-	{
-		dup = ft_strndup(*start, *temp - *start);
-		*expanded = ft_strjoin(*expanded, dup);
-		free(dup);
-		*start = *temp;
-		(*temp)++;
-		while (**temp && **temp != ' ' && **temp != '\t' && **temp != '\n'
-			&& **temp != '"' && **temp != '$' && **temp != '\'')
-			(*temp)++;
-		var = ft_strndup(*start + 1, *temp - *start - 1);
-		env_var = ft_getenvx(var, env->env);
-		if (env_var)
-			*expanded = ft_strjoin(*expanded, env_var);
-		*start = *temp;
-	}
+	i = 0;
+	while (str[i] && str[i] != ' ' && str[i] != '\t' && str[i] != '\n'
+		&& str[i] != '"' && str[i] != '$' && str[i] != '\'')
+		i++;
+	var_name = ft_strndup(str, i);
+	return (var_name);
 }
 
-void	expand_word(char *word, t_env *env,
-	char **res, int *squoted, int *dquoted)
+static char	*expand_variable(char *str, t_env *env, int *consumed)
 {
-	char	*expanded;
-	char	*temp;
-	char	*start;
-	char	*dup;
+	char	*var_name;
+	char	*value;
+	char	*exit_code_str;
 
-	temp = word;
-	expanded = ft_strdup("");
-	start = word;
-	while (*temp)
+	*consumed = 1;
+	if (!str[1] || str[1] == ' ' || str[1] == '\t' || str[1] == '\n')
+		return (ft_strdup("$"));
+	if (str[1] == '?')
 	{
-		if (*temp == '"' && !(*squoted))
-			*dquoted = !(*dquoted);
-		if (*temp == '\'' && !(*dquoted))
-			*squoted = !(*squoted);
-		if (*temp == '$' && !(*squoted) && (*temp + 1)
-			&& *(temp + 1) != '\0' && *(temp + 1) != ' ')
-			expand_variable(&temp, &start, &expanded, env);
-		else
-			temp++;
+		*consumed = 2;
+		exit_code_str = ft_itoa(env->exit_status);
+		return (exit_code_str);
 	}
-	dup = ft_strndup(start, temp - start);
-	*res = ft_strjoin(expanded, dup);
-	free(expanded);
-	free(dup);
-	free(word);
+	if (str[1] == '$')
+	{
+		*consumed = 2;
+		return (ft_strdup("$$"));
+	}
+	var_name = get_var_name(str + 1);
+	*consumed = ft_strlen(var_name) + 1;
+	value = ft_getenvx(var_name, env->env);
+	free(var_name);
+	if (value)
+		return (value);
+	return (ft_strdup(""));
+}
+
+static char	*join_and_free(char *s1, char *s2)
+{
+	char	*result;
+
+	result = ft_strjoin(s1, s2);
+	free(s1);
+	free(s2);
+	return (result);
 }
 
 void	expand_line(char **line, t_env *env)
 {
-	char	*res;
+	char	*result;
+	char	*temp;
+	char	*expanded;
+	int		i;
+	int		start;
 	int		squoted;
 	int		dquoted;
+	int		consumed;
 
-	res = ft_strdup("");
+	result = ft_strdup("");
 	squoted = 0;
 	dquoted = 0;
-	expand_word(*line, env, &res, &squoted, &dquoted);
-	*line = res;
+	i = 0;
+	start = 0;
+	while ((*line)[i])
+	{
+		if ((*line)[i] == '\'' && !dquoted)
+			squoted = !squoted;
+		else if ((*line)[i] == '"' && !squoted)
+			dquoted = !dquoted;
+		else if ((*line)[i] == '$' && !squoted)
+		{
+			if (i > start)
+			{
+				temp = ft_strndup(*line + start, i - start);
+				result = join_and_free(result, temp);
+			}
+			expanded = expand_variable(*line + i, env, &consumed);
+			result = join_and_free(result, expanded);
+			i += consumed;
+			start = i;
+			continue;
+		}
+		i++;
+	}
+	if (i > start)
+	{
+		temp = ft_strndup(*line + start, i - start);
+		result = join_and_free(result, temp);
+	}
+	free(*line);
+	*line = result;
 }
