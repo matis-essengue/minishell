@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/08 11:19:33 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 11:30:35 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,64 +87,44 @@ static void	expand_variable(
 	}
 }
 
-char	*expand_word(char *word, t_env *env)
+void	expand_word(char *word, t_env *env,
+	char **res, int *squoted, int *dquoted)
 {
 	char	*expanded;
 	char	*temp;
 	char	*start;
-	int		squoted;
-	int		dquoted;
-	char	*res;
 	char	*dup;
 
 	temp = word;
 	expanded = ft_strdup("");
-	squoted = 0;
-	dquoted = 0;
 	start = word;
 	while (*temp)
 	{
-		if (*temp == '"' && !squoted)
-			dquoted = !dquoted;
-		if (*temp == '\'' && !dquoted)
-			squoted = !squoted;
-		if (*temp == '$' && !squoted)
+		if (*temp == '"' && !(*squoted))
+			*dquoted = !(*dquoted);
+		if (*temp == '\'' && !(*dquoted))
+			*squoted = !(*squoted);
+		if (*temp == '$' && !(*squoted))
 			expand_variable(&temp, &start, &expanded, env);
 		else
 			temp++;
 	}
 	dup = ft_strndup(start, temp - start);
-	res = ft_strjoin(expanded, dup);
+	*res = ft_strjoin(expanded, dup);
 	free(expanded);
 	free(dup);
 	free(word);
-	return (res);
 }
 
-void	expand_cmds(char **line, t_env *env)
+void	expand_line(char **line, t_env *env)
 {
-	// t_token	*current;
-	// int		i;
-	char	*expanded_line;
+	char	*res;
+	int		squoted;
+	int		dquoted;
 
-	expanded_line = expand_word(*line, env);
-	// free(*line);
-	*line = expanded_line;
-	// current = tokens;
-	// while (current)
-	// {
-	// 	current->value = expand_word(current->value, env);
-		// if (current->name)
-		// 	current->name = expand_word(current->name, env);
-		// if (current->args)
-		// {
-		// 	i = 0;
-		// 	while (current->args[i])
-		// 	{
-		// 		current->args[i] = expand_word(current->args[i], env);
-		// 		i++;
-		// 	}
-		// }
-	// 	current = current->next;
-	// }
+	res = ft_strdup("");
+	squoted = 0;
+	dquoted = 0;
+	expand_word(*line, env, &res, &squoted, &dquoted);
+	*line = res;
 }
