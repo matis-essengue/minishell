@@ -6,12 +6,19 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 11:32:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 15:35:01 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/08 17:07:48 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
+
+void	command_not_found_error(t_cmd *cmd, char *command_name)
+{
+	printf("minishell: %s: command not found\n", command_name);
+	free_all_struct(cmd);
+	exit(127);
+}
 
 void	free_array(char **split)
 {

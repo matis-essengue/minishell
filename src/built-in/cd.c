@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:43 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/08 14:03:39 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/08 16:56:51 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int	handle_cd_errors(t_cmd *cmd)
 int	built_in_cd(t_cmd *cmd, t_env *env)
 {
 	DIR	*dir;
+	int ret;
 
 	if (handle_cd_errors(cmd) == 1)
 		return (1);
@@ -91,12 +92,11 @@ int	built_in_cd(t_cmd *cmd, t_env *env)
 		perror("");
 		return (closedir(dir), 1);
 	}
-	if (change_update_pwd_and_env(&env->env) != 0)
-		return (1);
+	ret = change_update_pwd_and_env(&env->env);
 	if (closedir(dir) == -1)
 	{
 		printf("minishell: cd: closedir: error closing directory stream");
 		return (perror(""), 1);
 	}
-	return (0);
+	return (ret);
 }

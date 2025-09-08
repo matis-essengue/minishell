@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 15:06:05 by matis             #+#    #+#             */
-/*   Updated: 2025/09/04 15:08:59 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 15:55:07 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	create_new_line(void)
 {
 	printf("\n");
 	rl_on_new_line();
-	// rl_replace_line("", 0);
+	rl_replace_line("", 0);
 	rl_redisplay();
 }
 
