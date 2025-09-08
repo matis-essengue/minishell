@@ -94,7 +94,6 @@ void						child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env,
 								int prev_read_fd);
 void						files_and_management(t_cmd *cmd, t_cmd *cmd_list,
 								int prev_read_fd);
-void						unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
 int							wait_child(pid_t *pid, int size);
 
 // manage_files
@@ -109,15 +108,15 @@ bool						exe_my_cmd(t_cmd *cmd, t_env *env);
 
 // init interface utilisateur
 
-void							handle_sigint(int sig);
-void							exec_handle_sigint(int sig);
-void							handle_sigquit(int sig);
+void						handle_sigint(int sig);
+void						exec_handle_sigint(int sig);
+void						handle_sigquit(int sig);
 
 // sig handlers
 
-void							handle_child_signal(void);
-void							handle_interactive_signal(void);
-void							handle_exec_signal(void);
+void						handle_child_signal(void);
+void						handle_interactive_signal(void);
+void						handle_exec_signal(void);
 
 // utils
 
@@ -125,6 +124,11 @@ int							count_cmd(t_cmd *cmd);
 int							count_args(t_cmd *cmd);
 int							count_all_cmd_args(t_cmd *cmd);
 void						print_array(char **array);
+
+// utils heredoc
+
+t_heredoc					*get_last_heredoc(t_cmd *cmd);
+void						unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
 
 // term state
 
