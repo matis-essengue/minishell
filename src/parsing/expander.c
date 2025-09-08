@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/08 13:01:56 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 13:11:36 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,8 @@ static char	*get_var_name(char *str)
 	return (var_name);
 }
 
-static char	*expand_variable(char *str, t_env *env, int *consumed)
+static char	*handle_special_vars(char *str, t_env *env, int *consumed)
 {
-	char	*var_name;
-	char	*value;
 	char	*exit_code_str;
 
 	*consumed = 1;
@@ -87,6 +85,18 @@ static char	*expand_variable(char *str, t_env *env, int *consumed)
 		*consumed = 2;
 		return (ft_strdup("$$"));
 	}
+	return (NULL);
+}
+
+static char	*expand_variable(char *str, t_env *env, int *consumed)
+{
+	char	*var_name;
+	char	*value;
+	char	*special_result;
+
+	special_result = handle_special_vars(str, env, consumed);
+	if (special_result)
+		return (special_result);
 	var_name = get_var_name(str + 1);
 	*consumed = ft_strlen(var_name) + 1;
 	value = ft_getenvx(var_name, env->env);
@@ -106,48 +116,77 @@ static char	*join_and_free(char *s1, char *s2)
 	return (result);
 }
 
-void	expand_line(char **line, t_env *env)
+typedef struct s_expand_state
 {
 	char	*result;
-	char	*temp;
-	char	*expanded;
 	int		i;
 	int		start;
 	int		squoted;
 	int		dquoted;
+}	t_expand_state;
+
+static void	init_expand_state(t_expand_state *state)
+{
+	state->result = ft_strdup("");
+	state->i = 0;
+	state->start = 0;
+	state->squoted = 0;
+	state->dquoted = 0;
+}
+
+
+static void	handle_dollar_sign(char **line, t_env *env, t_expand_state *s)
+{
+	char	*temp;
+	char	*expanded;
 	int		consumed;
 
-	result = ft_strdup("");
-	squoted = 0;
-	dquoted = 0;
-	i = 0;
-	start = 0;
-	while ((*line)[i])
+	if (s->i > s->start)
 	{
-		if ((*line)[i] == '\'' && !dquoted)
-			squoted = !squoted;
-		else if ((*line)[i] == '"' && !squoted)
-			dquoted = !dquoted;
-		else if ((*line)[i] == '$' && !squoted)
-		{
-			if (i > start)
-			{
-				temp = ft_strndup(*line + start, i - start);
-				result = join_and_free(result, temp);
-			}
-			expanded = expand_variable(*line + i, env, &consumed);
-			result = join_and_free(result, expanded);
-			i += consumed;
-			start = i;
-			continue;
-		}
-		i++;
+		temp = ft_strndup(*line + s->start, s->i - s->start);
+		s->result = join_and_free(s->result, temp);
 	}
-	if (i > start)
+	expanded = expand_variable(*line + s->i, env, &consumed);
+	s->result = join_and_free(s->result, expanded);
+	s->i += consumed;
+	s->start = s->i;
+}
+
+static void	process_char(char **line, t_env *env, t_expand_state *state)
+{
+	if ((*line)[state->i] == '\'' && !state->dquoted)
+		state->squoted = !state->squoted;
+	else if ((*line)[state->i] == '"' && !state->squoted)
+		state->dquoted = !state->dquoted;
+	else if ((*line)[state->i] == '$' && !state->squoted)
 	{
-		temp = ft_strndup(*line + start, i - start);
-		result = join_and_free(result, temp);
+		handle_dollar_sign(line, env, state);
+		return ;
+	}
+	state->i++;
+}
+
+static void	finalize_expansion(char **line, t_expand_state *state)
+{
+	char	*temp;
+
+	if (state->i > state->start)
+	{
+		temp = ft_strndup(*line + state->start, state->i - state->start);
+		state->result = join_and_free(state->result, temp);
 	}
 	free(*line);
-	*line = result;
+	*line = state->result;
+}
+
+void	expand_line(char **line, t_env *env)
+{
+	t_expand_state	state;
+
+	init_expand_state(&state);
+	while ((*line)[state.i])
+	{
+		process_char(line, env, &state);
+	}
+	finalize_expansion(line, &state);
 }
