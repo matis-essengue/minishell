@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:31:04 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/08 13:21:43 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 15:08:57 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ t_cmd	*parse(char *line, t_env *env)
 	(void)env;
 
 	expand_line(&line, env);
-	printf("line after expand: %s\n", line);
 	tokens = tokenize(line);
 	free(line);
 	if (!tokens)

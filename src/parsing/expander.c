@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/08 13:52:03 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 15:22:20 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,15 @@ static void	handle_dollar_sign(char **line, t_env *env, t_expand_state *s)
 	char	*temp;
 	char	*expanded;
 	int		consumed;
+	int		is_escaped;
 
+	is_escaped = s->i > 0 && (*line)[s->i - 1] == '\\';
 	if (s->i > s->start)
 	{
-		temp = ft_strndup(*line + s->start, s->i - s->start);
+		temp = ft_strndup(*line + s->start, s->i - s->start - is_escaped);
 		s->result = join_and_free(s->result, temp);
 	}
-	expanded = expand_variable(*line + s->i, env, &consumed);
+	expanded = expand_variable(*line + s->i, env, &consumed, is_escaped);
 	s->result = join_and_free(s->result, expanded);
 	s->i += consumed;
 	s->start = s->i;
