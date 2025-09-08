@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/08 11:23:51 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 11:34:58 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,9 @@ void	void_silenced_args(int argc, char **argv)
 	(void)argv;
 }
 
-void	exit_and_free(t_env *my_env, t_cmd *cmd)
+void	exit_and_free(t_env *my_env)
 {
 	free_my_env(my_env);
-	if (cmd)
-		free_all_struct(cmd);
 	exit(0);
 }
 
@@ -46,7 +44,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		line = readline("\033[36mminishell> \033[0m");
 		if (!line)
-			exit_and_free(my_env, cmd);
+			exit_and_free(my_env);
 		add_history(line);
 		cmd = parse(line, my_env);
 		my_env->exit_status = execute_command(cmd, my_env);
