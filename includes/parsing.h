@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:32:41 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/03 16:54:34 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 11:19:00 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void					reset_file_pointers(t_cmd *cmd, t_file **start_infile, t_file **start_o
 void					handle_input_redirect(t_cmd *cmd, t_token *current, t_file **start_infile);
 void					handle_output_redirect(t_cmd *cmd, t_token *current, t_file **start_outfile);
 t_cmd					*tokens_to_cmds(t_token *tokens);
-void					expand_cmds(t_cmd *tokens, t_env *env);
+void					expand_cmds(char **line, t_env *env);
 void					remove_quotes(t_cmd *cmds);
 
 #endif

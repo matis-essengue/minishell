@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/04 12:04:44 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/08 11:19:33 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,25 +121,30 @@ char	*expand_word(char *word, t_env *env)
 	return (res);
 }
 
-void	expand_cmds(t_cmd *tokens, t_env *env)
+void	expand_cmds(char **line, t_env *env)
 {
-	t_cmd	*current;
-	int		i;
+	// t_token	*current;
+	// int		i;
+	char	*expanded_line;
 
-	current = tokens;
-	while (current)
-	{
-		if (current->name)
-			current->name = expand_word(current->name, env);
-		if (current->args)
-		{
-			i = 0;
-			while (current->args[i])
-			{
-				current->args[i] = expand_word(current->args[i], env);
-				i++;
-			}
-		}
-		current = current->next;
-	}
+	expanded_line = expand_word(*line, env);
+	// free(*line);
+	*line = expanded_line;
+	// current = tokens;
+	// while (current)
+	// {
+	// 	current->value = expand_word(current->value, env);
+		// if (current->name)
+		// 	current->name = expand_word(current->name, env);
+		// if (current->args)
+		// {
+		// 	i = 0;
+		// 	while (current->args[i])
+		// 	{
+		// 		current->args[i] = expand_word(current->args[i], env);
+		// 		i++;
+		// 	}
+		// }
+	// 	current = current->next;
+	// }
 }
