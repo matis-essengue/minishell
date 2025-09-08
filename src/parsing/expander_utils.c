@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 13:13:31 by matis             #+#    #+#             */
-/*   Updated: 2025/09/08 13:16:23 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 13:44:18 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ char	*ft_getenvx(char *var, char **env)
 
 	i = 0;
 	while (env[i])
+
+
 	{
 		if (found(var, env[i]))
 		{
@@ -60,8 +62,7 @@ char	*_get_var_name(char *str)
 	char	*var_name;
 
 	i = 0;
-	while (str[i] && str[i] != ' ' && str[i] != '\t' && str[i] != '\n'
-		&& str[i] != '"' && str[i] != '$' && str[i] != '\'')
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		i++;
 	var_name = ft_strndup(str, i);
 	return (var_name);

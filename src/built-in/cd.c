@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:43 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 15:46:22 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/08 14:03:39 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	change_update_pwd_and_env(char ***env)
 	if (!new_oldpwd)
 		return (1);
 	if (get_my_export_env(env, new_oldpwd) != 0)
-		return (1);
+		return (free(new_oldpwd), 1);
 	free(new_oldpwd);
 	new_pwd = return_pwd();
 	if (!new_pwd)
