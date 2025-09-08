@@ -27,6 +27,7 @@ SRCS = \
 	src/exec/get_path.c \
 	src/exec/manage_files.c \
 	src/exec/utils.c \
+	src/exec/utils_heredoc.c \
 	src/exec/errors.c \
 	src/exec/errors2.c \
 	src/exec/init_struct_env.c \

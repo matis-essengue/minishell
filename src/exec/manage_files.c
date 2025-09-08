@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 15:35:44 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/08 11:38:20 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 {
 	char	*line;
 
+	(void)cmd;
 	close(pipe_fd_h[READ]);
 	while (1)
 	{
@@ -71,7 +72,7 @@ int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 		free(line);
 	}
 	close(pipe_fd_h[WRITE]);
-	return (free(line), free_all_struct(cmd), exit(0), 0);
+	return (free(line), exit(0), 0);
 }
 
 int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
