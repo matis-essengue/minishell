@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:58 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/05 18:16:12 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/08 13:34:01 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@
 int	check_head_var(char *var)
 {
 	int	i;
-	int	equal;
 
 	i = 0;
-	equal = 0;
 	if ((var[0] != '_' && ft_isalpha(var[0]) == 0) || var[0] == '=')
 		return (-1);
 	while (var[i] && var[i] != '=')

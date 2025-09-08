@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/08 13:17:14 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 13:52:03 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,23 @@ static void	handle_dollar_sign(char **line, t_env *env, t_expand_state *s)
 
 static void	process_char(char **line, t_env *env, t_expand_state *state)
 {
+	char	next_char;
+
+	if ((*line)[state->i + 1])
+		next_char = (*line)[state->i + 1];
+	else
+		next_char = '\0';
 	if ((*line)[state->i] == '\'' && !state->dquoted)
 		state->squoted = !state->squoted;
 	else if ((*line)[state->i] == '"' && !state->squoted)
 		state->dquoted = !state->dquoted;
 	else if ((*line)[state->i] == '$' && !state->squoted)
 	{
-		handle_dollar_sign(line, env, state);
+		if (next_char && (ft_isalnum(next_char) || next_char == '_'
+			|| next_char == '?' || next_char == '$'))
+			handle_dollar_sign(line, env, state);
+		else
+			state->i++;
 		return ;
 	}
 	state->i++;
