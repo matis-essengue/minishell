@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 13:13:31 by matis             #+#    #+#             */
-/*   Updated: 2025/09/08 15:12:42 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 15:53:08 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ char	*expand_variable(char *str, t_env *env, int *consumed, int is_escaped)
 	var_name = _get_var_name(str + 1);
 	if (is_escaped)
 	{
-		*consumed = ft_strlen(var_name) + 2;
+		*consumed = ft_strlen(var_name) + 1;
 		value = ft_strjoin("$", var_name);
 		free(var_name);
 		return (value);
