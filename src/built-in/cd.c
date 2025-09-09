@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:43 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 11:49:46 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 19:09:08 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,12 @@ int	change_update_pwd_and_env(char ***env)
 	char	*new_pwd;
 
 	new_oldpwd = return_oldpwd(*env);
-	printf("new_old pwd : %s\n", new_oldpwd);
 	if (!new_oldpwd)
 		return (1);
 	if (get_my_export_env(env, new_oldpwd) != 0)
 		return (free(new_oldpwd), 1);
 	free(new_oldpwd);
 	new_pwd = return_pwd();
-	printf("new pwd : %s\n", new_pwd);
 	if (!new_pwd)
 		return (1);
 	if (get_my_export_env(env, new_pwd) != 0)
