@@ -9,7 +9,6 @@ RM = rm -f
 
 SRCS = \
 	src/main.c \
-	src/signal_utils.c \
 	src/parsing/parser.c \
 	src/parsing/tokenizer.c \
 	src/parsing/token.c \
@@ -32,8 +31,8 @@ SRCS = \
 	src/exec/errors.c \
 	src/exec/errors2.c \
 	src/exec/init_struct_env.c \
-	src/exec/manage_signal.c \
 	src/exec/signal.c \
+	src/exec/signal_utils.c \
 	src/built-in/built_in.c \
 	src/built-in/built_in_utils2.c \
 	src/built-in/cd.c \

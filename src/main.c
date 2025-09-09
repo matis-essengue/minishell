@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/08 13:21:33 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/09 13:44:57 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	cmd = NULL;
 	void_silenced_args(argc, argv);
-	set_signal_action();
+	interactive_signal_handler();
 	printf("\033[2J\033[H");
 	while (1)
 	{
@@ -47,7 +47,8 @@ int	main(int argc, char **argv, char **envp)
 			exit_and_free(my_env);
 		add_history(line);
 		cmd = parse(line, my_env);
-		my_env->exit_status = execute_command(cmd, my_env);
+		if (cmd != NULL)
+			my_env->exit_status = execute_command(cmd, my_env);
 	}
 	return (free_my_env(my_env), 0);
 }

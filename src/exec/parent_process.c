@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 12:05:56 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 15:16:59 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,25 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 	cmd_list = cmd;
 	while (cmd && i < MAX_PROCESSES)
 	{
+		if (!cmd->name)
+		{
+			if (cmd->heredocs)
+			{
+				manage_heredocs(cmd);
+				t_heredoc *heredoc = cmd->heredocs;
+				while (heredoc)
+				{
+					if (heredoc->heredoc_fd != -1)
+					{
+						close(heredoc->heredoc_fd);
+						heredoc->heredoc_fd = -1;
+					}
+					heredoc = heredoc->next;
+				}
+			}
+			cmd = cmd->next;
+			continue;
+		}
 		if (cmd->heredocs)
 			manage_heredocs(cmd);
 		pipe_check_or_create(cmd, prev_read_fd);
@@ -95,12 +114,14 @@ int	execute_command(t_cmd *cmd, t_env *env)
 			restore_termios(&saved_term);
 		return (1);
 	}
+	exec_signal_handler();
 	exit_status = 0;
 	if (cmd->output_type != PIPEOUT && !cmd->next && is_built_in(cmd))
 		exit_status = parent_process_built_in(cmd, env);
 	else
 		exit_status = pipe_function(cmd, pid, exit_status, env);
 	free_all_struct(cmd);
+	interactive_signal_handler();
 	if (had_saved)
 		restore_termios(&saved_term);
 	return (exit_status);
