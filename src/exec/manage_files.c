@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 15:14:10 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/09 17:18:22 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,19 +60,13 @@ int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 
 	(void)cmd;
 	close(pipe_fd_h[READ]);
-	heredoc_signal_handler();
+	handle_heredoc_signals();
 	while (1)
 	{
 		line = readline("\033[36mheredoc> \033[0m");
 		if (line == NULL)
 		{
 			break ;
-		}
-		if (g_signal == SIGINT)
-		{
-			free(line);
-			close(pipe_fd_h[WRITE]);
-			exit(1);
 		}
 		if (ft_strncmp(heredoc->delimiter, line, ft_strlen(line)) == 0
 				&& ft_strlen(line) == ft_strlen(heredoc->delimiter))
@@ -87,16 +81,14 @@ int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 
 int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
 {
-	int	status;
+	// int	status;
 	close(pipe_fd_h[WRITE]);
-	signal(SIGINT, SIG_IGN);
-	waitpid(pid, &status, 0);
-	interactive_signal_handler();
-	if (WIFSIGNALED(status))
-	{
-		close(pipe_fd_h[READ]);
-		return (-1);
-	}
+	waitpid(pid, NULL, 0);
+	// if (WIFSIGNALED(status))
+	// {
+	// 	close(pipe_fd_h[READ]);
+	// 	return (-1);
+	// }
 	return (pipe_fd_h[READ]);
 }
 
@@ -115,9 +107,16 @@ void	manage_heredocs(t_cmd *cmd)
 		if (pid == -1)
 			pipe_and_pid_error(cmd, heredoc, pipe_fd_h, 2);
 		if (pid == 0)
+		{
+			handle_heredoc_signals();
 			child_process_heredoc(cmd, heredoc, pipe_fd_h);
+		}
 		else
+		{
+			parent_ignore_signals();
 			heredoc->heredoc_fd = parent_process_heredoc(pid, pipe_fd_h);
+			handle_signals(0);
+		}
 		if (heredoc->next && heredoc->heredoc_fd != -1)
 		{
 			close(heredoc->heredoc_fd);

@@ -3,51 +3,82 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 17:50:43 by matis             #+#    #+#             */
-/*   Updated: 2025/09/09 15:14:10 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/09 17:19:45 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/exec.h"
 
-void	interactive_signal_handler(void)
-{
-	t_sa	sa;
 
-	sa.sa_handler = handle_sigint;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
+void	handle_sigint(int signal)
+{
+	(void)signal;
+	printf("\n");
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	if (g_signal == 0)
+		rl_redisplay();
+}
+
+void	handle_sigint_in_exec(int signal)
+{
+	(void)signal;
+	printf("\n");
+	rl_replace_line("", 0);
+	rl_on_new_line();
+}
+
+void	handle_sigquit(int signal)
+{
+	(void)signal;
+	ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+}
+
+void	handle_signals(int interactive)
+{
+	
+	if (interactive)
+	{
+		signal(SIGINT, &handle_sigint);
+		signal(SIGQUIT, SIG_IGN);
+	}
+	else
+	{
+		signal(SIGINT, &handle_sigint_in_exec);
+		signal(SIGQUIT, &handle_sigquit);
+	}
+}
+
+void	handle_child_signals(void)
+{
+	signal(SIGINT, SIG_DFL);
+}
+
+
+
+void	handle_signal_heredoc(int signal)
+{
+	g_signal = signal;
+	printf("\n");
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	exit(130);
+}
+
+void	handle_heredoc_signals(void)	
+{
+	signal(SIGINT, &handle_signal_heredoc);
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	exec_signal_handler(void)
+void	parent_ignore_signals(void)
 {
-	t_sa	sa;
-
-	sa.sa_handler = handle_sigint_in_exec;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
-	signal(SIGQUIT, handle_sigquit);
-}
-
-void	child_signal_handler(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-}
-
-void	heredoc_signal_handler(void)
-{
-	t_sa	sa;
-
-	sa.sa_handler = handle_signal_heredoc;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
+	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 }

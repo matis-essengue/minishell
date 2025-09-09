@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 13:46:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 14:40:01 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/09 16:38:46 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env, int prev_read_fd)
 {
 	int	exit_status;
 
-	child_signal_handler();
 	files_and_management(cmd, cmd_list, prev_read_fd);
 	if (cmd->output_type == PIPEOUT)
 	{
@@ -47,6 +46,7 @@ void	child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env, int prev_read_fd)
 		dup2(cmd->pipefd[WRITE], FD_STDOUT);
 		close(cmd->pipefd[WRITE]);
 	}
+	handle_child_signals();
 	if (is_built_in(cmd))
 	{
 		exit_status = child_process_built_in(cmd, env);

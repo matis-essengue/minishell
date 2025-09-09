@@ -139,13 +139,10 @@ void						restore_termios(const struct termios *saved);
 
 // signal
 
-void						handle_sigint(int signal);
-void						handle_sigint_in_exec(int signal);
-void						handle_sigquit(int signal);
-void						interactive_signal_handler(void);
-void						exec_signal_handler(void);
-void						child_signal_handler(void);
-void						heredoc_signal_handler(void);
-void						handle_signal_heredoc(int signal);
+void						handle_signals(int interactive);
+void						handle_child_signals(void);
+void						handle_heredoc_signals(void);
+void						parent_ignore_signals(void);
+
 
 #endif
