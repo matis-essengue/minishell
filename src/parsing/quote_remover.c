@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:29 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/04 12:03:14 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/09 17:44:59 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,20 @@ static char	_handle_quotes(
 	char **start,
 	char **new_word)
 {
+	char	*chunk;
+	char	*joined;
+	
 	if (!quote)
 		quote = *temp;
 	else if (quote == *temp)
 		quote = 0;
 	else if (quote != *temp)
 		return (quote);
-	*new_word = ft_strjoin(*new_word, ft_strndup(*start, temp - *start));
+	chunk = ft_strndup(*start, temp - *start);
+	joined = ft_strjoin(*new_word, chunk);
+	free(*new_word);
+	free(chunk);
+	*new_word = joined;
 	*start = temp + 1;
 	return (quote);
 }
