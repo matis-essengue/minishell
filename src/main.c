@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/09 13:44:57 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/09 16:51:52 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	cmd = NULL;
 	void_silenced_args(argc, argv);
-	interactive_signal_handler();
+	handle_signals(1);
 	printf("\033[2J\033[H");
 	while (1)
 	{

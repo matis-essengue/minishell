@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:54 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/08 11:04:00 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/09 15:52:02 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	built_in_exit(t_cmd *cmd, t_env *env)
 	}
 	if (cmd->args[1])
 		return (printf("minishell: exit: too many arguments\n"), 2);
-	return (printf("exit\n"), ft_atoll(cmd->args[0]) % 256);
+	return (printf("exit\n"), exit(ft_atoll(cmd->args[0]) % 256), 0);
 }
 
 // int	built_in_exit_bis(t_cmd *cmd, int exit_status)

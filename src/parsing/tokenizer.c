@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 18:24:25 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/09 14:06:08 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/09 17:54:32 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ t_token	*tokenize(char *line)
 			if (!add_word(&line_ptr, &tokens))
 			{
 				printf("minishell: syntax error: unclosed quote\n");
+				free_tokens(tokens);
 				return (NULL);
 			}
 		}
