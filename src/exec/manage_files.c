@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 18:53:17 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/09 19:47:28 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,14 @@ int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 				&& ft_strlen(line) == ft_strlen(heredoc->delimiter))
 			break ;
 		if (ft_strlen(line) > 1024)
-			return (close(pipe_fd_h[WRITE]), free(line), exit(0), 0);
+			return (free_all_struct(cmd), 
+				close(pipe_fd_h[WRITE]), free(line), exit(0), 0);
 		write(pipe_fd_h[WRITE], line, ft_strlen(line));
 		write(pipe_fd_h[WRITE], "\n", 1);
 		free(line);
 	}
 	close(pipe_fd_h[WRITE]);
-	return (free(line), exit(0), 0);
+	return (free_all_struct(cmd), free(line), exit(0), 0);
 }
 
 int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)

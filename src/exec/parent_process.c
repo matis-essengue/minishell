@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 18:53:14 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/09 20:35:19 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,11 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 	t_cmd	*cmd_list;
 	int		prev_read_fd;
 	int		i;
+	t_cmd	*first_cmd;
 
 	i = 0;
 	prev_read_fd = -1;
+	first_cmd = cmd;
 	cmd_list = cmd;
 	while (cmd && i < MAX_PROCESSES)
 	{
@@ -120,7 +122,6 @@ int	execute_command(t_cmd *cmd, t_env *env)
 		exit_status = parent_process_built_in(cmd, env);
 	else
 		exit_status = pipe_function(cmd, pid, exit_status, env);
-	free_all_struct(cmd);
 	handle_signals(1);
 	if (had_saved)
 		restore_termios(&saved_term);

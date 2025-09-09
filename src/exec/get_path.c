@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/08 17:08:56 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 20:50:18 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,11 @@ bool	exe_my_cmd(t_cmd *cmd, t_env *env)
 	if (full_cmd == NULL)
 		return (false);
 	if (access(full_cmd[0], F_OK | X_OK) == 0)
+	{
 		execve(full_cmd[0], full_cmd, env->env);
+		free_array(full_cmd);
+		return (false);
+	}
 	path = get_path(env->env);
 	if (path == NULL)
 	{

@@ -69,6 +69,7 @@ int							built_in_exit(t_cmd *cmd, t_env *env);
 // errors
 
 void						free_all_struct(t_cmd *cmd);
+void						free_single_cmd(t_cmd *cmd);
 void						error(t_cmd *cmd, char *str, int code);
 
 // errors 2
