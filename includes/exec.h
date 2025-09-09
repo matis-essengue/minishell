@@ -145,5 +145,7 @@ void						handle_sigquit(int signal);
 void						interactive_signal_handler(void);
 void						exec_signal_handler(void);
 void						child_signal_handler(void);
+void						heredoc_signal_handler(void);
+void						handle_signal_heredoc(int signal);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 15:06:05 by matis             #+#    #+#             */
-/*   Updated: 2025/09/09 15:14:30 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 15:29:27 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,13 @@ void	handle_sigquit(int signal)
 {
 	(void)signal;
 	ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+	// rl_replace_line("", 0);
+	rl_on_new_line();
+}
+
+void	handle_signal_heredoc(int signal)
+{
+	g_signal = signal;
 	// rl_replace_line("", 0);
 	rl_on_new_line();
 }
