@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parent_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 12:01:55 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/09 14:48:05 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,25 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 	cmd_list = cmd;
 	while (cmd && i < MAX_PROCESSES)
 	{
+		if (!cmd->name)
+		{
+			if (cmd->heredocs)
+			{
+				manage_heredocs(cmd);
+				t_heredoc *heredoc = cmd->heredocs;
+				while (heredoc)
+				{
+					if (heredoc->heredoc_fd != -1)
+					{
+						close(heredoc->heredoc_fd);
+						heredoc->heredoc_fd = -1;
+					}
+					heredoc = heredoc->next;
+				}
+			}
+			cmd = cmd->next;
+			continue;
+		}
 		if (cmd->heredocs)
 			manage_heredocs(cmd);
 		pipe_check_or_create(cmd, prev_read_fd);
