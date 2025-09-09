@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:20:01 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 15:54:04 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 11:57:06 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,13 @@
 int	built_in_pwd(t_cmd *cmd)
 {
 	char	*pwd;
-	char	buffer[1024];
 
 	if (cmd->args && (ft_strncmp(cmd->args[0], "-", 1) == 0))
 	{
 		printf("pwd: There is no option\n");
 		return (1);
 	}
-	pwd = getcwd(buffer, 1024);
+	pwd = getcwd(NULL, 0);
 	if (!pwd)
 	{
 		perror("");
@@ -31,5 +30,6 @@ int	built_in_pwd(t_cmd *cmd)
 	}
 	if (pwd)
 		printf("%s\n", pwd);
+	free(pwd);
 	return (0);
 }
