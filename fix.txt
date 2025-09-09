@@ -1404,3 +1404,171 @@ certains messages d erreur mais pas tres grave en sah
 exit 444 doit exit avec un modulo 255 ou 256 jsplus
 
 
+heredoc> AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+==8380== 
+==8380== FILE DESCRIPTORS: 4 open (3 std) at exit.
+==8380== Open file descriptor 4:
+==8380==    at 0x49DB07D: pipe (pipe.c:29)
+==8380==    by 0x40481E: manage_heredocs (manage_files.c:96)
+==8380==    by 0x403BE4: pipe_function (parent_process.c:66)
+==8380==    by 0x403D76: execute_command (parent_process.c:102)
+==8380==    by 0x4013FE: main (main.c:50)
+==8380== 
+==8380== 
+==8380== HEAP SUMMARY:
+==8380==     in use at exit: 218,471 bytes in 284 blocks
+==8380==   total heap usage: 518 allocs, 234 frees, 250,609 bytes allocated
+==8380== 
+==8380== LEAK SUMMARY:
+==8380==    definitely lost: 0 bytes in 0 blocks
+==8380==    indirectly lost: 0 bytes in 0 blocks
+==8380==      possibly lost: 0 bytes in 0 blocks
+==8380==    still reachable: 5,115 bytes in 59 blocks
+==8380==         suppressed: 213,356 bytes in 225 blocks
+==8380== Reachable blocks (those to which a pointer was found) are not shown.
+==8380== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==8380== 
+==8380== For lists of detected and suppressed errors, rerun with: -s
+==8380== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==8426== Conditional jump or move depends on uninitialised value(s)
+==8426==    at 0x403FBF: wait_child (child_process.c:68)
+==8426==    by 0x403C8A: pipe_function (parent_process.c:79)
+==8426==    by 0x403D76: execute_command (parent_process.c:102)
+==8426==    by 0x4013FE: main (main.c:50)
+==8426==  Uninitialised value was created by a stack allocation
+==8426==    at 0x403F70: wait_child (child_process.c:58)
+==8426== 
+==8426== Conditional jump or move depends on uninitialised value(s)
+==8426==    at 0x403FEA: wait_child (child_process.c:70)
+==8426==    by 0x403C8A: pipe_function (parent_process.c:79)
+==8426==    by 0x403D76: execute_command (parent_process.c:102)
+==8426==    by 0x4013FE: main (main.c:50)
+==8426==  Uninitialised value was created by a stack allocation
+==8426==    at 0x403F70: wait_child (child_process.c:58)
+==8426== 
+tcsetattr: Inappropriate ioctl for device
+minishell> ==8426== 
+==8426== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==8426== 
+==8426== HEAP SUMMARY:
+==8426==     in use at exit: 208,240 bytes in 225 blocks
+==8426==   total heap usage: 504 allocs, 279 frees, 235,217 bytes allocated
+==8426== 
+==8426== LEAK SUMMARY:
+==8426==    definitely lost: 0 bytes in 0 blocks
+==8426==    indirectly lost: 0 bytes in 0 blocks
+==8426==      possibly lost: 0 bytes in 0 blocks
+==8426==    still reachable: 0 bytes in 0 blocks
+==8426==         suppressed: 208,240 bytes in 225 blocks
+==8426== 
+==8426== For lists of detected and suppressed errors, rerun with: -s
+==8426== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+
+
+
+minishell> << e
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: (null)
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]: NULL
+[HEREDOC]:  << e
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: HEREDOC
+
+heredoc> AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+==8609== 
+==8609== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==8609== 
+==8609== HEAP SUMMARY:
+==8609==     in use at exit: 218,471 bytes in 284 blocks
+==8609==   total heap usage: 518 allocs, 234 frees, 250,609 bytes allocated
+==8609== 
+==8609== 2 bytes in 1 blocks are still reachable in loss record 1 of 72
+==8609==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8609==    by 0x407E65: ft_strdup (in /home/armosnie/42/3_circle/armandbranch/minishell)
+==8609==    by 0x40390D: handle_heredoc (tokens_to_cmds_utils.c:47)
+==8609==    by 0x40386A: process_redirections (tokens_to_cmds_utils.c:77)
+==8609==    by 0x40327B: process_command (tokens_to_cmds.c:72)
+==8609==    by 0x4031D0: tokens_to_cmds (tokens_to_cmds.c:96)
+==8609==    by 0x4015FA: parse (parser.c:46)
+==8609==    by 0x4013ED: main (main.c:49)
+==8609== 
+==8609== 16 bytes in 1 blocks are still reachable in loss record 10 of 72
+==8609==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8609==    by 0x405415: init_env (init_struct_env.c:84)
+==8609==    by 0x40136B: main (main.c:36)
+==8609== 
+==8609== 32 bytes in 1 blocks are still reachable in loss record 18 of 72
+==8609==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8609==    by 0x4038F9: handle_heredoc (tokens_to_cmds_utils.c:46)
+==8609==    by 0x40386A: process_redirections (tokens_to_cmds_utils.c:77)
+==8609==    by 0x40327B: process_command (tokens_to_cmds.c:72)
+==8609==    by 0x4031D0: tokens_to_cmds (tokens_to_cmds.c:96)
+==8609==    by 0x4015FA: parse (parser.c:46)
+==8609==    by 0x4013ED: main (main.c:49)
+==8609== 
+==8609== 440 bytes in 1 blocks are still reachable in loss record 28 of 72
+==8609==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8609==    by 0x405341: copy_env (init_struct_env.c:61)
+==8609==    by 0x40543A: init_env (init_struct_env.c:87)
+==8609==    by 0x40136B: main (main.c:36)
+==8609== 
+==8609== 1,096 bytes in 1 blocks are still reachable in loss record 37 of 72
+==8609==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8609==    by 0x403175: tokens_to_cmds (tokens_to_cmds.c:87)
+==8609==    by 0x4015FA: parse (parser.c:46)
+==8609==    by 0x4013ED: main (main.c:49)
+==8609== 
+==8609== 3,529 bytes in 54 blocks are still reachable in loss record 47 of 72
+==8609==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8609==    by 0x407E65: ft_strdup (in /home/armosnie/42/3_circle/armandbranch/minishell)
+==8609==    by 0x405369: copy_env (init_struct_env.c:64)
+==8609==    by 0x40543A: init_env (init_struct_env.c:87)
+==8609==    by 0x40136B: main (main.c:36)
+==8609== 
+==8609== LEAK SUMMARY:
+==8609==    definitely lost: 0 bytes in 0 blocks
+==8609==    indirectly lost: 0 bytes in 0 blocks
+==8609==      possibly lost: 0 bytes in 0 blocks
+==8609==    still reachable: 5,115 bytes in 59 blocks
+==8609==         suppressed: 213,356 bytes in 225 blocks
+==8609== 
+==8609== For lists of detected and suppressed errors, rerun with: -s
+==8609== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==8612== Conditional jump or move depends on uninitialised value(s)
+==8612==    at 0x403FBF: wait_child (child_process.c:68)
+==8612==    by 0x403C8A: pipe_function (parent_process.c:79)
+==8612==    by 0x403D76: execute_command (parent_process.c:102)
+==8612==    by 0x4013FE: main (main.c:50)
+==8612==  Uninitialised value was created by a stack allocation
+==8612==    at 0x403F70: wait_child (child_process.c:58)
+==8612== 
+==8612== Conditional jump or move depends on uninitialised value(s)
+==8612==    at 0x403FEA: wait_child (child_process.c:70)
+==8612==    by 0x403C8A: pipe_function (parent_process.c:79)
+==8612==    by 0x403D76: execute_command (parent_process.c:102)
+==8612==    by 0x4013FE: main (main.c:50)
+==8612==  Uninitialised value was created by a stack allocation
+==8612==    at 0x403F70: wait_child (child_process.c:58)
+==8612== 
+tcsetattr: Inappropriate ioctl for device
+minishell> ==8612== 
+==8612== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==8612== 
+==8612== HEAP SUMMARY:
+==8612==     in use at exit: 208,240 bytes in 225 blocks
+==8612==   total heap usage: 504 allocs, 279 frees, 235,217 bytes allocated
+==8612== 
+==8612== LEAK SUMMARY:
+==8612==    definitely lost: 0 bytes in 0 blocks
+==8612==    indirectly lost: 0 bytes in 0 blocks
+==8612==      possibly lost: 0 bytes in 0 blocks
+==8612==    still reachable: 0 bytes in 0 blocks
+==8612==         suppressed: 208,240 bytes in 225 blocks
+==8612== 
+==8612== For lists of detected and suppressed errors, rerun with: -s
+==8612== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+minishell> 
