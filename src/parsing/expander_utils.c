@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 13:13:31 by matis             #+#    #+#             */
-/*   Updated: 2025/09/08 15:53:08 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/09 12:06:45 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ char	*ft_getenvx(char *var, char **env)
 
 	i = 0;
 	while (env[i])
+
+
 	{
 		if (found(var, env[i]))
 		{

@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:31:04 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/09 13:44:19 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/09 13:46:53 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,6 @@ t_cmd	*parse(char *line, t_env *env)
 	cmds = tokens_to_cmds(tokens);
 	free_tokens(tokens);
 	remove_quotes(cmds);
-	debug_cmds(cmds);
+	// debug_cmds(cmds);
 	return (cmds);
 }

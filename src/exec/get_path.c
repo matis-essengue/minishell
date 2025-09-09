@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 13:47:50 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/08 17:08:56 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,12 +104,11 @@ bool	exe_my_cmd(t_cmd *cmd, t_env *env)
 	if (path == NULL)
 	{
 		free_array(full_cmd);
-		free_array(path);
-		error(cmd, cmd->name, 127);
+		command_not_found_error(cmd, cmd->name);
 	}
 	exec(full_cmd[0], full_cmd, path, env->env);
 	free_array(path);
 	free_array(full_cmd);
-	error(cmd, cmd->name, 127);
+	command_not_found_error(cmd, cmd->name);
 	return (false);
 }

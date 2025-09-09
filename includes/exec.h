@@ -77,6 +77,8 @@ void						pipe_and_pid_error(t_cmd *cmd, t_heredoc *heredoc,
 								int *pipe_fd_h, int err);
 void						free_array(char **split);
 void						close_all_fd(int *fd);
+void						command_not_found_error(t_cmd *cmd,
+								char *command_name);
 
 // parent process
 

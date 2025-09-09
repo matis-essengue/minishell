@@ -362,33 +362,7 @@ minishell> <<e
 <<e
 heredoc> 
 PARSED COMMANDS
-<<<<<<< HEAD
-cmd 1:mini output = ()
-bash output = ($)
-mini error = ( invalid pointer)
-bash error = ()
-Test  20: ✅⚠️  echo $? 
-mini error = ( invalid pointer)
-bash error = ()
-Test  21: ✅⚠️  echo $?HELLO 
-mini error = ( invalid pointer)
-bash error = ()
-Test  22: ✅⚠️  pwd 
-mini error = ( double free detected in tcache 2)
-bash error = ()
-Test  23: ✅⚠️  pwd oi 
-mini error = ( invalid pointer)
-bash error = ()
-Test  24: ❌ export hello 
-mini output = (minishell: export: hello: not a valid identifier code error : 0)
-bash output = ()
-mini exit code = 1
-bash exit code = 0
-Test  25: ✅ export HELLO=123 
-
-=======
 cmd 1:
->>>>>>> 6ebbf2d8840a71d6eb1e9af98bc8129881013e1a
 [NAME]: (null)
 [ARGS]: NULL
 [INFILE]: NULL
@@ -467,46 +441,6 @@ minishell tester
 ////////////////////
 
 
-<<<<<<< HEAD
-=======
-gerer le $ seul entre quote dans l'expand
-
-Test  13: ❌ echo "> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<" 
-mini output = (> >> < bash_outfiles bash.supp bonus bonus_bonus builtins extras local.supp loop.out manual_tests mini_outfiles os_specific outfiles pipes README.md redirects syntax tester test_files wildcards ? [ ] | ; [ ] || && ( ) & # <<)
-bash output = (> >> < bash_outfiles bash.supp bonus bonus_bonus builtins extras local.supp loop.out manual_tests mini_outfiles os_specific outfiles pipes README.md redirects syntax tester test_files wildcards ? [ ] | ; [ ] || && ( ) & # $ <<)
-mini error = ( invalid pointer)
-bash error = ()
-Test  14: ✅⚠️  echo '> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<' 
-mini error = ( invalid pointer)
-bash error = ()
-test 15 : prblm parcing 
-minishell> echo "exit_code ->$? user ->$USER home -> $HOME"
-
-PARSED COMMANDS
-cmd 1:
-[NAME]: echo
-[ARGS]: 0 user ->armosnie home -> /home/armosnie
-[INFILE]: NULL
-[OUTFILE]: NULL
-[HEREDOC]: NULL
-[OUTPUT_TYPE]: STDOUT
-[INPUT_TYPE]: STDIN
-
-i : 0 - args[i] : 0 user ->armosnie home -> /home/armosnie
-0 user ->armosnie home -> /home/armosnie
-Test  15: ❌ echo "exit_code ->$? user ->$USER home -> $HOME" 
-mini output = (0 user ->armosnie home -> /home/armosnie)
-bash output = (exit_code ->0 user ->armosnie home -> /home/armosnie)
-mini error = ( invalid pointer)
-bash error = ()
-Test  16: ✅⚠️  echo 'exit_code ->$? user ->$USER home -> $HOME' 
-mini error = ( invalid pointer)
-bash error = ()
-
-parcing expand
-Test  17: ❌ echo "$" 
-
->>>>>>> 6ebbf2d8840a71d6eb1e9af98bc8129881013e1a
 mini output = ()
 bash output = ($)
 mini error = ( invalid pointer)
@@ -514,30 +448,6 @@ bash error = ()
 Test  18: ✅⚠️  echo '$' 
 mini error = ( invalid pointer)
 bash error = ()
-<<<<<<< HEAD
-=======
-
-parcing expand
-Test  19: ❌ echo $ 
-minishell> << a << b cat
-
-PARSED COMMANDS
-cmd 1:
-[NAME]: cat
-[ARGS]: NULL
-[INFILE]: NULL
-[OUTFILE]: NULL
-[HEREDOC]:  << a  << b
-[OUTPUT_TYPE]: STDOUT
-[INPUT_TYPE]: HEREDOC
-
-heredoc> armand
-heredoc> a
-heredoc> benoit
-heredoc> b
-
-
->>>>>>> 6ebbf2d8840a71d6eb1e9af98bc8129881013e1a
 mini output = ()
 bash output = ($)
 mini error = ( invalid pointer)
@@ -549,28 +459,7 @@ Test  21: ✅⚠️  echo $?HELLO
 mini error = ( invalid pointer)
 bash error = ()
 Test  22: ✅⚠️  pwd 
-<<<<<<< HEAD
 mini error = ( double free detected in tcache 2)
-=======
-mini error minishell> << a << b cat
-
-PARSED COMMANDS
-cmd 1:
-[NAME]: cat
-[ARGS]: NULL
-[INFILE]: NULL
-[OUTFILE]: NULL
-[HEREDOC]:  << a  << b
-[OUTPUT_TYPE]: STDOUT
-[INPUT_TYPE]: HEREDOC
-
-heredoc> armand
-heredoc> a
-heredoc> benoit
-heredoc> b
-
-= ( double free detected in tcache 2)
->>>>>>> 6ebbf2d8840a71d6eb1e9af98bc8129881013e1a
 bash error = ()
 Test  23: ✅⚠️  pwd oi 
 mini error = ( invalid pointer)
@@ -607,29 +496,7 @@ mini output = (minishell: export: =: not a valid identifier code error : 0)
 bash output = ()
 mini error = ()
 bash error = ( not a valid identifier)
-<<<<<<< HEAD
 Test  32: ❌ export 123 = (minishell: export: 123: not a valid identifier code error : 0)
-=======
-Test  32: ❌ export 123 
-mini outputminishell> << a << b cat
-
-PARSED COMMANDS
-cmd 1:
-[NAME]: cat
-[ARGS]: NULL
-[INFILE]: NULL
-[OUTFILE]: NULL
-[HEREDOC]:  << a  << b
-[OUTPUT_TYPE]: STDOUT
-[INPUT_TYPE]: HEREDOC
-
-heredoc> armand
-heredoc> a
-heredoc> benoit
-heredoc> b
-
- = (minishell: export: 123: not a valid identifier code error : 0)
->>>>>>> 6ebbf2d8840a71d6eb1e9af98bc8129881013e1a
 bash output = ()
 mini error = ()
 bash error = ( not a valid identifier)
@@ -685,28 +552,7 @@ bash exit code = 156
 Test  48: ❌ exit "-100" 
 mini output = (minishell: exit: -: There is no option allowed)
 bash output = ()
-<<<<<<< HEAD
 mini exit code = 2 
-=======
-mini exit code = 2
-bash exit minishell> << a << b cat
-
-PARSED COMMANDS
-cmd 1:
-[NAME]: cat
-[ARGS]: NULL
-[INFILE]: NULL
-[OUTFILE]: NULL
-[HEREDOC]:  << a  << b
-[OUTPUT_TYPE]: STDOUT
-[INPUT_TYPE]: HEREDOC
-
-heredoc> armand
-heredoc> a
-heredoc> benoit
-heredoc> b
-
->>>>>>> 6ebbf2d8840a71d6eb1e9af98bc8129881013e1a
 code = 156
 Test  49: ❌ exit -"100" 
 mini output = (minishell: exit: -: There is no option allowed)
@@ -716,27 +562,6 @@ bash exit code = 156
 Test  50: ❌ exit hello 
 mini output = (minishell: exit: hello: numeric argument required)
 bash output = ()
-<<<<<<< HEAD
-=======
-mini errorminishell> << a << b cat
-
-PARSED COMMANDS
-cmd 1:
-[NAME]: cat
-[ARGS]: NULL
-[INFILE]: NULL
-[OUTFILE]: NULL
-[HEREDOC]:  << a  << b
-[OUTPUT_TYPE]: STDOUT
-[INPUT_TYPE]: HEREDOC
-
-heredoc> armand
-heredoc> a
-heredoc> benoit
-heredoc> b
-
- = ()
->>>>>>> 6ebbf2d8840a71d6eb1e9af98bc8129881013e1a
 bash error = ( numeric argument required)
 Test  51: ❌ exit 42 world 
 mini output = (minishell: exit: too many arguments)
@@ -748,26 +573,6 @@ bash error = ( too many arguments)
 Test  52: ❌  
 mini exit code = 139
 bash exit code = 0
-<<<<<<< HEAD
-=======
-——————————minishell> << a << b cat
-
-PARSED COMMANDS
-cmd 1:
-[NAME]: cat
-[ARGS]: NULL
-[INFILE]: NULL
-[OUTFILE]: NULL
-[HEREDOC]:  << a  << b
-[OUTPUT_TYPE]: STDOUT
-[INPUT_TYPE]: HEREDOC
-
-heredoc> armand
-heredoc> a
-heredoc> benoit
-heredoc> b
-
->>>>>>> 6ebbf2d8840a71d6eb1e9af98bc8129881013e1a
 —— pipes
 Test  53: ✅⚠️  env | sort | grep -v SHLVL | grep -v ^_ 
 mini error = ( invalid pointer)
@@ -873,11 +678,7 @@ mini output = (hi bye)
 bash output = ()
 mini error = ( invalid pointer)
 bash error = ()
-<<<<<<< HEAD
 Test  84: ✅⚠️  ls >./outfiles/outfile01 >./outfiles/oufile02 
-=======
-Test  84: ✅⚠️  ls >./outfiles/outfile01 >./outfiles/outfile02 
->>>>>>> 6ebbf2d8840a71d6eb1e9af98bc8129881013e1a
 mini error = ( invalid pointer)
 bash error = ()
 Test  85: ✅⚠️  ls >./outfiles/outfile01 >./test_files/invalid_permission 
@@ -887,28 +688,7 @@ Test  86: ✅⚠️  ls >"./outfiles/outfile with spaces"
 mini error = ( invalid pointer)
 bash error = ()
 Test  87: ✅⚠️  ls >"./outfiles/outfile""1""2""3""4""5" 
-<<<<<<< HEAD
 mini error = ( invalid pointer)
-=======
-mini errorminishell> << a << b cat
-
-PARSED COMMANDS
-cmd 1:
-[NAME]: cat
-[ARGS]: NULL
-[INFILE]: NULL
-[OUTFILE]: NULL
-[HEREDOC]:  << a  << b
-[OUTPUT_TYPE]: STDOUT
-[INPUT_TYPE]: HEREDOC
-
-heredoc> armand
-heredoc> a
-heredoc> benoit
-heredoc> b
-
- = ( invalid pointer)
->>>>>>> 6ebbf2d8840a71d6eb1e9af98bc8129881013e1a
 bash error = ()
 Test  88: ✅⚠️  ls >"./outfiles/outfile01" >./test_files/invalid_permission >"./outfiles/outfile02" 
 mini error = ( Permission denied invalid pointer)
@@ -1186,7 +966,6 @@ free(): invalid pointer
 minishell> 
 free(): invalid pointer
 [1]    395140 IOT instruction (core dumped)  ./minishell
-<<<<<<< HEAD
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                          //
@@ -1327,7 +1106,7 @@ cmd 1:
 [HEREDOC]:  << e
 [OUTPUT_TYPE]: STDOUT
 [INPUT_TYPE]: HEREDOC
-
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
 heredoc> armand
 heredoc> e
 
@@ -1386,5 +1165,22 @@ ark,akd
 armosnie@f4r10s11:~/42/3_circle/armandbranch$ 
 
 
-=======
->>>>>>> 6ebbf2d8840a71d6eb1e9af98bc8129881013e1a
+
+
+
+heredoc :: gerer les 1024 caracteres + les entrees qui font quitter le hd
+
+
+echo -nnn -nnn aaa -nnn
+-> doit afficher aaa -nnn
+
+^\ -> mettre le message d erreur y a des casses couilles
+
+fix les signaux dans heredocs
+
+certains messages d erreur mais pas tres grave en sah
+
+
+exit 444 doit exit avec un modulo 255 ou 256 jsplus
+
+
