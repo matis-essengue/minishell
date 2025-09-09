@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 15:16:51 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 15:31:47 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,19 @@ int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 
 	(void)cmd;
 	close(pipe_fd_h[READ]);
-	child_signal_handler();
+	heredoc_signal_handler();
 	while (1)
 	{
 		line = readline("\033[36mheredoc> \033[0m");
 		if (line == NULL)
 		{
-			write(2, "\n", 1);
 			break ;
+		}
+		if (g_signal == SIGINT)
+		{
+			free(line);
+			close(pipe_fd_h[WRITE]);
+			exit(1);
 		}
 		if (ft_strncmp(heredoc->delimiter, line, ft_strlen(line)) == 0
 				&& ft_strlen(line) == ft_strlen(heredoc->delimiter))
@@ -86,9 +91,9 @@ int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
 {
 	int	status;
 	close(pipe_fd_h[WRITE]);
-	// signal(SIGINT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
-	// interactive_signal_handler();
+	interactive_signal_handler();
 	if (WIFSIGNALED(status))
 	{
 		close(pipe_fd_h[READ]);
