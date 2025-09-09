@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 15:31:51 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 16:21:00 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,37 +27,18 @@ int	parent_call(t_cmd *cmd, int prev_read_fd)
 	return (prev_read_fd);
 }
 
-void	pipe_check_or_create(t_cmd *cmd, int prev_read_fd)
-{
-	if (cmd->output_type == PIPEOUT && pipe(cmd->pipefd) == -1)
-	{
-		if (prev_read_fd != -1)
-			close(prev_read_fd);
-		error(cmd, "pipe failed", 1);
-	}
-}
-
-void	pidarray_check(t_cmd *cmd, pid_t *pid, int prev_read_fd, int i)
-{
-	if (pid[i] == -1)
-	{
-		if (prev_read_fd != -1)
-			close(prev_read_fd);
-		if (cmd->output_type == PIPEOUT)
-		{
-			close_all_fd(cmd->pipefd);
-			error(cmd, "fork failed", 1);
-		}
-	}
-}
 void	heredocs_and_no_cmd_management(t_cmd *cmd)
 {
+	t_heredoc	*heredoc;
+
+	// if (cmd->outfile)
+	// 	manage_no_cmd_with_an_outfile(cmd);
 	if (!cmd->name)
 	{
 		if (cmd->heredocs)
 		{
 			manage_heredocs(cmd);
-			t_heredoc *heredoc = cmd->heredocs;
+			heredoc = cmd->heredocs;
 			while (heredoc)
 			{
 				if (heredoc->heredoc_fd != -1)
@@ -70,7 +51,7 @@ void	heredocs_and_no_cmd_management(t_cmd *cmd)
 		}
 		cmd = cmd->next;
 	}
-	if (cmd->heredocs)
+	else
 		manage_heredocs(cmd);
 }
 
