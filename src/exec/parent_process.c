@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parent_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/08 11:31:21 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/08 17:56:07 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ int	execute_command(t_cmd *cmd, t_env *env)
 			restore_termios(&saved_term);
 		return (1);
 	}
+	exec_signal_handler();
 	exit_status = 0;
 	if (cmd->output_type != PIPEOUT && !cmd->next && is_built_in(cmd))
 		exit_status = parent_process_built_in(cmd, env);

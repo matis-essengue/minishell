@@ -3,36 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/01 17:34:59 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 13:33:09 by armosnie         ###   ########.fr       */
+/*   Created: 2025/09/08 17:50:43 by matis             #+#    #+#             */
+/*   Updated: 2025/09/08 17:54:48 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/exec.h"
 #include "../../includes/minishell.h"
+#include "../../includes/exec.h"
 
-// void	handle_sigint(int sig)
-// {
-// 	g_signal = sig;
-// 	write(1, "\n", 1);
-// 	rl_replace_line("", 0);
-// 	rl_on_new_line();
-// 	rl_redisplay();
-// }
+void	interactive_signal_handler(void)
+{
+	t_sa	sa;
 
-// void	exec_handle_sigint(int sig)
-// {
-// 	g_signal = sig;
-// 	rl_replace_line("", 0);
-// 	rl_on_new_line();
-// }
+	sa.sa_handler = handle_sigint;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &sa, NULL);
+	signal(SIGQUIT, SIG_IGN);
+}
 
-// void	handle_sigquit(int sig)
-// {
-// 	ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
-// 	(void)sig;
-// 	rl_replace_line("", 0);
-// 	rl_on_new_line();
-// }
+void	exec_signal_handler(void)
+{
+	t_sa	sa;
+
+	sa.sa_handler = handle_sigint_in_exec;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &sa, NULL);
+	signal(SIGQUIT, handle_sigquit);
+}
+
+void	child_signal_handler(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
