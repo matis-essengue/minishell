@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 17:32:41 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/08 13:15:38 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 15:11:40 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void					handle_output_redirect(t_cmd *cmd, t_token *current, t_file **start_out
 t_cmd					*tokens_to_cmds(t_token *tokens);
 void					expand_line(char **line, t_env *env);
 void					remove_quotes(t_cmd *cmds);
-char					*expand_variable(char *str, t_env *env, int *consumed);
+char					*expand_variable(char *str, t_env *env, int *consumed, int is_escaped);
 
 
 #endif

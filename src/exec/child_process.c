@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 13:46:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/08 11:21:23 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/08 17:53:55 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 void	files_and_management(t_cmd *cmd, t_cmd *cmd_list, int prev_read_fd)
 {
 	t_heredoc *last_hd;
-	
+
 	unused_heredoc_fd(cmd, cmd_list);
 	last_hd = get_last_heredoc(cmd);
 	if (last_hd && last_hd->heredoc_fd != -1)
@@ -39,6 +39,7 @@ void	child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env, int prev_read_fd)
 {
 	int	exit_status;
 
+	child_signal_handler();
 	files_and_management(cmd, cmd_list, prev_read_fd);
 	if (cmd->output_type == PIPEOUT)
 	{

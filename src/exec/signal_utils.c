@@ -3,44 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   signal_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 15:06:05 by matis             #+#    #+#             */
-/*   Updated: 2025/09/08 15:55:07 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 12:06:05 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
+#include "../../includes/exec.h"
 
+volatile sig_atomic_t	g_signal;
 
-static void	create_new_line(void)
+void	handle_sigint(int signal)
 {
-	printf("\n");
-	rl_on_new_line();
+	g_signal = signal;
+	write(1, "\n", 1);
 	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-static void	signal_handler_ignore(void)
-{
 	rl_on_new_line();
 	rl_redisplay();
 }
 
-static void	signal_handler(int signal)
+void	handle_sigint_in_exec(int signal)
 {
-	if (signal == SIGINT)
-		create_new_line();
-	else if (signal == SIGQUIT)
-		signal_handler_ignore();
+	g_signal = signal;
+	rl_replace_line("", 0);
+	rl_on_new_line();
 }
 
-void	set_signal_action(void)
+void	handle_sigquit(int signal)
 {
-	struct sigaction act;
-
-	ft_bzero(&act, sizeof(act));
-	act.sa_handler = signal_handler;
-	sigaction(SIGINT, &act, NULL);
-	sigaction(SIGQUIT, &act, NULL);
+	(void)signal;
+	ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+	rl_replace_line("", 0);
+	rl_on_new_line();
 }
+

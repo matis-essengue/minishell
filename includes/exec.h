@@ -137,4 +137,13 @@ void						unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
 int							save_termios(struct termios *out_saved);
 void						restore_termios(const struct termios *saved);
 
+// signal
+
+void						handle_sigint(int signal);
+void						handle_sigint_in_exec(int signal);
+void						handle_sigquit(int signal);
+void						interactive_signal_handler(void);
+void						exec_signal_handler(void);
+void						child_signal_handler(void);
+
 #endif

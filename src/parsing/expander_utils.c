@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 13:13:31 by matis             #+#    #+#             */
-/*   Updated: 2025/09/08 13:44:18 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 12:06:45 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ char	*handle_special_vars(char *str, t_env *env, int *consumed)
 	return (NULL);
 }
 
-char	*expand_variable(char *str, t_env *env, int *consumed)
+char	*expand_variable(char *str, t_env *env, int *consumed, int is_escaped)
 {
 	char	*var_name;
 	char	*value;
@@ -99,6 +99,13 @@ char	*expand_variable(char *str, t_env *env, int *consumed)
 	if (special_result)
 		return (special_result);
 	var_name = _get_var_name(str + 1);
+	if (is_escaped)
+	{
+		*consumed = ft_strlen(var_name) + 1;
+		value = ft_strjoin("$", var_name);
+		free(var_name);
+		return (value);
+	}
 	*consumed = ft_strlen(var_name) + 1;
 	value = ft_getenvx(var_name, env->env);
 	free(var_name);

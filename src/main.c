@@ -6,7 +6,7 @@
 /*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/08 13:21:33 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/08 17:56:21 by matis            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	cmd = NULL;
 	void_silenced_args(argc, argv);
-	set_signal_action();
+	interactive_signal_handler();
 	printf("\033[2J\033[H");
 	while (1)
 	{
