@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:26 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 18:52:29 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/05 18:16:50 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	built_in_echo(t_cmd *cmd)
 	int	i;
 
 	i = 0;
-	if (cmd->args && cmd->args[i] && ft_strcmp(cmd->args[i], "-n") == 0)
+	if (cmd->args && cmd->args[i] && ft_strncmp(cmd->args[i], "-n", 2) == 0)
 	{
 		newline = 0;
 		i = 1;

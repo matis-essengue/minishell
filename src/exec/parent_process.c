@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parent_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 18:55:48 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 18:53:14 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,40 @@ int	parent_call(t_cmd *cmd, int prev_read_fd)
 	return (prev_read_fd);
 }
 
+void	pipe_check_or_create(t_cmd *cmd, int prev_read_fd)
+{
+	if (cmd->output_type == PIPEOUT && pipe(cmd->pipefd) == -1)
+	{
+		if (prev_read_fd != -1)
+			close(prev_read_fd);
+		error(cmd, "pipe failed", 1);
+	}
+}
+
+void	pidarray_check(t_cmd *cmd, pid_t *pid, int prev_read_fd, int i)
+{
+	if (pid[i] == -1)
+	{
+		if (prev_read_fd != -1)
+			close(prev_read_fd);
+		if (cmd->output_type == PIPEOUT)
+		{
+			close_all_fd(cmd->pipefd);
+			error(cmd, "fork failed", 1);
+		}
+	}
+}
+
 int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 {
 	t_cmd	*cmd_list;
 	int		prev_read_fd;
 	int		i;
 
-	i = -1;
+	i = 0;
 	prev_read_fd = -1;
 	cmd_list = cmd;
-	while (cmd && ++i < MAX_PROCESSES)
+	while (cmd && i < MAX_PROCESSES)
 	{
 		if (!cmd->name)
 		{
@@ -66,6 +90,7 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 			child_call(cmd, cmd_list, env, prev_read_fd);
 		else
 			prev_read_fd = parent_call(cmd, prev_read_fd);
+		i++;
 		cmd = cmd->next;
 	}
 	if (prev_read_fd != -1)

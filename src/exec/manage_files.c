@@ -3,25 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   manage_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 18:56:28 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 18:53:17 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
-
-void	manage_no_cmd_with_an_outfile(t_cmd *cmd)
-{
-	int prev_old_fd;
-
-	prev_old_fd = dup(FD_STDOUT);
-	open_outfile(cmd);
-	dup2(prev_old_fd, FD_STDOUT);
-	close(prev_old_fd);
-}
 
 void	open_infile(t_cmd *cmd)
 {
