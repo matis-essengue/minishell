@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 16:21:00 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 17:37:45 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,46 +27,38 @@ int	parent_call(t_cmd *cmd, int prev_read_fd)
 	return (prev_read_fd);
 }
 
-void	heredocs_and_no_cmd_management(t_cmd *cmd)
-{
-	t_heredoc	*heredoc;
-
-	// if (cmd->outfile)
-	// 	manage_no_cmd_with_an_outfile(cmd);
-	if (!cmd->name)
-	{
-		if (cmd->heredocs)
-		{
-			manage_heredocs(cmd);
-			heredoc = cmd->heredocs;
-			while (heredoc)
-			{
-				if (heredoc->heredoc_fd != -1)
-				{
-					close(heredoc->heredoc_fd);
-					heredoc->heredoc_fd = -1;
-				}
-				heredoc = heredoc->next;
-			}
-		}
-		cmd = cmd->next;
-	}
-	else
-		manage_heredocs(cmd);
-}
-
 int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 {
 	t_cmd	*cmd_list;
 	int		prev_read_fd;
 	int		i;
 
-	i = 0;
+	i = -1;
 	prev_read_fd = -1;
 	cmd_list = cmd;
-	while (cmd && i < MAX_PROCESSES)
+	while (cmd && ++i < MAX_PROCESSES)
 	{
-		heredocs_and_no_cmd_management(cmd);
+		if (!cmd->name)
+		{
+			if (cmd->heredocs)
+			{
+				manage_heredocs(cmd);
+				t_heredoc *heredoc = cmd->heredocs;
+				while (heredoc)
+				{
+					if (heredoc->heredoc_fd != -1)
+					{
+						close(heredoc->heredoc_fd);
+						heredoc->heredoc_fd = -1;
+					}
+					heredoc = heredoc->next;
+				}
+			}
+			cmd = cmd->next;
+			continue;
+		}
+		if (cmd->heredocs)
+			manage_heredocs(cmd);
 		pipe_check_or_create(cmd, prev_read_fd);
 		pid[i] = fork();
 		pidarray_check(cmd, pid, prev_read_fd, i);
@@ -74,7 +66,6 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 			child_call(cmd, cmd_list, env, prev_read_fd);
 		else
 			prev_read_fd = parent_call(cmd, prev_read_fd);
-		i++;
 		cmd = cmd->next;
 	}
 	if (prev_read_fd != -1)

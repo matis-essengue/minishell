@@ -1352,3 +1352,127 @@ minishell> ==8612==
 ==8612== For lists of detected and suppressed errors, rerun with: -s
 ==8612== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
 minishell> 
+
+
+
+minishell> > pwd
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: (null)
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]:  > pwd
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+minishell> >> pwd
+
+PARSED COMMANDS
+cmd 1:
+[NAME]: (null)
+[ARGS]: NULL
+[INFILE]: NULL
+[OUTFILE]:  >> pwd
+[HEREDOC]: NULL
+[OUTPUT_TYPE]: STDOUT
+[INPUT_TYPE]: STDIN
+
+minishell> cat <<a >>>out | <<^C
+minishell> cat <<a >>>out | <<
+minishell: syntax error near unexpected token `>'
+minishell> 
+==27911== 
+==27911== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==27911== 
+==27911== HEAP SUMMARY:
+==27911==     in use at exit: 208,973 bytes in 263 blocks
+==27911==   total heap usage: 657 allocs, 394 frees, 240,333 bytes allocated
+==27911== 
+==27911== 2 bytes in 1 blocks are indirectly lost in loss record 3 of 85
+==27911==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==27911==    by 0x401DCB: ft_strndup (utils.c:29)
+==27911==    by 0x4019C1: add_redirect (tokenizer.c:43)
+==27911==    by 0x4017DB: add_meta_char (tokenizer.c:80)
+==27911==    by 0x401644: tokenize (tokenizer.c:136)
+==27911==    by 0x4014D5: parse (parser.c:39)
+==27911==    by 0x4013FD: main (main.c:49)
+==27911== 
+==27911== 2 bytes in 1 blocks are indirectly lost in loss record 4 of 85
+==27911==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==27911==    by 0x401DCB: ft_strndup (utils.c:29)
+==27911==    by 0x401964: add_pipe (tokenizer.c:27)
+==27911==    by 0x40176F: add_meta_char (tokenizer.c:66)
+==27911==    by 0x401644: tokenize (tokenizer.c:136)
+==27911==    by 0x4014D5: parse (parser.c:39)
+==27911==    by 0x4013FD: main (main.c:49)
+==27911== 
+==27911== 9 bytes in 3 blocks are indirectly lost in loss record 10 of 85
+==27911==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==27911==    by 0x401DCB: ft_strndup (utils.c:29)
+==27911==    by 0x4019C1: add_redirect (tokenizer.c:43)
+==27911==    by 0x401797: add_meta_char (tokenizer.c:72)
+==27911==    by 0x401644: tokenize (tokenizer.c:136)
+==27911==    by 0x4014D5: parse (parser.c:39)
+==27911==    by 0x4013FD: main (main.c:49)
+==27911== 
+==27911== 10 bytes in 3 blocks are indirectly lost in loss record 11 of 85
+==27911==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==27911==    by 0x401DCB: ft_strndup (utils.c:29)
+==27911==    by 0x4018FB: add_word (tokenizer.c:110)
+==27911==    by 0x40167B: tokenize (tokenizer.c:139)
+==27911==    by 0x4014D5: parse (parser.c:39)
+==27911==    by 0x4013FD: main (main.c:49)
+==27911== 
+==27911== 24 bytes in 1 blocks are indirectly lost in loss record 22 of 85
+==27911==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==27911==    by 0x401A08: create_token (token.c:26)
+==27911==    by 0x4019CE: add_redirect (tokenizer.c:43)
+==27911==    by 0x4017DB: add_meta_char (tokenizer.c:80)
+==27911==    by 0x401644: tokenize (tokenizer.c:136)
+==27911==    by 0x4014D5: parse (parser.c:39)
+==27911==    by 0x4013FD: main (main.c:49)
+==27911== 
+==27911== 24 bytes in 1 blocks are indirectly lost in loss record 23 of 85
+==27911==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==27911==    by 0x401A08: create_token (token.c:26)
+==27911==    by 0x401971: add_pipe (tokenizer.c:27)
+==27911==    by 0x40176F: add_meta_char (tokenizer.c:66)
+==27911==    by 0x401644: tokenize (tokenizer.c:136)
+==27911==    by 0x4014D5: parse (parser.c:39)
+==27911==    by 0x4013FD: main (main.c:49)
+==27911== 
+==27911== 48 bytes in 2 blocks are indirectly lost in loss record 32 of 85
+==27911==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==27911==    by 0x401A08: create_token (token.c:26)
+==27911==    by 0x401905: add_word (tokenizer.c:110)
+==27911==    by 0x40167B: tokenize (tokenizer.c:139)
+==27911==    by 0x4014D5: parse (parser.c:39)
+==27911==    by 0x4013FD: main (main.c:49)
+==27911== 
+==27911== 72 bytes in 3 blocks are indirectly lost in loss record 34 of 85
+==27911==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==27911==    by 0x401A08: create_token (token.c:26)
+==27911==    by 0x4019CE: add_redirect (tokenizer.c:43)
+==27911==    by 0x401797: add_meta_char (tokenizer.c:72)
+==27911==    by 0x401644: tokenize (tokenizer.c:136)
+==27911==    by 0x4014D5: parse (parser.c:39)
+==27911==    by 0x4013FD: main (main.c:49)
+==27911== 
+==27911== 215 (24 direct, 191 indirect) bytes in 1 blocks are definitely lost in loss record 43 of 85
+==27911==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==27911==    by 0x401A08: create_token (token.c:26)
+==27911==    by 0x401905: add_word (tokenizer.c:110)
+==27911==    by 0x40167B: tokenize (tokenizer.c:139)
+==27911==    by 0x4014D5: parse (parser.c:39)
+==27911==    by 0x4013FD: main (main.c:49)
+==27911== 
+==27911== LEAK SUMMARY:
+==27911==    definitely lost: 24 bytes in 1 blocks
+==27911==    indirectly lost: 191 bytes in 15 blocks
+==27911==      possibly lost: 0 bytes in 0 blocks
+==27911==    still reachable: 0 bytes in 0 blocks
+==27911==         suppressed: 208,758 bytes in 247 blocks
+==27911== 
+    

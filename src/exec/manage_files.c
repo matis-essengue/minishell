@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 16:19:17 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 16:38:23 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	open_outfile(t_cmd *cmd)
 		}
 		dup2(file->fd, FD_STDOUT);
 		close(file->fd);
-		printf("here\n");
 		file = file->next;
 	}
 }
