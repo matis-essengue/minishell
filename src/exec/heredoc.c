@@ -1,70 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   manage_files.c                                     :+:      :+:    :+:   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/09/09 18:53:17 by messengu         ###   ########.fr       */
-=======
-/*   Updated: 2025/09/09 16:38:23 by armosnie         ###   ########.fr       */
->>>>>>> armand
+/*   Created: 2025/09/09 15:46:02 by armosnie          #+#    #+#             */
+/*   Updated: 2025/09/09 16:26:09 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-void	manage_no_cmd_with_an_outfile(t_cmd *cmd)
+void	heredoc_signal(char *line, int *pipe_fd_h)
 {
-	int prev_old_fd;
-
-	prev_old_fd = dup(FD_STDOUT);
-	open_outfile(cmd);
-	dup2(prev_old_fd, FD_STDOUT);
-	close(prev_old_fd);
-}
-
-void	open_infile(t_cmd *cmd)
-{
-	t_file	*file;
-
-	file = cmd->infile;
-	while (file && file->name)
+	if (g_signal == SIGINT)
 	{
-		file->fd = open(file->name, O_RDONLY);
-		if (file->fd == -1)
-		{
-			error(cmd, file->name, 1);
-		}
-		dup2(file->fd, FD_STDIN);
-		close(file->fd);
-		file = file->next;
-	}
-}
-
-void	open_outfile(t_cmd *cmd)
-{
-	t_file	*file;
-
-	file = cmd->outfile;
-	while (file && file->name)
-	{
-		if (file->append)
-			file->fd = open(file->name, O_WRONLY | O_CREAT | O_APPEND,
-					0644);
-		else
-			file->fd = open(file->name, O_WRONLY | O_CREAT | O_TRUNC,
-					0644);
-		if (file->fd == -1)
-		{
-			error(cmd, file->name, 1);
-		}
-		dup2(file->fd, FD_STDOUT);
-		close(file->fd);
-		file = file->next;
+		free(line);
+		close(pipe_fd_h[WRITE]);
+		exit(1);
 	}
 }
 
@@ -74,16 +29,15 @@ int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 
 	(void)cmd;
 	close(pipe_fd_h[READ]);
-	handle_heredoc_signals();
+	heredoc_signal_handler();
 	while (1)
 	{
 		line = readline("\033[36mheredoc> \033[0m");
 		if (line == NULL)
-		{
 			break ;
-		}
+		heredoc_signal(line, pipe_fd_h);
 		if (ft_strncmp(heredoc->delimiter, line, ft_strlen(line)) == 0
-				&& ft_strlen(line) == ft_strlen(heredoc->delimiter))
+			&& ft_strlen(line) == ft_strlen(heredoc->delimiter))
 			break ;
 		if (ft_strlen(line) > 1024)
 			return (close(pipe_fd_h[WRITE]), free(line), exit(0), 0);
@@ -97,14 +51,17 @@ int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 
 int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
 {
-	// int	status;
+	int	status;
+
 	close(pipe_fd_h[WRITE]);
-	waitpid(pid, NULL, 0);
-	// if (WIFSIGNALED(status))
-	// {
-	// 	close(pipe_fd_h[READ]);
-	// 	return (-1);
-	// }
+	signal(SIGINT, SIG_IGN);
+	waitpid(pid, &status, 0);
+	interactive_signal_handler();
+	if (WIFSIGNALED(status))
+	{
+		close(pipe_fd_h[READ]);
+		return (-1);
+	}
 	return (pipe_fd_h[READ]);
 }
 
@@ -123,16 +80,9 @@ void	manage_heredocs(t_cmd *cmd)
 		if (pid == -1)
 			pipe_and_pid_error(cmd, heredoc, pipe_fd_h, 2);
 		if (pid == 0)
-		{
-			handle_heredoc_signals();
 			child_process_heredoc(cmd, heredoc, pipe_fd_h);
-		}
 		else
-		{
-			parent_ignore_signals();
 			heredoc->heredoc_fd = parent_process_heredoc(pid, pipe_fd_h);
-			handle_signals(0);
-		}
 		if (heredoc->next && heredoc->heredoc_fd != -1)
 		{
 			close(heredoc->heredoc_fd);
