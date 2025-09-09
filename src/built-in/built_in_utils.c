@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 18:07:34 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/04 15:39:44 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 11:41:56 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ int	check_is_same_var(char *s1, char *s2)
 	if (len_s1 == 0 || len_s2 == 0)
 		return (0);
 	if (ft_strncmp(s1, s2, len_s1) == 0 && len_s2 == len_s1)
+	{
 		return (1);
+	}
 	return (0);
 }
