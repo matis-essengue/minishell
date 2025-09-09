@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:58 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/08 13:33:46 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 15:05:43 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ int	check_head_var(char *var)
 	}
 	if (var[i] == '=' && var[i + 1])
 		return (i);
-	if (var[i] != '=')
-		return (-2);
-	return (-1);
+	if (var[i] == '=' && !var[i + 1])
+		return (0);
+	return (-2);
 }
 
 int	check_export_format(char *var)
@@ -45,10 +45,12 @@ int	check_export_format(char *var)
 	if (i == -2)
 		return (-404);
 	i++;
+	if (var[i] == ' ')
+		return (0);
 	while (var[i])
 	{
 		if (ft_isalnum(var[i]) == 0 && var[i] != '_' && var[i] != '/'
-			&& var[i] != ' ' && var[i] != '-' && var[i] == '=' && len > 100)
+			&& var[i] != '-' && var[i] == '=' && len > 100)
 			return (1);
 		i++;
 	}
@@ -67,14 +69,15 @@ int	built_in_export(t_cmd *cmd, t_env *env, int code_error)
 			2);
 	while (cmd->args && cmd->args[i])
 	{
-		if (check_export_format(cmd->args[i]) == 1)
+		code_error = check_export_format(cmd->args[i]);
+		if (code_error == 1)
 		{
 			printf("minishell: export: %s: not a valid identifier\n",
 				cmd->args[i]);
-			code_error = 1;
 		}
-		if (check_export_format(cmd->args[i]) == 0)
-			if (cmd->args && cmd->args[i] && get_my_export_env(&(env->env), cmd->args[i]) == 1)
+		if (code_error == 0)
+			if (cmd->args && cmd->args[i] && get_my_export_env(&(env->env),
+					cmd->args[i]) == 1)
 				return (1);
 		i++;
 	}

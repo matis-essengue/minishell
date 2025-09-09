@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 15:06:05 by matis             #+#    #+#             */
-/*   Updated: 2025/09/08 15:55:07 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 10:42:03 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	signal_handler(int signal)
 void	set_signal_action(void)
 {
 	struct sigaction act;
-
+	
 	ft_bzero(&act, sizeof(act));
 	act.sa_handler = signal_handler;
 	sigaction(SIGINT, &act, NULL);
