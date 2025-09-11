@@ -96,13 +96,13 @@ void						pidarray_check(t_cmd *cmd, pid_t *pid,
 void						child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env,
 								int prev_read_fd);
 void						files_and_management(t_cmd *cmd, t_cmd *cmd_list,
-								int prev_read_fd);
+								int prev_read_fd, t_env *env);
 int							wait_child(pid_t *pid, int size);
 
 // manage_files
 
-void						open_infile(t_cmd *cmd);
-void						open_outfile(t_cmd *cmd);
+void						open_infile(t_cmd *cmd, t_cmd *cmd_list, t_env *env);
+void						open_outfile(t_cmd *cmd, t_cmd *cmd_list, t_env *env);
 void						manage_heredocs(t_cmd *current, t_cmd *cmd, int prev_read_fd, t_env *env);
 
 // get_path

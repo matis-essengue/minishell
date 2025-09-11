@@ -6,14 +6,14 @@
 /*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/11 17:55:18 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/11 18:01:20 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-void	open_infile(t_cmd *cmd)
+void	open_infile(t_cmd *cmd, t_cmd *cmd_list, t_env *env)
 {
 	t_file	*file;
 
@@ -23,7 +23,10 @@ void	open_infile(t_cmd *cmd)
 		file->fd = open(file->name, O_RDONLY);
 		if (file->fd == -1)
 		{
-			error(cmd, file->name, 1);
+			perror(file->name);
+			free_all_struct(cmd_list);
+			free_my_env(env);
+			exit(1);
 		}
 		dup2(file->fd, FD_STDIN);
 		close(file->fd);
@@ -31,7 +34,7 @@ void	open_infile(t_cmd *cmd)
 	}
 }
 
-void	open_outfile(t_cmd *cmd)
+void	open_outfile(t_cmd *cmd, t_cmd *cmd_list, t_env *env)
 {
 	t_file	*file;
 
@@ -46,7 +49,10 @@ void	open_outfile(t_cmd *cmd)
 					0644);
 		if (file->fd == -1)
 		{
-			error(cmd, file->name, 1);
+			perror(file->name);
+			free_all_struct(cmd_list);
+			free_my_env(env);
+			exit(1);
 		}
 		dup2(file->fd, FD_STDOUT);
 		close(file->fd);
