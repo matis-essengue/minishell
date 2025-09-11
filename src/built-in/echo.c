@@ -6,20 +6,39 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:26 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 20:37:14 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/11 14:51:54 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
+int	cmp_n(char *s1)
+{
+	int i;
+
+	i = 1;
+	if (s1[0] != '-')
+		return (1);
+	while (s1[i] && s1[i] == 'n')
+		i++;
+	if (s1[i] != '\0')
+		return (1);
+	return (0);
+}
+
 int	n_search(char **args)
 {
 	int	i;
 
 	i = 0;
-	while (args[i] && ft_strcmp(args[i], "-n") == 0)
-		i++;
+	while (args[i])
+	{
+		if (cmp_n(args[i]) == 0)
+			i++;
+		else
+			break ;
+	}
 	return (i);
 }
 
@@ -46,7 +65,7 @@ int	built_in_echo(t_cmd *cmd)
 	int	i;
 
 	i = 0;
-	if (cmd->args && cmd->args[i] && ft_strcmp(cmd->args[i], "-n") == 0)
+	if (cmd->args && cmd->args[i] && cmp_n(cmd->args[i]) == 0)
 	{
 		newline = 0;
 		i = n_search(cmd->args);
@@ -58,8 +77,7 @@ int	built_in_echo(t_cmd *cmd)
 		if (write_sentance(cmd->args[i]) == 1)
 			return (perror("minishell: echo"), 1);
 		if (cmd->args[i + 1])
-			if (printf(" ") < 0)
-				return (1);
+			write(1, " ", 1);
 		i++;
 	}
 	if (newline == 1)
