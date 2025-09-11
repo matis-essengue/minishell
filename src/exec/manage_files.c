@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/11 11:37:30 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/11 11:46:31 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ int	open_infile(t_cmd *cmd)
 		close(file->fd);
 		file = file->next;
 	}
-	if (!file || !file->name)
-		return (perror(file->name), 1);
 	return (0);
 }
 
