@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_to_cmds_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:12:25 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/03 16:51:32 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/09 21:24:10 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	allocate_and_fill_args(t_cmd *cmd, t_token *tokens, int arg_count)
 	if (arg_count == 0)
 		return ;
 	cmd->args = malloc(sizeof(char *) * (arg_count + 1));
+	if (!cmd->args)
+		return ;
 	i = -1;
 	current = tokens;
 	while (current && current->type != TOKEN_CONTROL_OP)
@@ -28,7 +30,11 @@ void	allocate_and_fill_args(t_cmd *cmd, t_token *tokens, int arg_count)
 		if (current->type == TOKEN_WORD)
 		{
 			if (i >= 0)
+			{
 				cmd->args[i] = ft_strdup(current->value);
+				if (!cmd->args[i])
+					return ;
+			}
 			i++;
 		}
 		else

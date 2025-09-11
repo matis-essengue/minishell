@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parent_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 18:55:48 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/11 15:06:22 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,11 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 	t_cmd	*cmd_list;
 	int		prev_read_fd;
 	int		i;
+	t_cmd	*first_cmd;
 
 	i = -1;
 	prev_read_fd = -1;
+	first_cmd = cmd;
 	cmd_list = cmd;
 	while (cmd && ++i < MAX_PROCESSES)
 	{
@@ -42,7 +44,7 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 		{
 			if (cmd->heredocs)
 			{
-				manage_heredocs(cmd);
+				manage_heredocs(cmd, prev_read_fd, env);
 				t_heredoc *heredoc = cmd->heredocs;
 				while (heredoc)
 				{
@@ -58,18 +60,43 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 			continue;
 		}
 		if (cmd->heredocs)
-			manage_heredocs(cmd);
+			manage_heredocs(cmd, prev_read_fd, env);
 		pipe_check_or_create(cmd, prev_read_fd);
 		pid[i] = fork();
 		pidarray_check(cmd, pid, prev_read_fd, i);
 		if (pid[i] == 0)
 			child_call(cmd, cmd_list, env, prev_read_fd);
 		else
+		{
 			prev_read_fd = parent_call(cmd, prev_read_fd);
+			if (cmd->heredocs)
+			{
+				t_heredoc *heredoc = cmd->heredocs;
+				while (heredoc)
+				{
+					if (heredoc->heredoc_fd != -1)
+					{
+						close(heredoc->heredoc_fd);
+						heredoc->heredoc_fd = -1;
+					}
+					heredoc = heredoc->next;
+				}
+			}
+		}
+		i++;
 		cmd = cmd->next;
 	}
 	if (prev_read_fd != -1)
 		close(prev_read_fd);
+	cmd = first_cmd;
+	while (cmd)
+	{
+		if (cmd->pipefd[READ] > 2)
+			close(cmd->pipefd[READ]);
+		if (cmd->pipefd[WRITE] > 2)
+			close(cmd->pipefd[WRITE]);
+		cmd = cmd->next;
+	}
 	exit_status = wait_child(pid, i);
 	return (exit_status);
 }
@@ -95,7 +122,6 @@ int	execute_command(t_cmd *cmd, t_env *env)
 		exit_status = parent_process_built_in(cmd, env);
 	else
 		exit_status = pipe_function(cmd, pid, exit_status, env);
-	free_all_struct(cmd);
 	handle_signals(1);
 	if (had_saved)
 		restore_termios(&saved_term);

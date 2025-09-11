@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_to_cmds.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:12:25 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/03 16:50:25 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/09 21:26:56 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ static void	process_cmd_name_and_count_args(t_cmd *cmd,
 static t_cmd	*handle_pipe(t_cmd *cmds)
 {
 	cmds->next = malloc(sizeof(t_cmd));
+	if (!cmds->next)
+		return (NULL);
 	cmds->output_type = PIPEOUT;
 	init_cmd(cmds->next);
 	cmds = cmds->next;
@@ -85,6 +87,8 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 	t_file	*start_outfile;
 
 	cmds = malloc(sizeof(t_cmd));
+	if (!cmds)
+		return (NULL);
 	init_cmd(cmds);
 	first_cmd = cmds;
 	current = tokens;
@@ -97,6 +101,11 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 		if (current && current->type == TOKEN_CONTROL_OP)
 		{
 			cmds = handle_pipe(cmds);
+			if (!cmds)
+			{
+				free_all_struct(first_cmd);
+				return (NULL);
+			}
 			current = current->next;
 		}
 	}
