@@ -100,7 +100,7 @@ int							wait_child(pid_t *pid, int size);
 
 // manage_files
 
-void						open_infile(t_cmd *cmd);
+int							open_infile(t_cmd *cmd);
 void						open_outfile(t_cmd *cmd);
 int							manage_heredocs(t_cmd *cmd);
 

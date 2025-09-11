@@ -6,18 +6,22 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/11 11:00:13 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/11 11:37:30 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-void	open_infile(t_cmd *cmd)
+int	open_infile(t_cmd *cmd)
 {
 	t_file	*file;
+	int exit_status;
 
+	exit_status = 0;
 	file = cmd->infile;
+	if (!file || !file->name)
+		return (perror(file->name), 1);
 	while (file && file->name)
 	{
 		file->fd = open(file->name, O_RDONLY);
@@ -29,6 +33,9 @@ void	open_infile(t_cmd *cmd)
 		close(file->fd);
 		file = file->next;
 	}
+	if (!file || !file->name)
+		return (perror(file->name), 1);
+	return (0);
 }
 
 void	open_outfile(t_cmd *cmd)
