@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parent_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/11 15:06:22 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/11 15:11:22 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,30 @@ int	parent_call(t_cmd *cmd, int prev_read_fd)
 	return (prev_read_fd);
 }
 
+void	pipe_check_or_create(t_cmd *cmd, int prev_read_fd)
+{
+	if (cmd->output_type == PIPEOUT && pipe(cmd->pipefd) == -1)
+	{
+		if (prev_read_fd != -1)
+			close(prev_read_fd);
+		error(cmd, "pipe failed", 1);
+	}
+}
+
+void	pidarray_check(t_cmd *cmd, pid_t *pid, int prev_read_fd, int i)
+{
+	if (pid[i] == -1)
+	{
+		if (prev_read_fd != -1)
+			close(prev_read_fd);
+		if (cmd->output_type == PIPEOUT)
+		{
+			close_all_fd(cmd->pipefd);
+			error(cmd, "fork failed", 1);
+		}
+	}
+}
+
 int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 {
 	t_cmd	*cmd_list;
@@ -34,17 +58,18 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 	int		i;
 	t_cmd	*first_cmd;
 
-	i = -1;
+	i = 0;
 	prev_read_fd = -1;
 	first_cmd = cmd;
 	cmd_list = cmd;
-	while (cmd && ++i < MAX_PROCESSES)
+	while (cmd && i < MAX_PROCESSES)
 	{
 		if (!cmd->name)
 		{
 			if (cmd->heredocs)
 			{
-				manage_heredocs(cmd, prev_read_fd, env);
+				if (manage_heredocs(cmd) == 2)
+					return (2);
 				t_heredoc *heredoc = cmd->heredocs;
 				while (heredoc)
 				{
@@ -59,8 +84,11 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 			cmd = cmd->next;
 			continue;
 		}
-		if (cmd->heredocs)
-			manage_heredocs(cmd, prev_read_fd, env);
+		if (cmd->heredocs && manage_heredocs(cmd) == 2)
+		{
+			exit_status = 2;
+			break ;
+		}
 		pipe_check_or_create(cmd, prev_read_fd);
 		pid[i] = fork();
 		pidarray_check(cmd, pid, prev_read_fd, i);

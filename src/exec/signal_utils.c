@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   signal_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 15:06:05 by matis             #+#    #+#             */
-/*   Updated: 2025/09/09 18:56:03 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 18:53:09 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/exec.h"
 #include "../../includes/minishell.h"
+#include "../../includes/exec.h"
 
 volatile sig_atomic_t	g_signal;
+
 

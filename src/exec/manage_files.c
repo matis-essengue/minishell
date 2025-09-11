@@ -3,31 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   manage_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/11 15:06:14 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/11 15:12:15 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-void	manage_no_cmd_with_an_outfile(t_cmd *cmd)
-{
-	int prev_old_fd;
-
-	prev_old_fd = dup(FD_STDOUT);
-	open_outfile(cmd);
-	dup2(prev_old_fd, FD_STDOUT);
-	close(prev_old_fd);
-}
-
-void	open_infile(t_cmd *cmd)
+int	open_infile(t_cmd *cmd)
 {
 	t_file	*file;
+	int exit_status;
 
+	exit_status = 0;
 	file = cmd->infile;
+	if (!file || !file->name)
+		return (perror(file->name), 1);
 	while (file && file->name)
 	{
 		file->fd = open(file->name, O_RDONLY);
@@ -39,6 +33,7 @@ void	open_infile(t_cmd *cmd)
 		close(file->fd);
 		file = file->next;
 	}
+	return (0);
 }
 
 void	open_outfile(t_cmd *cmd)
@@ -49,11 +44,9 @@ void	open_outfile(t_cmd *cmd)
 	while (file && file->name)
 	{
 		if (file->append)
-			file->fd = open(file->name, O_WRONLY | O_CREAT | O_APPEND,
-					0644);
+			file->fd = open(file->name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		else
-			file->fd = open(file->name, O_WRONLY | O_CREAT | O_TRUNC,
-					0644);
+			file->fd = open(file->name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (file->fd == -1)
 		{
 			error(cmd, file->name, 1);
@@ -89,7 +82,7 @@ int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h, t_env 
 			break ;
 		}
 		if (ft_strncmp(heredoc->delimiter, line, ft_strlen(line)) == 0
-				&& ft_strlen(line) == ft_strlen(heredoc->delimiter))
+			&& ft_strlen(line) == ft_strlen(heredoc->delimiter))
 			break ;
 		if (ft_strlen(line) > 1024)
 		{
@@ -124,13 +117,41 @@ int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
 	return (pipe_fd_h[READ]);
 }
 
-void	manage_heredocs(t_cmd *cmd, int prev_read_fd, t_env *env)
+int	check_heredoc_total(t_cmd *cmd)
+{
+	int			count;
+	t_cmd		*tmp;
+	t_heredoc	*heredoc;
+
+	count = 0;
+	tmp = cmd;
+	while (tmp)
+	{
+		heredoc = tmp->heredocs;
+		while (heredoc)
+		{
+			count++;
+			heredoc = heredoc->next;
+		}
+		tmp = tmp->next;
+	}
+	if (count > 16)
+	{
+		printf("minishell: maximum here-document count exceeded\n");
+		return (2);
+	}
+	return (0);
+}
+
+int	manage_heredocs(t_cmd *cmd, int prev_read_fd, t_env *env)
 {
 	t_heredoc	*heredoc;
 	pid_t		pid;
 	int			pipe_fd_h[2];
 
 	heredoc = cmd->heredocs;
+	if (check_heredoc_total(cmd) == 2)
+		return (2);
 	while (heredoc)
 	{
 		if (pipe(pipe_fd_h) == -1)
@@ -158,4 +179,5 @@ void	manage_heredocs(t_cmd *cmd, int prev_read_fd, t_env *env)
 		}
 		heredoc = heredoc->next;
 	}
+	return (0);
 }

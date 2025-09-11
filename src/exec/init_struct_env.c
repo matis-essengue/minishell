@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 20:17:52 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 16:38:38 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/04 15:37:46 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ char	**build_mini_env(void)
 {
 	char	**mini_env;
 
+	printf("build_mini_env\n");
 	mini_env = malloc(sizeof(char *) * (4));
 	if (!mini_env)
 		return (NULL);
