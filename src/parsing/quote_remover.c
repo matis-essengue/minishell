@@ -90,13 +90,18 @@ char	*_remove_quotes(char *word)
 void	rm_quotes_for_all_files(t_file *first_file)
 {
 	t_file	*current_file;
+	char	*old_name;
 
 	current_file = first_file;
 	while (current_file)
 	{
+		old_name = current_file->name;
 		current_file->name = _remove_quotes(current_file->name);
 		if (!current_file->name)
+		{
+			current_file->name = old_name;
 			return ;
+		}
 		current_file = current_file->next;
 	}
 }
@@ -104,13 +109,18 @@ void	rm_quotes_for_all_files(t_file *first_file)
 void	rm_quotes_for_all_heredocs(t_heredoc *first_heredoc)
 {
 	t_heredoc	*current_heredoc;
+	char		*old_delimiter;
 
 	current_heredoc = first_heredoc;
 	while (current_heredoc)
 	{
+		old_delimiter = current_heredoc->delimiter;
 		current_heredoc->delimiter = _remove_quotes(current_heredoc->delimiter);
 		if (!current_heredoc->delimiter)
+		{
+			current_heredoc->delimiter = old_delimiter;
 			return ;
+		}
 		current_heredoc = current_heredoc->next;
 	}
 }
@@ -131,9 +141,13 @@ void	remove_quotes(t_cmd *cmds)
 		i = 0;
 		if (current->name)
 		{
+			char *old_name = current->name;
 			current->name = _remove_quotes(current->name);
 			if (!current->name)
+			{
+				current->name = old_name;
 				return ;
+			}
 		}
 		if (current->infile)
 			rm_quotes_for_all_files(current->infile);
@@ -145,9 +159,13 @@ void	remove_quotes(t_cmd *cmds)
 		{
 			while (current->args[i])
 			{
+				char *old_arg = current->args[i];
 				current->args[i] = _remove_quotes(current->args[i]);
 				if (!current->args[i])
+				{
+					current->args[i] = old_arg;
 					return ;
+				}
 				i++;
 			}
 		}
