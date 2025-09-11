@@ -11,6 +11,7 @@
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
+# include <sys/ioctl.h>
 
 # define FD_STDIN 0
 # define FD_STDOUT 1
@@ -101,9 +102,9 @@ int							wait_child(pid_t *pid, int size);
 
 // manage_files
 
-void						open_infile(t_cmd *cmd, t_cmd *cmd_list, t_env *env);
+int							open_infile(t_cmd *cmd, t_cmd *cmd_list, t_env *env);
 void						open_outfile(t_cmd *cmd, t_cmd *cmd_list, t_env *env);
-void						manage_heredocs(t_cmd *current, t_cmd *cmd, int prev_read_fd, t_env *env);
+int							manage_heredocs(t_cmd *current, t_cmd *cmd, int prev_read_fd, t_env *env);
 
 // get_path
 

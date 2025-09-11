@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/11 17:55:45 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/11 20:06:27 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 	int		prev_read_fd;
 	int		i;
 	t_cmd	*first_cmd;
+	// int		hd_status;
 
 	i = 0;
 	prev_read_fd = -1;

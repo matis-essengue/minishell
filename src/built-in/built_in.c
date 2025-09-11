@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:48:50 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/11 18:07:46 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/11 19:24:27 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,13 @@ int	redir_and_restore_stdout(t_cmd *cmd)
         if (file->fd == -1)
         {
 			perror(file->name);
+			dup2(prev_old_fd, FD_STDOUT);
 			close(prev_old_fd);
 			return (-1);
         }
-			dup2(file->fd, FD_STDOUT);
-			close(file->fd);
-			file = file->next;
+		dup2(file->fd, FD_STDOUT);
+		close(file->fd);
+		file = file->next;
     }
 	return (prev_old_fd);
 }

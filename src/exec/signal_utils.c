@@ -6,13 +6,13 @@
 /*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 15:06:05 by matis             #+#    #+#             */
-/*   Updated: 2025/09/09 18:53:09 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/11 20:03:55 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/exec.h"
 
-volatile sig_atomic_t	g_signal;
+// volatile sig_atomic_t	g_signal;
 
 
