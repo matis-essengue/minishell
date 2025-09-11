@@ -1352,3 +1352,108 @@ minishell> ==8612==
 ==8612== For lists of detected and suppressed errors, rerun with: -s
 ==8612== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
 minishell> 
+
+
+cursor problem 
+
+minishell: syntax error near unexpected token `|'
+minishell> << q << w << e << r << t <| < y << u | << i << o|  << p << a << s << d << f << g << h << z
+minishell: syntax error near unexpected token `|'
+minishell> << q << w << e << r << t <| < y << u | << i << o|  << p << a << s << d << f << g << h << z
+
+
+
+
+
+
+
+minishell> echo armand mosnier lol bonjour | cat -e
+==149691== Memcheck, a memory error detector
+==149691== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==149691== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==149691== Command: /usr/bin/cat -e
+==149691== 
+==149690== 
+==149690== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==149690== 
+==149690== HEAP SUMMARY:
+==149690==     in use at exit: 214,680 bytes in 300 blocks
+==149690==   total heap usage: 630 allocs, 330 frees, 238,635 bytes allocated
+==149690== 
+==149690== 9 bytes in 2 blocks are still reachable in loss record 5 of 79
+==149690==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==149690==    by 0x408619: ft_strjoin (in /home/armosnie/42/3_circle/minishell/minishell)
+==149690==    by 0x402CFF: _remove_quotes (quote_remover.c:75)
+==149690==    by 0x402EAF: remove_quotes (quote_remover.c:109)
+==149690==    by 0x401544: parse (parser.c:52)
+==149690==    by 0x4013F2: main (main.c:49)
+==149690== 
+==149690== 16 bytes in 1 blocks are still reachable in loss record 11 of 79
+==149690==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==149690==    by 0x405765: init_env (init_struct_env.c:84)
+==149690==    by 0x40136B: main (main.c:36)
+==149690== 
+==149690== 30 bytes in 5 blocks are still reachable in loss record 20 of 79
+==149690==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==149690==    by 0x408619: ft_strjoin (in /home/armosnie/42/3_circle/minishell/minishell)
+==149690==    by 0x402CFF: _remove_quotes (quote_remover.c:75)
+==149690==    by 0x402F3D: remove_quotes (quote_remover.c:118)
+==149690==    by 0x401544: parse (parser.c:52)
+==149690==    by 0x4013F2: main (main.c:49)
+==149690== 
+==149690== 56 bytes in 2 blocks are still reachable in loss record 27 of 79
+==149690==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==149690==    by 0x4037E3: allocate_and_fill_args (tokens_to_cmds_utils.c:23)
+==149690==    by 0x403396: process_command (tokens_to_cmds.c:71)
+==149690==    by 0x403300: tokens_to_cmds (tokens_to_cmds.c:96)
+==149690==    by 0x40152E: parse (parser.c:50)
+==149690==    by 0x4013F2: main (main.c:49)
+==149690== 
+==149690== 440 bytes in 1 blocks are still reachable in loss record 35 of 79
+==149690==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==149690==    by 0x405691: copy_env (init_struct_env.c:61)
+==149690==    by 0x40578A: init_env (init_struct_env.c:87)
+==149690==    by 0x40136B: main (main.c:36)
+==149690== 
+==149690== 1,096 bytes in 1 blocks are still reachable in loss record 48 of 79
+==149690==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==149690==    by 0x4032A5: tokens_to_cmds (tokens_to_cmds.c:87)
+==149690==    by 0x40152E: parse (parser.c:50)
+==149690==    by 0x4013F2: main (main.c:49)
+==149690== 
+==149690== 1,096 bytes in 1 blocks are still reachable in loss record 49 of 79
+==149690==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==149690==    by 0x403435: handle_pipe (tokens_to_cmds.c:55)
+==149690==    by 0x403322: tokens_to_cmds (tokens_to_cmds.c:99)
+==149690==    by 0x40152E: parse (parser.c:50)
+==149690==    by 0x4013F2: main (main.c:49)
+==149690== 
+==149690== 3,534 bytes in 54 blocks are still reachable in loss record 54 of 79
+==149690==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==149690==    by 0x408566: ft_strdup (in /home/armosnie/42/3_circle/minishell/minishell)
+==149690==    by 0x4056B9: copy_env (init_struct_env.c:64)
+==149690==    by 0x40578A: init_env (init_struct_env.c:87)
+==149690==    by 0x40136B: main (main.c:36)
+==149690== 
+==149690== LEAK SUMMARY:
+==149690==    definitely lost: 0 bytes in 0 blocks
+==149690==    indirectly lost: 0 bytes in 0 blocks
+==149690==      possibly lost: 0 bytes in 0 blocks
+==149690==    still reachable: 6,277 bytes in 67 blocks
+==149690==         suppressed: 208,403 bytes in 233 blocks
+==149690== 
+==149690== For lists of detected and suppressed errors, rerun with: -s
+==149690== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+pos 0$
+armand mosnier lol bonjour $
+==149691== 
+==149691== FILE DESCRIPTORS: 0 open (0 std) at exit.
+==149691== 
+==149691== HEAP SUMMARY:
+==149691==     in use at exit: 0 bytes in 0 blocks
+==149691==   total heap usage: 32 allocs, 32 frees, 798,707 bytes allocated
+==149691== 
+==149691== All heap blocks were freed -- no leaks are possible
+==149691== 
+==149691== For lists of detected and suppressed errors, rerun with: -s
+==149691== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
