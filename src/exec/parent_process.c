@@ -68,7 +68,7 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 		{
 			if (cmd->heredocs)
 			{
-				manage_heredocs(cmd);
+				manage_heredocs(cmd, prev_read_fd, env);
 				t_heredoc *heredoc = cmd->heredocs;
 				while (heredoc)
 				{
@@ -84,19 +84,43 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 			continue;
 		}
 		if (cmd->heredocs)
-			manage_heredocs(cmd);
+			manage_heredocs(cmd, prev_read_fd, env);
 		pipe_check_or_create(cmd, prev_read_fd);
 		pid[i] = fork();
 		pidarray_check(cmd, pid, prev_read_fd, i);
 		if (pid[i] == 0)
 			child_call(cmd, cmd_list, env, prev_read_fd);
 		else
+		{
 			prev_read_fd = parent_call(cmd, prev_read_fd);
+			if (cmd->heredocs)
+			{
+				t_heredoc *heredoc = cmd->heredocs;
+				while (heredoc)
+				{
+					if (heredoc->heredoc_fd != -1)
+					{
+						close(heredoc->heredoc_fd);
+						heredoc->heredoc_fd = -1;
+					}
+					heredoc = heredoc->next;
+				}
+			}
+		}
 		i++;
 		cmd = cmd->next;
 	}
 	if (prev_read_fd != -1)
 		close(prev_read_fd);
+	cmd = first_cmd;
+	while (cmd)
+	{
+		if (cmd->pipefd[READ] > 2)
+			close(cmd->pipefd[READ]);
+		if (cmd->pipefd[WRITE] > 2)
+			close(cmd->pipefd[WRITE]);
+		cmd = cmd->next;
+	}
 	exit_status = wait_child(pid, i);
 	return (exit_status);
 }

@@ -53,7 +53,11 @@ int	main(int argc, char **argv, char **envp)
 			free_all_struct(cmd);
 		cmd = parse(line, my_env);
 		if (cmd != NULL)
+		{
 			my_env->exit_status = execute_command(cmd, my_env);
+			free_all_struct(cmd);
+			cmd = NULL;
+		}
 	}
 	return (free_my_env(my_env), 0);
 }

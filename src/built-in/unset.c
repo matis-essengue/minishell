@@ -58,13 +58,18 @@ int	get_my_unset_env(char ***env, char *new_var)
 		{
 			tmp = unset_replace_my_env(*env, var_path);
 			if (!tmp)
+			{
+				free(var_path);
 				return (1);
+			}
 			free_array(*env);
 			*env = tmp;
+			free(var_path);
 			return (0);
 		}
 		i++;
 	}
+	free(var_path);
 	return (0);
 }
 

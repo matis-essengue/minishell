@@ -78,7 +78,7 @@ void						pipe_and_pid_error(t_cmd *cmd, t_heredoc *heredoc,
 								int *pipe_fd_h, int err);
 void						free_array(char **split);
 void						close_all_fd(int *fd);
-void						command_not_found_error(t_cmd *cmd,
+void						command_not_found_error(t_cmd *cmd, t_env *env,
 								char *command_name);
 
 // parent process
@@ -103,11 +103,11 @@ int							wait_child(pid_t *pid, int size);
 
 void						open_infile(t_cmd *cmd);
 void						open_outfile(t_cmd *cmd);
-void						manage_heredocs(t_cmd *cmd);
+void						manage_heredocs(t_cmd *cmd, int prev_read_fd, t_env *env);
 
 // get_path
 
-bool						exe_my_cmd(t_cmd *cmd, t_env *env);
+bool						exe_my_cmd(t_cmd *cmd, t_cmd *cmd_list, t_env *env);
 
 // init interface utilisateur
 

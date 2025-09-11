@@ -6,17 +6,18 @@
 /*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 11:32:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 21:17:53 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/11 11:04:11 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-void	command_not_found_error(t_cmd *cmd, char *command_name)
+void	command_not_found_error(t_cmd *cmd, t_env *env, char *command_name)
 {
 	printf("minishell: %s: command not found\n", command_name);
 	free_all_struct(cmd);
+	free_my_env(env);
 	exit(127);
 }
 
