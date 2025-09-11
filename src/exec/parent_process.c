@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 20:35:19 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:55:45 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 		{
 			if (cmd->heredocs)
 			{
-				manage_heredocs(cmd, prev_read_fd, env);
+				manage_heredocs(cmd, first_cmd, prev_read_fd, env);
 				t_heredoc *heredoc = cmd->heredocs;
 				while (heredoc)
 				{
@@ -84,7 +84,7 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 			continue;
 		}
 		if (cmd->heredocs)
-			manage_heredocs(cmd, prev_read_fd, env);
+			manage_heredocs(cmd, first_cmd, prev_read_fd, env);
 		pipe_check_or_create(cmd, prev_read_fd);
 		pid[i] = fork();
 		pidarray_check(cmd, pid, prev_read_fd, i);

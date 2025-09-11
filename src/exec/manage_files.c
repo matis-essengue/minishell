@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 19:47:28 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:55:18 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,13 +114,13 @@ int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
 	return (pipe_fd_h[READ]);
 }
 
-void	manage_heredocs(t_cmd *cmd, int prev_read_fd, t_env *env)
+void	manage_heredocs(t_cmd *current, t_cmd *cmd, int prev_read_fd, t_env *env)
 {
 	t_heredoc	*heredoc;
 	pid_t		pid;
 	int			pipe_fd_h[2];
 
-	heredoc = cmd->heredocs;
+	heredoc = current->heredocs;
 	while (heredoc)
 	{
 		if (pipe(pipe_fd_h) == -1)

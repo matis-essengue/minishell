@@ -103,7 +103,7 @@ int							wait_child(pid_t *pid, int size);
 
 void						open_infile(t_cmd *cmd);
 void						open_outfile(t_cmd *cmd);
-void						manage_heredocs(t_cmd *cmd, int prev_read_fd, t_env *env);
+void						manage_heredocs(t_cmd *current, t_cmd *cmd, int prev_read_fd, t_env *env);
 
 // get_path
 
