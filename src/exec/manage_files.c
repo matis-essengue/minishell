@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 18:53:17 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/11 11:00:13 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,9 @@ void	open_outfile(t_cmd *cmd)
 	while (file && file->name)
 	{
 		if (file->append)
-			file->fd = open(file->name, O_WRONLY | O_CREAT | O_APPEND,
-					0644);
+			file->fd = open(file->name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		else
-			file->fd = open(file->name, O_WRONLY | O_CREAT | O_TRUNC,
-					0644);
+			file->fd = open(file->name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (file->fd == -1)
 		{
 			error(cmd, file->name, 1);
@@ -69,7 +67,7 @@ int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h)
 			break ;
 		}
 		if (ft_strncmp(heredoc->delimiter, line, ft_strlen(line)) == 0
-				&& ft_strlen(line) == ft_strlen(heredoc->delimiter))
+			&& ft_strlen(line) == ft_strlen(heredoc->delimiter))
 			break ;
 		if (ft_strlen(line) > 1024)
 			return (close(pipe_fd_h[WRITE]), free(line), exit(0), 0);
@@ -94,13 +92,41 @@ int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
 	return (pipe_fd_h[READ]);
 }
 
-void	manage_heredocs(t_cmd *cmd)
+int	check_heredoc_total(t_cmd *cmd)
+{
+	int			count;
+	t_cmd		*tmp;
+	t_heredoc	*heredoc;
+
+	count = 0;
+	tmp = cmd;
+	while (tmp)
+	{
+		heredoc = tmp->heredocs;
+		while (heredoc)
+		{
+			count++;
+			heredoc = heredoc->next;
+		}
+		tmp = tmp->next;
+	}
+	if (count > 16)
+	{
+		printf("minishell: maximum here-document count exceeded\n");
+		return (2);
+	}
+	return (0);
+}
+
+int	manage_heredocs(t_cmd *cmd)
 {
 	t_heredoc	*heredoc;
 	pid_t		pid;
 	int			pipe_fd_h[2];
 
 	heredoc = cmd->heredocs;
+	if (check_heredoc_total(cmd) == 2)
+		return (2);
 	while (heredoc)
 	{
 		if (pipe(pipe_fd_h) == -1)
@@ -126,4 +152,5 @@ void	manage_heredocs(t_cmd *cmd)
 		}
 		heredoc = heredoc->next;
 	}
+	return (0);
 }

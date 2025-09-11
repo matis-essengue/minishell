@@ -102,7 +102,7 @@ int							wait_child(pid_t *pid, int size);
 
 void						open_infile(t_cmd *cmd);
 void						open_outfile(t_cmd *cmd);
-void						manage_heredocs(t_cmd *cmd);
+int							manage_heredocs(t_cmd *cmd);
 
 // get_path
 
@@ -143,6 +143,5 @@ void						handle_signals(int interactive);
 void						handle_child_signals(void);
 void						handle_heredoc_signals(void);
 void						parent_ignore_signals(void);
-
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parent_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 18:53:14 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/11 10:58:45 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 		{
 			if (cmd->heredocs)
 			{
-				manage_heredocs(cmd);
+				if (manage_heredocs(cmd) == 2)
+					return (2);
 				t_heredoc *heredoc = cmd->heredocs;
 				while (heredoc)
 				{
@@ -81,8 +82,11 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 			cmd = cmd->next;
 			continue;
 		}
-		if (cmd->heredocs)
-			manage_heredocs(cmd);
+		if (cmd->heredocs && manage_heredocs(cmd) == 2)
+		{
+			exit_status = 2;
+			break ;
+		}
 		pipe_check_or_create(cmd, prev_read_fd);
 		pid[i] = fork();
 		pidarray_check(cmd, pid, prev_read_fd, i);
