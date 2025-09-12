@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 16:43:06 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/08 17:08:56 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/11 11:04:41 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ char	**recup_full_cmd(t_cmd *cmd)
 	return (full_cmd);
 }
 
-bool	exe_my_cmd(t_cmd *cmd, t_env *env)
+bool	exe_my_cmd(t_cmd *cmd, t_cmd *cmd_list, t_env *env)
 {
 	char	**path;
 	char	**full_cmd;
@@ -99,16 +99,20 @@ bool	exe_my_cmd(t_cmd *cmd, t_env *env)
 	if (full_cmd == NULL)
 		return (false);
 	if (access(full_cmd[0], F_OK | X_OK) == 0)
+	{
 		execve(full_cmd[0], full_cmd, env->env);
+		free_array(full_cmd);
+		return (false);
+	}
 	path = get_path(env->env);
 	if (path == NULL)
 	{
 		free_array(full_cmd);
-		command_not_found_error(cmd, cmd->name);
+		command_not_found_error(cmd_list, env, cmd->name);
 	}
 	exec(full_cmd[0], full_cmd, path, env->env);
 	free_array(path);
 	free_array(full_cmd);
-	command_not_found_error(cmd, cmd->name);
+	command_not_found_error(cmd_list, env, cmd->name);
 	return (false);
 }

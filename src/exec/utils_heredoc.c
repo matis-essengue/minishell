@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_heredoc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 11:17:33 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/08 11:22:35 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/11 14:31:15 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,20 @@ void	unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list)
 	t_heredoc	*heredoc;
 
 	tmp = cmd_list;
-	while (tmp != current)
+	while (tmp)
 	{
-		heredoc = tmp->heredocs;
-		while (heredoc)
+		if (tmp != current)
 		{
-			if (heredoc->heredoc_fd != -1)
+			heredoc = tmp->heredocs;
+			while (heredoc)
 			{
-				close(heredoc->heredoc_fd);
-				heredoc->heredoc_fd = -1;
+				if (heredoc->heredoc_fd != -1)
+				{
+					close(heredoc->heredoc_fd);
+					heredoc->heredoc_fd = -1;
+				}
+				heredoc = heredoc->next;
 			}
-			heredoc = heredoc->next;
 		}
 		tmp = tmp->next;
 	}
