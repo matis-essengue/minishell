@@ -6,13 +6,14 @@
 /*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 17:50:43 by matis             #+#    #+#             */
-/*   Updated: 2025/09/09 17:19:45 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/11 21:23:45 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/exec.h"
 
+volatile sig_atomic_t	g_signal;
 
 void	handle_sigint(int signal)
 {
@@ -60,15 +61,13 @@ void	handle_child_signals(void)
 	signal(SIGINT, SIG_DFL);
 }
 
-
-
 void	handle_signal_heredoc(int signal)
 {
 	g_signal = signal;
-	printf("\n");
+	write(STDOUT_FILENO, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
-	exit(130);
+	ioctl(STDOUT_FILENO, TIOCSTI, "\n");
 }
 
 void	handle_heredoc_signals(void)	

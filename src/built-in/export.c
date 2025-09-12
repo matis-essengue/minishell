@@ -6,7 +6,7 @@
 /*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:58 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/09 19:09:35 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/09 15:14:35 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,6 @@ int	built_in_export(t_cmd *cmd, t_env *env, int code_error)
 			if (cmd->args && cmd->args[i] && get_my_export_env(&(env->env),
 					cmd->args[i]) == 1)
 				return (1);
-		if (code_error == -404)
-			code_error = 0;
 		i++;
 	}
 	return (code_error);

@@ -6,14 +6,14 @@
 /*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 13:46:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/11 14:26:37 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/11 18:02:14 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-void	files_and_management(t_cmd *cmd, t_cmd *cmd_list, int prev_read_fd)
+void	files_and_management(t_cmd *cmd, t_cmd *cmd_list, int prev_read_fd, t_env *env)
 {
 	t_heredoc *last_hd;
 
@@ -25,14 +25,14 @@ void	files_and_management(t_cmd *cmd, t_cmd *cmd_list, int prev_read_fd)
 		close(last_hd->heredoc_fd);
 	}
 	else if (cmd->infile && cmd->infile->name)
-		open_infile(cmd);
+		open_infile(cmd, cmd_list, env);
 	else if (prev_read_fd != -1)
 	{
 		dup2(prev_read_fd, FD_STDIN);
 		close(prev_read_fd);
 	}
 	if (cmd->outfile && cmd->outfile->name)
-		open_outfile(cmd);
+		open_outfile(cmd, cmd_list, env);
 }
 
 
@@ -41,7 +41,7 @@ void	child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env, int prev_read_fd)
 	int	exit_status;
 	t_cmd	*tmp;
 
-	files_and_management(cmd, cmd_list, prev_read_fd);
+	files_and_management(cmd, cmd_list, prev_read_fd, env);
 	tmp = cmd_list;
 	while (tmp)
 	{

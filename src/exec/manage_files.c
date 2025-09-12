@@ -3,22 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   manage_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/11 15:12:15 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/11 21:17:14 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-int	open_infile(t_cmd *cmd)
+int	open_infile(t_cmd *cmd, t_cmd *cmd_list, t_env *env)
 {
 	t_file	*file;
-	int exit_status;
 
-	exit_status = 0;
 	file = cmd->infile;
 	if (!file || !file->name)
 		return (perror(file->name), 1);
@@ -26,8 +24,11 @@ int	open_infile(t_cmd *cmd)
 	{
 		file->fd = open(file->name, O_RDONLY);
 		if (file->fd == -1)
-		{
-			error(cmd, file->name, 1);
+		{	
+			perror(file->name);
+			free_all_struct(cmd_list);
+			free_my_env(env);
+			exit(1);
 		}
 		dup2(file->fd, FD_STDIN);
 		close(file->fd);
@@ -36,7 +37,7 @@ int	open_infile(t_cmd *cmd)
 	return (0);
 }
 
-void	open_outfile(t_cmd *cmd)
+void	open_outfile(t_cmd *cmd, t_cmd *cmd_list, t_env *env)
 {
 	t_file	*file;
 
@@ -44,12 +45,17 @@ void	open_outfile(t_cmd *cmd)
 	while (file && file->name)
 	{
 		if (file->append)
-			file->fd = open(file->name, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			file->fd = open(file->name, O_WRONLY | O_CREAT | O_APPEND,
+					0644);
 		else
-			file->fd = open(file->name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			file->fd = open(file->name, O_WRONLY | O_CREAT | O_TRUNC,
+					0644);
 		if (file->fd == -1)
 		{
-			error(cmd, file->name, 1);
+			perror(file->name);
+			free_all_struct(cmd_list);
+			free_my_env(env);
+			exit(1);
 		}
 		dup2(file->fd, FD_STDOUT);
 		close(file->fd);
@@ -62,7 +68,7 @@ int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h, t_env 
 	char	*line;
 	t_cmd	*tmp;
 
-	(void)cmd;
+	// (void)cmd;
 	close(pipe_fd_h[READ]);
 	tmp = cmd;
 	while (tmp)
@@ -73,16 +79,27 @@ int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h, t_env 
 			close(tmp->pipefd[WRITE]);
 		tmp = tmp->next;
 	}
+	g_signal = 0;
 	handle_heredoc_signals();
 	while (1)
 	{
+		
 		line = readline("\033[36mheredoc> \033[0m");
-		if (line == NULL)
+		if (g_signal == SIGINT)
+		{
+			if (line)
+				free(line);
+			close(pipe_fd_h[WRITE]);
+			free_all_struct(cmd);
+			free_my_env(env);
+			exit(130);
+		}
+		if (line == NULL || g_signal == SIGINT)
 		{
 			break ;
 		}
 		if (ft_strncmp(heredoc->delimiter, line, ft_strlen(line)) == 0
-			&& ft_strlen(line) == ft_strlen(heredoc->delimiter))
+				&& ft_strlen(line) == ft_strlen(heredoc->delimiter))
 			break ;
 		if (ft_strlen(line) > 1024)
 		{
@@ -106,14 +123,15 @@ int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h, t_env 
 
 int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
 {
-	// int	status;
+	int	status;
+	
 	close(pipe_fd_h[WRITE]);
-	waitpid(pid, NULL, 0);
-	// if (WIFSIGNALED(status))
-	// {
-	// 	close(pipe_fd_h[READ]);
-	// 	return (-1);
-	// }
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status) || (WIFEXITED(status) && WEXITSTATUS(status) == 130))
+	{
+		close(pipe_fd_h[READ]);
+		return (-1);
+	}
 	return (pipe_fd_h[READ]);
 }
 
@@ -143,13 +161,13 @@ int	check_heredoc_total(t_cmd *cmd)
 	return (0);
 }
 
-int	manage_heredocs(t_cmd *cmd, int prev_read_fd, t_env *env)
+int	manage_heredocs(t_cmd *current, t_cmd *cmd, int prev_read_fd, t_env *env)
 {
 	t_heredoc	*heredoc;
 	pid_t		pid;
 	int			pipe_fd_h[2];
 
-	heredoc = cmd->heredocs;
+	heredoc = current->heredocs;
 	if (check_heredoc_total(cmd) == 2)
 		return (2);
 	while (heredoc)
