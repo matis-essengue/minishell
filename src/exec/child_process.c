@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 13:46:05 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/11 18:02:14 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/12 14:37:16 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-void	files_and_management(t_cmd *cmd, t_cmd *cmd_list, int prev_read_fd, t_env *env)
+void	files_and_management(t_cmd *cmd, t_cmd *cmd_list, int prev_read_fd,
+		t_env *env)
 {
-	t_heredoc *last_hd;
+	t_heredoc	*last_hd;
 
 	unused_heredoc_fd(cmd, cmd_list);
 	last_hd = get_last_heredoc(cmd);
@@ -35,12 +36,30 @@ void	files_and_management(t_cmd *cmd, t_cmd *cmd_list, int prev_read_fd, t_env *
 		open_outfile(cmd, cmd_list, env);
 }
 
+void	manage_built_in_or_cmd(t_cmd *cmd, t_cmd *cmd_list, int exit_status,
+		t_env *env)
+{
+	if (is_built_in(cmd))
+	{
+		exit_status = child_process_built_in(cmd, env);
+		free_all_struct(cmd_list);
+		free_my_env(env);
+		exit(exit_status);
+	}
+	if (!exe_my_cmd(cmd, cmd_list, env))
+	{
+		free_all_struct(cmd_list);
+		free_my_env(env);
+		exit(127);
+	}
+}
 
 void	child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env, int prev_read_fd)
 {
-	int	exit_status;
+	int		exit_status;
 	t_cmd	*tmp;
 
+	exit_status = 0;
 	files_and_management(cmd, cmd_list, prev_read_fd, env);
 	tmp = cmd_list;
 	while (tmp)
@@ -61,19 +80,7 @@ void	child_call(t_cmd *cmd, t_cmd *cmd_list, t_env *env, int prev_read_fd)
 		close(cmd->pipefd[WRITE]);
 	}
 	handle_child_signals();
-	if (is_built_in(cmd))
-	{
-		exit_status = child_process_built_in(cmd, env);
-		free_all_struct(cmd_list);
-		free_my_env(env);
-		exit(exit_status);
-	}
-	if (!exe_my_cmd(cmd, cmd_list, env))
-	{
-		free_all_struct(cmd_list);
-		free_my_env(env);
-		exit(127);
-	}
+	manage_built_in_or_cmd(cmd, cmd_list, exit_status, env);
 }
 
 int	wait_child(pid_t *pid, int size)

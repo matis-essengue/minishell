@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_in.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:48:50 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/11 19:24:27 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/12 12:41:13 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,28 @@
 
 int	redir_and_restore_stdout(t_cmd *cmd)
 {
-	int	prev_old_fd;
-	t_file *file;
+	int		prev_old_fd;
+	t_file	*file;
 
 	prev_old_fd = dup(FD_STDOUT);
 	file = cmd->outfile;
-    while (file && file->name)
-    {
-    	if (file->append)
-        	file->fd = open(file->name, O_WRONLY | O_CREAT | O_APPEND, 0644);
-    	else
-        	file->fd = open(file->name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        if (file->fd == -1)
-        {
+	while (file && file->name)
+	{
+		if (file->append)
+			file->fd = open(file->name, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			file->fd = open(file->name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (file->fd == -1)
+		{
 			perror(file->name);
 			dup2(prev_old_fd, FD_STDOUT);
 			close(prev_old_fd);
 			return (-1);
-        }
+		}
 		dup2(file->fd, FD_STDOUT);
 		close(file->fd);
 		file = file->next;
-    }
+	}
 	return (prev_old_fd);
 }
 

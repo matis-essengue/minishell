@@ -7,11 +7,11 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/ioctl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
-# include <sys/ioctl.h>
 
 # define FD_STDIN 0
 # define FD_STDOUT 1
@@ -70,7 +70,6 @@ int							built_in_exit(t_cmd *cmd, t_env *env);
 // errors
 
 void						free_all_struct(t_cmd *cmd);
-void						free_single_cmd(t_cmd *cmd);
 void						error(t_cmd *cmd, char *str, int code);
 
 // errors 2
@@ -88,9 +87,17 @@ int							execute_command(t_cmd *cmd, t_env *env);
 int							pipe_function(t_cmd *cmd, pid_t *pid,
 								int exit_status, t_env *env);
 int							parent_call(t_cmd *cmd, int prev_read_fd);
-void						pipe_check_or_create(t_cmd *cmd, int prev_read_fd);
 void						pidarray_check(t_cmd *cmd, pid_t *pid,
 								int prev_read_fd, int i);
+
+// parent process
+
+void						pipe_check_or_create(t_cmd *cmd, pid_t *pid, int i,
+								int prev_read_fd);
+void						pidarray_check(t_cmd *cmd, pid_t *pid,
+								int prev_read_fd, int i);
+int							single_heredoc(t_cmd *cmd, t_cmd *first_cmd,
+								t_env *env, int prev_read_fd);
 
 // child process
 
@@ -102,9 +109,21 @@ int							wait_child(pid_t *pid, int size);
 
 // manage_files
 
-int							open_infile(t_cmd *cmd, t_cmd *cmd_list, t_env *env);
-void						open_outfile(t_cmd *cmd, t_cmd *cmd_list, t_env *env);
-int							manage_heredocs(t_cmd *current, t_cmd *cmd, int prev_read_fd, t_env *env);
+int							open_infile(t_cmd *cmd, t_cmd *cmd_list,
+								t_env *env);
+void						open_outfile(t_cmd *cmd, t_cmd *cmd_list,
+								t_env *env);
+
+// heredoc
+
+int							manage_heredocs(t_cmd *current, t_cmd *cmd,
+								int prev_read_fd, t_env *env);
+
+// utils heredoc
+
+t_heredoc					*get_last_heredoc(t_cmd *cmd);
+void						unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
+int							check_heredoc_total(t_cmd *cmd);
 
 // get_path
 
@@ -129,11 +148,6 @@ int							count_args(t_cmd *cmd);
 int							count_all_cmd_args(t_cmd *cmd);
 void						print_array(char **array);
 
-// utils heredoc
-
-t_heredoc					*get_last_heredoc(t_cmd *cmd);
-void						unused_heredoc_fd(t_cmd *current, t_cmd *cmd_list);
-
 // term state
 
 int							save_termios(struct termios *out_saved);
@@ -145,6 +159,5 @@ void						handle_signals(int interactive);
 void						handle_child_signals(void);
 void						handle_heredoc_signals(void);
 void						parent_ignore_signals(void);
-
 
 #endif

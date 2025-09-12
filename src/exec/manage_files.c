@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_files.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 14:52:39 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/11 21:17:14 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/12 12:41:35 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	open_infile(t_cmd *cmd, t_cmd *cmd_list, t_env *env)
 	{
 		file->fd = open(file->name, O_RDONLY);
 		if (file->fd == -1)
-		{	
+		{
 			perror(file->name);
 			free_all_struct(cmd_list);
 			free_my_env(env);
@@ -45,11 +45,9 @@ void	open_outfile(t_cmd *cmd, t_cmd *cmd_list, t_env *env)
 	while (file && file->name)
 	{
 		if (file->append)
-			file->fd = open(file->name, O_WRONLY | O_CREAT | O_APPEND,
-					0644);
+			file->fd = open(file->name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		else
-			file->fd = open(file->name, O_WRONLY | O_CREAT | O_TRUNC,
-					0644);
+			file->fd = open(file->name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (file->fd == -1)
 		{
 			perror(file->name);
@@ -61,141 +59,4 @@ void	open_outfile(t_cmd *cmd, t_cmd *cmd_list, t_env *env)
 		close(file->fd);
 		file = file->next;
 	}
-}
-
-int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h, t_env *env)
-{
-	char	*line;
-	t_cmd	*tmp;
-
-	// (void)cmd;
-	close(pipe_fd_h[READ]);
-	tmp = cmd;
-	while (tmp)
-	{
-		if (tmp->pipefd[READ] > 2)
-			close(tmp->pipefd[READ]);
-		if (tmp->pipefd[WRITE] > 2)
-			close(tmp->pipefd[WRITE]);
-		tmp = tmp->next;
-	}
-	g_signal = 0;
-	handle_heredoc_signals();
-	while (1)
-	{
-		
-		line = readline("\033[36mheredoc> \033[0m");
-		if (g_signal == SIGINT)
-		{
-			if (line)
-				free(line);
-			close(pipe_fd_h[WRITE]);
-			free_all_struct(cmd);
-			free_my_env(env);
-			exit(130);
-		}
-		if (line == NULL || g_signal == SIGINT)
-		{
-			break ;
-		}
-		if (ft_strncmp(heredoc->delimiter, line, ft_strlen(line)) == 0
-				&& ft_strlen(line) == ft_strlen(heredoc->delimiter))
-			break ;
-		if (ft_strlen(line) > 1024)
-		{
-			free_all_struct(cmd);
-			free_my_env(env);
-			close(pipe_fd_h[WRITE]);
-			free(line);
-			exit(0);
-		}
-		write(pipe_fd_h[WRITE], line, ft_strlen(line));
-		write(pipe_fd_h[WRITE], "\n", 1);
-		free(line);
-	}
-	close(pipe_fd_h[WRITE]);
-	free_all_struct(cmd);
-	free_my_env(env);
-	free(line);
-	exit(0);
-	return (0);
-}
-
-int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
-{
-	int	status;
-	
-	close(pipe_fd_h[WRITE]);
-	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status) || (WIFEXITED(status) && WEXITSTATUS(status) == 130))
-	{
-		close(pipe_fd_h[READ]);
-		return (-1);
-	}
-	return (pipe_fd_h[READ]);
-}
-
-int	check_heredoc_total(t_cmd *cmd)
-{
-	int			count;
-	t_cmd		*tmp;
-	t_heredoc	*heredoc;
-
-	count = 0;
-	tmp = cmd;
-	while (tmp)
-	{
-		heredoc = tmp->heredocs;
-		while (heredoc)
-		{
-			count++;
-			heredoc = heredoc->next;
-		}
-		tmp = tmp->next;
-	}
-	if (count > 16)
-	{
-		printf("minishell: maximum here-document count exceeded\n");
-		return (2);
-	}
-	return (0);
-}
-
-int	manage_heredocs(t_cmd *current, t_cmd *cmd, int prev_read_fd, t_env *env)
-{
-	t_heredoc	*heredoc;
-	pid_t		pid;
-	int			pipe_fd_h[2];
-
-	heredoc = current->heredocs;
-	if (check_heredoc_total(cmd) == 2)
-		return (2);
-	while (heredoc)
-	{
-		if (pipe(pipe_fd_h) == -1)
-			pipe_and_pid_error(cmd, heredoc, pipe_fd_h, 1);
-		pid = fork();
-		if (pid == -1)
-			pipe_and_pid_error(cmd, heredoc, pipe_fd_h, 2);
-		if (pid == 0)
-		{
-			if (prev_read_fd > 2)
-				close(prev_read_fd);
-			handle_heredoc_signals();
-			child_process_heredoc(cmd, heredoc, pipe_fd_h, env);
-		}
-		else
-		{
-			parent_ignore_signals();
-			heredoc->heredoc_fd = parent_process_heredoc(pid, pipe_fd_h);
-			handle_signals(0);
-		}
-		if (heredoc->next && heredoc->heredoc_fd != -1)
-		{
-			close(heredoc->heredoc_fd);
-			heredoc->heredoc_fd = -1;
-		}
-		heredoc = heredoc->next;
-	}
-	return (0);
 }
