@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:54:53 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/09 21:30:54 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/12 12:28:52 by armosnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,25 @@ void	exit_and_free(t_env *my_env, t_cmd *cmd)
 	exit(0);
 }
 
+t_env	*first_preparation(char **envp)
+{
+	t_env	*my_env;
+
+	if (!isatty(0))
+		return (printf("minishell: tty required\n"), NULL);
+	my_env = init_env(envp);
+	if (!my_env)
+		return (NULL);
+	return (my_env);
+}
+
+void	clean_cmd(t_cmd *cmd, t_env *my_env)
+{
+	my_env->exit_status = execute_command(cmd, my_env);
+	free_all_struct(cmd);
+	cmd = NULL;
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_cmd	*cmd;
@@ -34,13 +53,10 @@ int	main(int argc, char **argv, char **envp)
 	char	*line;
 
 	void_silenced_args(argc, argv);
-	if (!isatty(0))
-		return (printf("minishell: tty required\n"), 1);
-	my_env = init_env(envp);
+	my_env = first_preparation(envp);
 	if (!my_env)
 		return (1);
 	cmd = NULL;
-	void_silenced_args(argc, argv);
 	handle_signals(1);
 	printf("\033[2J\033[H");
 	while (1)
@@ -53,11 +69,8 @@ int	main(int argc, char **argv, char **envp)
 			free_all_struct(cmd);
 		cmd = parse(line, my_env);
 		if (cmd != NULL)
-		{
-			my_env->exit_status = execute_command(cmd, my_env);
-			free_all_struct(cmd);
-			cmd = NULL;
-		}
+			clean_cmd(cmd, my_env);
+		cmd = NULL;
 	}
 	return (free_my_env(my_env), 0);
 }
