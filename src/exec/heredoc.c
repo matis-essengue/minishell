@@ -3,55 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 12:36:33 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/12 12:36:46 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/13 13:00:20 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/exec.h"
 #include "../../includes/minishell.h"
 
-int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h, t_env *env)
+static void	read_heredoc_input(t_heredoc *heredoc, int *pipe_fd_h, t_cmd *cmd,
+		t_env *env)
 {
 	char	*line;
-	t_cmd	*tmp;
+	int		status;
 
-	// (void)cmd;
-	close(pipe_fd_h[READ]);
-	tmp = cmd;
-	while (tmp)
-	{
-		if (tmp->pipefd[READ] > 2)
-			close(tmp->pipefd[READ]);
-		if (tmp->pipefd[WRITE] > 2)
-			close(tmp->pipefd[WRITE]);
-		tmp = tmp->next;
-	}
-	g_signal = 0;
-	handle_heredoc_signals();
 	while (1)
 	{
-		
 		line = readline("\033[36mheredoc> \033[0m");
 		if (g_signal == SIGINT)
-		{
-			if (line)
-				free(line);
-			close(pipe_fd_h[WRITE]);
-			free_all_struct(cmd);
-			free_my_env(env);
-			exit(130);
-		}
-		if (line == NULL || g_signal == SIGINT)
-		{
-			break ;
-		}
-		if (ft_strncmp(heredoc->delimiter, line, ft_strlen(line)) == 0
-				&& ft_strlen(line) == ft_strlen(heredoc->delimiter))
-			break ;
-		if (ft_strlen(line) > 1024)
+			handle_heredoc_interrupt(line, pipe_fd_h, cmd, env);
+		status = process_heredoc_line(line, heredoc, pipe_fd_h);
+		if (status == 2)
 		{
 			free_all_struct(cmd);
 			free_my_env(env);
@@ -59,30 +33,49 @@ int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h, t_env 
 			free(line);
 			exit(0);
 		}
-		write(pipe_fd_h[WRITE], line, ft_strlen(line));
-		write(pipe_fd_h[WRITE], "\n", 1);
+		if (status == 1)
+		{
+			free(line);
+			break ;
+		}
 		free(line);
 	}
+}
+
+int	child_process_heredoc(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h,
+		t_env *env)
+{
+	close(pipe_fd_h[READ]);
+	close_all_pipes(cmd);
+	g_signal = 0;
+	handle_heredoc_signals();
+	read_heredoc_input(heredoc, pipe_fd_h, cmd, env);
 	close(pipe_fd_h[WRITE]);
 	free_all_struct(cmd);
 	free_my_env(env);
-	free(line);
 	exit(0);
-	return (0);
 }
 
 int	parent_process_heredoc(pid_t pid, int *pipe_fd_h)
 {
 	int	status;
-	
+
 	close(pipe_fd_h[WRITE]);
 	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status) || (WIFEXITED(status) && WEXITSTATUS(status) == 130))
+	if (WIFSIGNALED(status) || (WIFEXITED(status)
+			&& WEXITSTATUS(status) == 130))
 	{
 		close(pipe_fd_h[READ]);
 		return (-1);
 	}
 	return (pipe_fd_h[READ]);
+}
+
+static void	handle_heredoc_child(t_cmd *cmd, t_heredoc *heredoc, int *pipe_fd_h,
+		t_env *env)
+{
+	handle_heredoc_signals();
+	child_process_heredoc(cmd, heredoc, pipe_fd_h, env);
 }
 
 int	manage_heredocs(t_cmd *current, t_cmd *cmd, int prev_read_fd, t_env *env)
@@ -105,20 +98,10 @@ int	manage_heredocs(t_cmd *current, t_cmd *cmd, int prev_read_fd, t_env *env)
 		{
 			if (prev_read_fd > 2)
 				close(prev_read_fd);
-			handle_heredoc_signals();
-			child_process_heredoc(cmd, heredoc, pipe_fd_h, env);
+			handle_heredoc_child(cmd, heredoc, pipe_fd_h, env);
 		}
 		else
-		{
-			parent_ignore_signals();
-			heredoc->heredoc_fd = parent_process_heredoc(pid, pipe_fd_h);
-			handle_signals(0);
-		}
-		if (heredoc->next && heredoc->heredoc_fd != -1)
-		{
-			close(heredoc->heredoc_fd);
-			heredoc->heredoc_fd = -1;
-		}
+			handle_heredoc_parent(heredoc, pid, pipe_fd_h);
 		heredoc = heredoc->next;
 	}
 	return (0);

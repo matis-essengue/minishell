@@ -6,27 +6,12 @@
 /*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:12:25 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/09 21:26:56 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/13 12:02:51 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/parsing.h"
-
-void	init_cmd(t_cmd *cmd)
-{
-	cmd->name = NULL;
-	cmd->args = NULL;
-	cmd->pipefd[0] = -1;
-	cmd->pipefd[1] = -1;
-	cmd->exit_status = 0;
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	cmd->next = NULL;
-	cmd->output_type = STDOUT;
-	cmd->input_type = STDIN;
-	cmd->heredocs = NULL;
-}
 
 static void	process_cmd_name_and_count_args(t_cmd *cmd,
 	t_token *tokens, int *arg_count)
@@ -78,26 +63,18 @@ static t_token	*process_command(t_cmd *cmd,
 	return (*tokens);
 }
 
-t_cmd	*tokens_to_cmds(t_token *tokens)
+static t_cmd	*process_tokens_loop(t_cmd *cmds, t_token *tokens,
+	t_file **start_infile, t_file **start_outfile)
 {
 	t_cmd	*first_cmd;
-	t_cmd	*cmds;
 	t_token	*current;
-	t_file	*start_infile;
-	t_file	*start_outfile;
 
-	cmds = malloc(sizeof(t_cmd));
-	if (!cmds)
-		return (NULL);
-	init_cmd(cmds);
 	first_cmd = cmds;
 	current = tokens;
-	start_infile = NULL;
-	start_outfile = NULL;
 	while (current)
 	{
 		if (current->type != TOKEN_CONTROL_OP)
-			process_command(cmds, &current, &start_infile, &start_outfile);
+			process_command(cmds, &current, start_infile, start_outfile);
 		if (current && current->type == TOKEN_CONTROL_OP)
 		{
 			cmds = handle_pipe(cmds);
@@ -110,4 +87,19 @@ t_cmd	*tokens_to_cmds(t_token *tokens)
 		}
 	}
 	return (first_cmd);
+}
+
+t_cmd	*tokens_to_cmds(t_token *tokens)
+{
+	t_cmd	*cmds;
+	t_file	*start_infile;
+	t_file	*start_outfile;
+
+	cmds = malloc(sizeof(t_cmd));
+	if (!cmds)
+		return (NULL);
+	init_cmd(cmds);
+	start_infile = NULL;
+	start_outfile = NULL;
+	return (process_tokens_loop(cmds, tokens, &start_infile, &start_outfile));
 }

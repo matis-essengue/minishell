@@ -13,16 +13,11 @@
 #include "../../includes/minishell.h"
 #include "../../includes/parsing.h"
 
-void	allocate_and_fill_args(t_cmd *cmd, t_token *tokens, int arg_count)
+static int	fill_args_array(t_cmd *cmd, t_token *tokens)
 {
 	t_token	*current;
 	int		i;
 
-	if (arg_count == 0)
-		return ;
-	cmd->args = malloc(sizeof(char *) * (arg_count + 1));
-	if (!cmd->args)
-		return ;
 	i = -1;
 	current = tokens;
 	while (current && current->type != TOKEN_CONTROL_OP)
@@ -33,7 +28,7 @@ void	allocate_and_fill_args(t_cmd *cmd, t_token *tokens, int arg_count)
 			{
 				cmd->args[i] = ft_strdup(current->value);
 				if (!cmd->args[i])
-					return ;
+					return (-1);
 			}
 			i++;
 		}
@@ -41,7 +36,21 @@ void	allocate_and_fill_args(t_cmd *cmd, t_token *tokens, int arg_count)
 			current = current->next;
 		current = current->next;
 	}
-	cmd->args[i] = NULL;
+	return (i);
+}
+
+void	allocate_and_fill_args(t_cmd *cmd, t_token *tokens, int arg_count)
+{
+	int	i;
+
+	if (arg_count == 0)
+		return ;
+	cmd->args = malloc(sizeof(char *) * (arg_count + 1));
+	if (!cmd->args)
+		return ;
+	i = fill_args_array(cmd, tokens);
+	if (i >= 0)
+		cmd->args[i] = NULL;
 }
 
 static void	handle_heredoc(t_cmd *cmd, t_token *current)

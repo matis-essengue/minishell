@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parent_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armosnie <armosnie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 13:39:21 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/12 14:30:03 by armosnie         ###   ########.fr       */
+/*   Updated: 2025/09/13 11:35:00 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,19 +76,17 @@ int	pipe_function(t_cmd *cmd, pid_t *pid, int exit_status, t_env *env)
 	cmd_list = cmd;
 	while (cmd && i < MAX_PROCESSES)
 	{
-		if (single_heredoc(cmd, cmd_list, env, prev_read_fd) == 1)
+		if (single_heredoc(cmd, cmd_list, env, prev_read_fd) != 1)
 		{
-			cmd = cmd->next;
-			continue ;
+			if (cmd->heredocs)
+				manage_heredocs(cmd, cmd_list, prev_read_fd, env);
+			pipe_check_or_create(cmd, pid, i, prev_read_fd);
+			if (pid[i] == 0)
+				child_call(cmd, cmd_list, env, prev_read_fd);
+			else
+				prev_read_fd = manage_parent_call(cmd);
+			i++;
 		}
-		if (cmd->heredocs)
-			manage_heredocs(cmd, cmd_list, prev_read_fd, env);
-		pipe_check_or_create(cmd, pid, i, prev_read_fd);
-		if (pid[i] == 0)
-			child_call(cmd, cmd_list, env, prev_read_fd);
-		else
-			prev_read_fd = manage_parent_call(cmd);
-		i++;
 		cmd = cmd->next;
 	}
 	end_pipe_function(cmd_list, cmd, prev_read_fd);

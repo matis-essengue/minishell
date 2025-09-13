@@ -61,6 +61,25 @@ bool	is_built_in(t_cmd *cmd)
 	return (false);
 }
 
+static int	execute_builtin_command(t_cmd *cmd, t_env *env, int code_error)
+{
+	if (ft_strcmp(cmd->name, "echo") == 0)
+		return (built_in_echo(cmd));
+	if (ft_strcmp(cmd->name, "cd") == 0)
+		return (built_in_cd(cmd, env));
+	if (ft_strcmp(cmd->name, "pwd") == 0)
+		return (built_in_pwd(cmd));
+	if (ft_strcmp(cmd->name, "export") == 0)
+		return (built_in_export(cmd, env, code_error));
+	if (ft_strcmp(cmd->name, "unset") == 0)
+		return (built_in_unset(cmd, env));
+	if (ft_strcmp(cmd->name, "env") == 0)
+		return (built_in_env(cmd, env));
+	if (ft_strcmp(cmd->name, "exit") == 0)
+		return (built_in_exit(cmd, env));
+	return (code_error);
+}
+
 int	parent_process_built_in(t_cmd *cmd, t_env *env)
 {
 	int	code_error;
@@ -74,20 +93,7 @@ int	parent_process_built_in(t_cmd *cmd, t_env *env)
 		if (prev_old_fd == -1)
 			return (1);
 	}
-	if (ft_strcmp(cmd->name, "echo") == 0)
-		code_error = built_in_echo(cmd);
-	if (ft_strcmp(cmd->name, "cd") == 0)
-		code_error = built_in_cd(cmd, env);
-	if (ft_strcmp(cmd->name, "pwd") == 0)
-		code_error = built_in_pwd(cmd);
-	if (ft_strcmp(cmd->name, "export") == 0)
-		code_error = built_in_export(cmd, env, code_error);
-	if (ft_strcmp(cmd->name, "unset") == 0)
-		code_error = built_in_unset(cmd, env);
-	if (ft_strcmp(cmd->name, "env") == 0)
-		code_error = built_in_env(cmd, env);
-	if (ft_strcmp(cmd->name, "exit") == 0)
-		code_error = built_in_exit(cmd, env);
+	code_error = execute_builtin_command(cmd, env, code_error);
 	if (prev_old_fd > 0)
 		return (dup2(prev_old_fd, FD_STDOUT), close(prev_old_fd), code_error);
 	return (code_error);

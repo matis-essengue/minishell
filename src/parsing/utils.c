@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:33:04 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/09 14:06:08 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/13 11:38:32 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,74 +57,6 @@ char	*get_output_type(t_cmd *cmd)
 	if (cmd->output_type == STDOUT)
 		return ("STDOUT");
 	return (NULL);
-}
-
-/**
- * @brief [DEBUG FUNCTION] Print a command
- * with its arguments
- *
- * @param cmd The command to print
- */
-void	print_cmd(t_cmd *cmd)
-{
-	int	i;
-
-	printf("[NAME]: %s\n", cmd->name);
-	if (cmd->args != NULL)
-	{
-		i = 0;
-		printf("[ARGS]:");
-		while (cmd->args[i])
-		{
-			printf(" %s", cmd->args[i]);
-			i++;
-		}
-		printf("\n");
-	}
-	else
-		printf("[ARGS]: NULL\n");
-	printf("[INFILE]:");
-	if (cmd->infile != NULL)
-	{
-		t_file *current = cmd->infile;
-		while (current)
-		{
-			printf("  > %s", current->name);
-			current = current->next;
-		}
-	}
-	else
-		printf(" NULL");
-	printf("\n[OUTFILE]:");
-	if (cmd->outfile)
-	{
-		t_file *current = cmd->outfile;
-		while (current)
-		{
-			if (current->append)
-				printf("  >> %s", current->name);
-			else
-				printf("  > %s", current->name);
-			current = current->next;
-		}
-	}
-	else
-		printf(" NULL");
-	printf("\n[HEREDOC]:");
-	if (cmd->heredocs)
-	{
-		t_heredoc *current = cmd->heredocs;
-		while (current)
-		{
-			printf("  << %s", current->delimiter);
-			current = current->next;
-		}
-	}
-	else
-		printf(" NULL");
-	printf("\n[OUTPUT_TYPE]: %s\n", get_output_type(cmd));
-	printf("[INPUT_TYPE]: %s\n", get_input_type(cmd));
-	printf("\n");
 }
 
 /**

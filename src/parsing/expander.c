@@ -3,25 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matis <matis@student.42.fr>                +#+  +:+       +#+        */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:04:58 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/08 16:04:21 by matis            ###   ########.fr       */
+/*   Updated: 2025/09/13 12:10:22 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
 #include "../../includes/minishell.h"
-
-static char	*join_and_free(char *s1, char *s2)
-{
-	char	*result;
-
-	result = ft_strjoin(s1, s2);
-	free(s1);
-	free(s2);
-	return (result);
-}
+#include "../../includes/parsing.h"
 
 static void	handle_dollar_sign(char **line, t_env *env, t_expand_state *s)
 {
@@ -30,22 +20,14 @@ static void	handle_dollar_sign(char **line, t_env *env, t_expand_state *s)
 	int		consumed;
 	int		is_escaped;
 
-	is_escaped = s->i > 0 && (*line)[s->i - 1] == '\\';
-	// printf("\n\n\ns->i: %d\n", s->i);
-	// printf("s->start: %d\n", s->start);
-	// printf("is_escaped: %d\n", is_escaped);
-	// printf("*line: %s\n", *line);
+	if ((s->i > 0) && ((*line)[s->i - 1] == '\\'))
+		is_escaped = 1;
+	else
+		is_escaped = 0;
 	if (s->i > s->start)
 	{
-		// printf("AFTER\n");
 		temp = ft_strndup(*line + s->start, s->i - s->start - is_escaped);
-		// printf("temp: %s\n", temp);
 		s->result = join_and_free(s->result, temp);
-	// 	printf("s->result: %s\n", s->result);
-	// 	printf("s->i: %d\n", s->i);
-	// 	printf("s->start: %d\n", s->start);
-	// 	printf("is_escaped: %d\n", is_escaped);
-	// 	printf("*line: %s\n", *line);
 	}
 	expanded = expand_variable(*line + s->i, env, &consumed, is_escaped);
 	s->result = join_and_free(s->result, expanded);
@@ -79,7 +61,7 @@ static void	process_char(char **line, t_env *env, t_expand_state *state)
 	else if ((*line)[state->i] == '$' && !state->squoted)
 	{
 		if (next_char && (ft_isalnum(next_char) || next_char == '_'
-			|| next_char == '?' || next_char == '$'))
+				|| next_char == '?' || next_char == '$'))
 			handle_dollar_sign(line, env, state);
 		else if (!state->dquoted && (next_char == '"' || next_char == '\''))
 			escape_quote(line, state);

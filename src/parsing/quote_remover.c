@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:27:29 by messengu          #+#    #+#             */
-/*   Updated: 2025/09/11 14:30:15 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/13 12:05:50 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
  * @param new_word The word being built
  * @return The updated quote state
  */
-static char	_handle_quotes(
+char	handle_quotes(
 	char *temp,
 	char quote,
 	char **start,
@@ -30,7 +30,7 @@ static char	_handle_quotes(
 {
 	char	*chunk;
 	char	*joined;
-	
+
 	if (!quote)
 		quote = *temp;
 	else if (quote == *temp)
@@ -47,31 +47,24 @@ static char	_handle_quotes(
 }
 
 /**
- * @brief Remove quotes from a word
+ * @brief Finalize the quote removal process
  *
- * @param word The word to remove quotes from
- * @return The word without quotes
+ * @param new_word The partially built word
+ * @param start Start of the remaining segment
+ * @param end End of the string
+ * @param word Original word to free
+ * @return The final result
  */
-char	*_remove_quotes(char *word)
+char	*finalize_quote_removal(
+	char *new_word,
+	char *start,
+	char *end,
+	char *word)
 {
-	char	*new_word;
-	char	quote;
-	char	*start;
-	char	*temp;
 	char	*dup;
 	char	*res;
 
-	new_word = ft_strdup("");
-	quote = 0;
-	start = word;
-	temp = word;
-	while (*temp)
-	{
-		if (*temp == '\'' || *temp == '"')
-			quote = _handle_quotes(temp, quote, &start, &new_word);
-		temp++;
-	}
-	dup = ft_strndup(start, temp - start);
+	dup = ft_strndup(start, end - start);
 	if (!dup)
 	{
 		free(new_word);
@@ -82,47 +75,57 @@ char	*_remove_quotes(char *word)
 	free(new_word);
 	free(dup);
 	free(word);
-	if (!res)
-		return (NULL);
 	return (res);
 }
 
-void	rm_quotes_for_all_files(t_file *first_file)
+/**
+ * @brief Process command name removal of quotes
+ *
+ * @param current The current command
+ * @return 0 on success, 1 on failure
+ */
+static int	_process_cmd_name(t_cmd *current)
 {
-	t_file	*current_file;
 	char	*old_name;
 
-	current_file = first_file;
-	while (current_file)
+	if (!current->name)
+		return (0);
+	old_name = current->name;
+	current->name = _remove_quotes(current->name);
+	if (!current->name)
 	{
-		old_name = current_file->name;
-		current_file->name = _remove_quotes(current_file->name);
-		if (!current_file->name)
-		{
-			current_file->name = old_name;
-			return ;
-		}
-		current_file = current_file->next;
+		current->name = old_name;
+		return (1);
 	}
+	return (0);
 }
 
-void	rm_quotes_for_all_heredocs(t_heredoc *first_heredoc)
+/**
+ * @brief Process arguments removal of quotes
+ *
+ * @param args The arguments array
+ * @return 0 on success, 1 on failure
+ */
+static int	_process_args(char **args)
 {
-	t_heredoc	*current_heredoc;
-	char		*old_delimiter;
+	int		i;
+	char	*old_arg;
 
-	current_heredoc = first_heredoc;
-	while (current_heredoc)
+	if (!args)
+		return (0);
+	i = 0;
+	while (args[i])
 	{
-		old_delimiter = current_heredoc->delimiter;
-		current_heredoc->delimiter = _remove_quotes(current_heredoc->delimiter);
-		if (!current_heredoc->delimiter)
+		old_arg = args[i];
+		args[i] = _remove_quotes(args[i]);
+		if (!args[i])
 		{
-			current_heredoc->delimiter = old_delimiter;
-			return ;
+			args[i] = old_arg;
+			return (1);
 		}
-		current_heredoc = current_heredoc->next;
+		i++;
 	}
+	return (0);
 }
 
 /**
@@ -133,42 +136,20 @@ void	rm_quotes_for_all_heredocs(t_heredoc *first_heredoc)
 void	remove_quotes(t_cmd *cmds)
 {
 	t_cmd	*current;
-	int		i;
 
 	current = cmds;
 	while (current)
 	{
-		i = 0;
-		if (current->name)
-		{
-			char *old_name = current->name;
-			current->name = _remove_quotes(current->name);
-			if (!current->name)
-			{
-				current->name = old_name;
-				return ;
-			}
-		}
+		if (_process_cmd_name(current))
+			return ;
 		if (current->infile)
 			rm_quotes_for_all_files(current->infile);
 		if (current->outfile)
 			rm_quotes_for_all_files(current->outfile);
 		if (current->heredocs)
 			rm_quotes_for_all_heredocs(current->heredocs);
-		if (current->args)
-		{
-			while (current->args[i])
-			{
-				char *old_arg = current->args[i];
-				current->args[i] = _remove_quotes(current->args[i]);
-				if (!current->args[i])
-				{
-					current->args[i] = old_arg;
-					return ;
-				}
-				i++;
-			}
-		}
+		if (_process_args(current->args))
+			return ;
 		current = current->next;
 	}
 }

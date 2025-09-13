@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/13 12:17:26 by messengu          #+#    #+#             */
+/*   Updated: 2025/09/13 13:06:00 by messengu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EXEC_H
 # define EXEC_H
 
@@ -81,6 +93,15 @@ void						close_all_fd(int *fd);
 void						command_not_found_error(t_cmd *cmd, t_env *env,
 								char *command_name);
 
+// heredoc_utils_2.c
+void						close_all_pipes(t_cmd *cmd);
+void						handle_heredoc_interrupt(char *line, int *pipe_fd_h,
+								t_cmd *cmd, t_env *env);
+int							process_heredoc_line(char *line, t_heredoc *heredoc,
+								int *pipe_fd_h);
+void						handle_heredoc_parent(t_heredoc *heredoc, pid_t pid,
+								int *pipe_fd_h);
+
 // parent process
 
 int							execute_command(t_cmd *cmd, t_env *env);
@@ -118,6 +139,7 @@ void						open_outfile(t_cmd *cmd, t_cmd *cmd_list,
 
 int							manage_heredocs(t_cmd *current, t_cmd *cmd,
 								int prev_read_fd, t_env *env);
+int							parent_process_heredoc(pid_t pid, int *pipe_fd_h);
 
 // utils heredoc
 

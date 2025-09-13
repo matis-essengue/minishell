@@ -6,7 +6,7 @@
 /*   By: messengu <messengu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 15:19:43 by armosnie          #+#    #+#             */
-/*   Updated: 2025/09/11 11:47:53 by messengu         ###   ########.fr       */
+/*   Updated: 2025/09/13 12:19:35 by messengu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ int	change_update_pwd_and_env(char ***env)
 int	handle_cd_errors(t_cmd *cmd)
 {
 	if (!cmd->args)
-		return (printf("minishell: cd: absolute or relative path only allowed\n"),
+		return (printf(
+				"minishell: cd: absolute or relative path only allowed\n"),
 			1);
 	if (cmd->args[0] && cmd->args[1])
 		return (printf("minishell: cd: too many arguments\n"), 1);
@@ -74,7 +75,8 @@ int	handle_cd_errors(t_cmd *cmd)
 		return (printf("minishell: cd: '-': There is no option allowed\n"), 2);
 	if ((cmd->args && cmd->args[0][0] == '~' && !cmd->args[0][1]) || (cmd->args
 			&& cmd->args[0][0] == '-' && !cmd->args[0][1]))
-		return (printf("minishell: cd: absolute or relative path only allowed\n"),
+		return (printf(
+				"minishell: cd: absolute or relative path only allowed\n"),
 			1);
 	return (0);
 }

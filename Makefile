@@ -16,11 +16,14 @@ SRCS = \
 	src/parsing/utils.c \
 	src/parsing/expander.c \
 	src/parsing/expander_utils.c \
+	src/parsing/expander_utils_2.c \
 	src/parsing/quote_remover.c \
+	src/parsing/quote_remover_utils.c \
 	src/parsing/cmd_checker.c \
 	src/parsing/tokens_to_cmds.c \
 	src/parsing/redirect_utils.c \
 	src/parsing/tokens_to_cmds_utils.c \
+	src/parsing/tokens_to_cmds_utils_2.c \
 	src/exec/parent_process.c \
 	src/exec/parent_process2.c \
 	src/exec/child_process.c \
@@ -30,6 +33,7 @@ SRCS = \
 	src/exec/utils.c \
 	src/exec/heredoc.c \
 	src/exec/heredoc_utils.c \
+	src/exec/heredoc_utils_2.c \
 	src/exec/errors.c \
 	src/exec/errors2.c \
 	src/exec/init_struct_env.c \
